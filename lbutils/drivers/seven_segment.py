@@ -1,17 +1,39 @@
 """
-Simple driver for a seven-segment display, requiring seven GPIO pins.
+Simple (decimal) numeric driver for a seven-segment display, requiring seven GPIO pins.
 
 Overview
 --------
 
-This driver will only display characters in the range '0' to '9', and will raise a `ValueError` exception if the requested character is not in an appropriate range.
+During initialisation the user must supply a list of exactly seven GPIO pins,
+using the numeric pin identifier (e.g. 16 for GPIO Pin 16). Each entry in the
+list corresponds to the segment 'a' (for the first entry) to 'g' (for the last
+entry). Once the constructor has been called, no further changes are possible:
+and the driver will also assume exclusive use of the relevant GPIO pins.
+
+To display a character, the `display` method of the class is used: passing in an
+integer in the range 0..9 representing the number to show on the seven segment.
+Not that by default the `display` method assumes that GPIO pins must be held
+_low_ for the segment to display: i.e. the behaviour normally used by common
+anode seven-segment displays. If you need the requested GPIO pin to be held
+_high_ to display a segment, pass in `True` to the `inverted` parameter of the
+`display` method.
+
+.. Note: This driver will only display characters in the range '0' to 'F', and
+will raise a `ValueError` exception if the requested character is not in an
+appropriate range.
+
+Examples
+--------
+
+* See: `examples\seven_segment_example.py`
+* [WokWi](https://wokwi.com/projects/360451068863047681)
 
 Tested Implementations
 ----------------------
 
 This version is written for MicroPython 3.4, and has been tested on:
 
-  * Raspberry Pi Pico H/W
+* Raspberry Pi Pico H/W
 
 Licence
 -------
@@ -45,6 +67,10 @@ try:
 except ImportError:
     print("Ignoring MicroPython includes")
 
+##
+## Classes
+##
+
 
 class SegDisplay:
     char_list = [
@@ -60,7 +86,9 @@ class SegDisplay:
         [False, False, False, True, True, False, False],
     ]
     """
-    Defines how characters are rendered, from zero ('0') in the first entry to nine ('9') as the last entry. Note that pins which are listed here as `False` will be _on_ using the default options to the `display` method.
+    Defines how characters are rendered, from zero ('0') in the first entry to
+    nine ('9') as the last entry. Note that pins which are listed here as
+    `False` will be _on_ using the default options to the `display` method.
     """
 
     def __init__(self, gpio_reqest: list):
@@ -69,18 +97,28 @@ class SegDisplay:
         list of GPIO pins in `gpio_request` as reference for pins to
         drive.
 
-        This class also assume a common anode seven-segment display by default, and so will assume that pulling a GPIO pin _low_ will turn the relevant segment _on_. If you need to modify this behaviour, see the `inverted` parameter for the `display` method.
+        This class also assume a common anode seven-segment display by default,
+        and so will assume that pulling a GPIO pin _low_ will turn the relevant
+        segment _on_. If you need to modify this behaviour, see the `inverted`
+        parameter for the `display` method.
 
         .. Note::
-            This list of entries in the `gpio_request` _must_ be exactly seven entries long, or the class will throw a `ValueError` in the constructor.
+            This list of entries in the `gpio_request` _must_ be exactly seven
+            entries long, or the class will throw a `ValueError` in the
+            constructor.
 
         Parameters
         ----------
 
         gpio_reqest: list
-            The pin-ordered list of GPIO pins to use for the segment positions 'a' (as the first entry in the list) to 'f' (as the last entry in the list).
+            The pin-ordered list of GPIO pins to use for the segment positions
+            'a' (as the first entry in the list) to 'g' (as the last entry in
+            the list).
 
-            **NOTE**: The `SegDisplay` class will also attempt to create the underlying GPIO object for each of the entries in the list. If the GPIO pins need to be initialised first, this must be done _before_ calling this constructor.
+            **NOTE**: The `SegDisplay` class will also attempt to create the
+            underlying GPIO object for each of the entries in the list. If
+            the GPIO pins need to be initialised first, this must be done
+            _before_ calling this constructor.
         """
         self.pin_list = []
 
@@ -95,16 +133,23 @@ class SegDisplay:
     def display(self, character: int, inverted: bool = False):
         """
         Display the given `character` on the seven-segment display,
-        using the `char_list` as a guide for which pins to turn on or off. By default the `display` method will use the entries in the `char_list` directly: if you need to invert the 'normal' sense, set the `inverted` parameter to `True`.
+        using the `char_list` as a guide for which pins to turn on or off. By default
+        the `display` method will use the entries in the `char_list` directly: if you
+        need to invert the 'normal' sense, set the `inverted` parameter to `True`.
 
         Parameters
         ----------
 
         character: int
-            The value to be displayed on the seven segment display, which must be between zero ('0') and nine ('9')
+            The value to be displayed on the seven segment display, which must be
+            between zero ('0') and nine ('9')
 
         inverted: bool
-            By default the `display` method assumes that pulling a GPIO pin _low_ will turn the relevant segment _on_; i.e. the typical behaviour for a common anode display. If the attached display needs to raise a GPIO pin _high_ to set the segment _on_ (i.e. the typical behaviour for a common cathode display), call the `display` method with `inverted` set to `True`.
+            By default the `display` method assumes that pulling a GPIO pin _low_
+            will turn the relevant segment _on_; i.e. the typical behaviour for a
+            common anode display. If the attached display needs to raise a GPIO pin
+            _high_ to set the segment _on_ (i.e. the typical behaviour for a common
+            cathode display), call the `display` method with `inverted` set to `True`.
         """
         if 0 <= character <= 9:
             if not inverted:
