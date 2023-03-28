@@ -105,12 +105,12 @@ class SegHexDisplay:
         [False, False, False, True, True, True, True],
         [False, False, False, False, False, False, False],
         [False, False, False, True, True, False, False],
-        [True, False, False, False, False, False, False],
-        [False, False, True, True, False, False, False],
+        [False, False, False, True, False, False, False],
+        [True, True, False, False, False, False, False],
         [False, True, True, False, False, False, True],
-        [False, False, False, True, True, False, False],
+        [True, False, False, False, False, True, False],
         [False, True, True, False, False, False, False],
-        [True, True, True, False, False, False, False],
+        [False, True, True, True, False, False, False],
     ]
     """
     Defines how characters are rendered, from zero ('0') in the first entry to
