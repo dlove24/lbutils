@@ -1,0 +1,9 @@
+# Python temp files
+**/__pycache__/
+
+# Python Virtal Environment
+.venv/
+
+# Temporary packaging files
+dist/
+lbutils_mp.egg-info/
