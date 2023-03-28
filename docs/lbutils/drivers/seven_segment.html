@@ -103,19 +103,19 @@ except ImportError:
 
 class SegDisplay:
     char_list = [
-        [0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 1, 1, 1, 1],
-        [0, 0, 1, 0, 0, 1, 0],
-        [0, 0, 0, 0, 1, 1, 0],
-        [1, 0, 0, 1, 1, 0, 0],
-        [0, 1, 0, 0, 1, 0, 0],
-        [0, 1, 0, 0, 0, 0, 0],
-        [0, 0, 0, 1, 1, 1, 1],
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 1, 1, 0, 0],
+        [False, False, False, False, False, False, True],
+        [True, False, False, True, True, True, True],
+        [False, False, True, False, False, True, False],
+        [False, False, False, False, True, True, False],
+        [True, False, False, True, True, False, False],
+        [False, True, False, False, True, False, False],
+        [False, True, False, False, False, False, False],
+        [False, False, False, True, True, True, True],
+        [False, False, False, False, False, False, False],
+        [False, False, False, True, True, False, False],
     ]
     &#34;&#34;&#34;
-    Defines how characters are rendered, from zero (&#39;0&#39;) in the first entry to nine (&#39;9&#39;) as the last entry. Note that pins which are listed here as `0` will be _on_ using the default options to the `display` method.
+    Defines how characters are rendered, from zero (&#39;0&#39;) in the first entry to nine (&#39;9&#39;) as the last entry. Note that pins which are listed here as `False` will be _on_ using the default options to the `display` method.
     &#34;&#34;&#34;
 
     def __init__(self, gpio_reqest: list):
@@ -164,8 +164,12 @@ class SegDisplay:
             By default the `display` method assumes that pulling a GPIO pin _low_ will turn the relevant segment _on_; i.e. the typical behaviour for a common anode display. If the attached display needs to raise a GPIO pin _high_ to set the segment _on_ (i.e. the typical behaviour for a common cathode display), call the `display` method with `inverted` set to `True`.
         &#34;&#34;&#34;
         if 0 &lt;= character &lt;= 9:
-            for pin in range(7):
-                self.pin_list[pin].value(self.char_list[character][pin])
+            if not inverted:
+                for pin in range(7):
+                    self.pin_list[pin].value(self.char_list[character][pin])
+            else:
+                for pin in range(7):
+                    self.pin_list[pin].value(not self.char_list[character][pin])
         else:
             raise ValueError(
                 &#34;The display character must be between zero (&#39;0&#39;) and nine (&#39;9&#39;)&#34;
@@ -193,19 +197,19 @@ class SegDisplay:
 </summary>
 <pre><code class="python">class SegDisplay:
     char_list = [
-        [0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 1, 1, 1, 1],
-        [0, 0, 1, 0, 0, 1, 0],
-        [0, 0, 0, 0, 1, 1, 0],
-        [1, 0, 0, 1, 1, 0, 0],
-        [0, 1, 0, 0, 1, 0, 0],
-        [0, 1, 0, 0, 0, 0, 0],
-        [0, 0, 0, 1, 1, 1, 1],
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 1, 1, 0, 0],
+        [False, False, False, False, False, False, True],
+        [True, False, False, True, True, True, True],
+        [False, False, True, False, False, True, False],
+        [False, False, False, False, True, True, False],
+        [True, False, False, True, True, False, False],
+        [False, True, False, False, True, False, False],
+        [False, True, False, False, False, False, False],
+        [False, False, False, True, True, True, True],
+        [False, False, False, False, False, False, False],
+        [False, False, False, True, True, False, False],
     ]
     &#34;&#34;&#34;
-    Defines how characters are rendered, from zero (&#39;0&#39;) in the first entry to nine (&#39;9&#39;) as the last entry. Note that pins which are listed here as `0` will be _on_ using the default options to the `display` method.
+    Defines how characters are rendered, from zero (&#39;0&#39;) in the first entry to nine (&#39;9&#39;) as the last entry. Note that pins which are listed here as `False` will be _on_ using the default options to the `display` method.
     &#34;&#34;&#34;
 
     def __init__(self, gpio_reqest: list):
@@ -254,8 +258,12 @@ class SegDisplay:
             By default the `display` method assumes that pulling a GPIO pin _low_ will turn the relevant segment _on_; i.e. the typical behaviour for a common anode display. If the attached display needs to raise a GPIO pin _high_ to set the segment _on_ (i.e. the typical behaviour for a common cathode display), call the `display` method with `inverted` set to `True`.
         &#34;&#34;&#34;
         if 0 &lt;= character &lt;= 9:
-            for pin in range(7):
-                self.pin_list[pin].value(self.char_list[character][pin])
+            if not inverted:
+                for pin in range(7):
+                    self.pin_list[pin].value(self.char_list[character][pin])
+            else:
+                for pin in range(7):
+                    self.pin_list[pin].value(not self.char_list[character][pin])
         else:
             raise ValueError(
                 &#34;The display character must be between zero (&#39;0&#39;) and nine (&#39;9&#39;)&#34;
@@ -265,7 +273,7 @@ class SegDisplay:
 <dl>
 <dt id="lbutils.drivers.seven_segment.SegDisplay.char_list"><code class="name">var <span class="ident">char_list</span></code></dt>
 <dd>
-<div class="desc"><p>Defines how characters are rendered, from zero ('0') in the first entry to nine ('9') as the last entry. Note that pins which are listed here as <code>0</code> will be <em>on</em> using the default options to the <code>display</code> method.</p></div>
+<div class="desc"><p>Defines how characters are rendered, from zero ('0') in the first entry to nine ('9') as the last entry. Note that pins which are listed here as <code>False</code> will be <em>on</em> using the default options to the <code>display</code> method.</p></div>
 </dd>
 </dl>
 <h3>Methods</h3>
@@ -307,8 +315,12 @@ class SegDisplay:
         By default the `display` method assumes that pulling a GPIO pin _low_ will turn the relevant segment _on_; i.e. the typical behaviour for a common anode display. If the attached display needs to raise a GPIO pin _high_ to set the segment _on_ (i.e. the typical behaviour for a common cathode display), call the `display` method with `inverted` set to `True`.
     &#34;&#34;&#34;
     if 0 &lt;= character &lt;= 9:
-        for pin in range(7):
-            self.pin_list[pin].value(self.char_list[character][pin])
+        if not inverted:
+            for pin in range(7):
+                self.pin_list[pin].value(self.char_list[character][pin])
+        else:
+            for pin in range(7):
+                self.pin_list[pin].value(not self.char_list[character][pin])
     else:
         raise ValueError(
             &#34;The display character must be between zero (&#39;0&#39;) and nine (&#39;9&#39;)&#34;
