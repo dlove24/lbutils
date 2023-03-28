@@ -64,15 +64,6 @@ class SegDisplay:
     """
 
     def __init__(self, gpio_reqest: list):
-        self.pin_list = []
-
-        if (gpio_reqest is None) or (not gpio_reqest):
-            raise ValueError("The GPIO Request List is empty")
-        elif len(gpio_reqest) != 7:
-            raise ValueError("The GPIO Request List must be EXACTLY seven entries long")
-        else:
-            for segment in range(7):
-                self.pin_list.append(Pin(gpio_reqest[segment], Pin.OUT))
         """
         Initialise a seven-segment display, using the user supplied
         list of GPIO pins in `gpio_request` as reference for pins to
@@ -91,13 +82,20 @@ class SegDisplay:
 
             **NOTE**: The `SegDisplay` class will also attempt to create the underlying GPIO object for each of the entries in the list. If the GPIO pins need to be Initialised, this must be done _before_ calling this constructor.
         """
+        self.pin_list = []
+
+        if (gpio_reqest is None) or (not gpio_reqest):
+            raise ValueError("The GPIO Request List is empty")
+        elif len(gpio_reqest) != 7:
+            raise ValueError("The GPIO Request List must be EXACTLY seven entries long")
+        else:
+            for segment in range(7):
+                self.pin_list.append(Pin(gpio_reqest[segment], Pin.OUT))
 
     def display(self, character: int, inverted: bool = False):
         """
-        Display
-
-        .. Note::
-            This list of entries in the `gpio_request` _must_ be exactly seven entries long, or the class will throw a `ValueError` in the constructor.
+        Display the given `character` on the seven-segment display,
+        using the `char_list` as a guide for which pins to turn on or off. By default the `display` method will use the entries in the `char_list` directly: if you need to invert the 'normal' sense, set the `inverted` parameter to `True`.
 
         Parameters
         ----------
