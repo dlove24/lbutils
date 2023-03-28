@@ -80,7 +80,7 @@ class SegDisplay:
         gpio_reqest: list
             The pin-ordered list of GPIO pins to use for the segment positions 'a' (as the first entry in the list) to 'f' (as the last entry in the list).
 
-            **NOTE**: The `SegDisplay` class will also attempt to create the underlying GPIO object for each of the entries in the list. If the GPIO pins need to be Initialised, this must be done _before_ calling this constructor.
+            **NOTE**: The `SegDisplay` class will also attempt to create the underlying GPIO object for each of the entries in the list. If the GPIO pins need to be initialised first, this must be done _before_ calling this constructor.
         """
         self.pin_list = []
 

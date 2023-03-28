@@ -10,6 +10,15 @@ examples will require extension, or further development in real applications.
 However they should give some idea of what those more complete applications may
 look like.
 
+Demonstrations
+--------------
+
+Many of the examples require a working board to reproduce, and so where possible examples have been provided on [WokWi](https://wokwi.com/).
+
+Current demonstrations are
+
+* **7-Segment Display**: [`lbutils.drivers.SegDisplay`](https://wokwi.com/projects/360451068863047681)
+
 Tested Implementations
 ----------------------
 
@@ -41,3 +50,5 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
+
+__pdoc__ = {"seven_segment_example": False}
