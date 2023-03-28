@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lbutils-mp"
-version = "0.1.0"
+version = "0.1.1"
 authors = [
   { name="David Love", email="david.love@leedsbeckett.ac.uk" },
 ]
-description = "An embedded HTTP server, focused on very small REST-style API's"
+description = "Utility library for MicroPython, used at Leeds Beckett University and primarily aimed at the Pico H/W microcontrollers"
 readme = "README.md"
 requires-python = ">=3.4"
 classifiers = [
