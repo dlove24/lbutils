@@ -57,7 +57,7 @@ except ImportError:
 
 # Import required libraries from LBUtils
 try:
-    from lbutils.drivers.seven_segment import SegDisplay
+    from lbutils.drivers import SegDisplay
 except ImportError:
     print("Missing LBUtils seven segment driver")
 
