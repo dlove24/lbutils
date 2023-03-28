@@ -44,3 +44,4 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ### Expose the `drivers` module interface as a full package
 from .seven_segment import SegDisplay
+from .seven_segment_hex import SegHexDisplay

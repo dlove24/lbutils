@@ -17,7 +17,7 @@ Many of the examples require a working board to reproduce, and so where possible
 
 Current demonstrations are
 
-* `lbutils.drivers.seven_segment.SegDisplay`: [7-Segment Display](https://wokwi.com/projects/360451068863047681)
+* `lbutils.drivers.SegDisplay`: [7-Segment Display](https://wokwi.com/projects/360451068863047681)
 
 Tested Implementations
 ----------------------

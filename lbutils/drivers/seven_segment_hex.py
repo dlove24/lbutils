@@ -1,5 +1,5 @@
 """
-Simple (decimal) numeric driver for a seven-segment display, requiring seven GPIO pins.
+Simple hexadecimal driver for a seven-segment display, requiring seven GPIO pins.
 
 Overview
 --------
@@ -11,7 +11,7 @@ entry). Once the constructor has been called, no further changes are possible:
 and the driver will also assume exclusive use of the relevant GPIO pins.
 
 To display a character, the `display` method of the class is used: passing in an
-integer in the range 0..9 representing the number to show on the seven segment.
+integer in the range 0..F representing the number to show on the seven segment.
 Not that by default the `display` method assumes that GPIO pins must be held
 _low_ for the segment to display: i.e. the behaviour normally used by common
 anode seven-segment displays. If you need the requested GPIO pin to be held
@@ -25,8 +25,8 @@ appropriate range.
 Examples
 --------
 
-* See: `examples\seven_segment_example.py`
-* [WokWi](https://wokwi.com/projects/360451068863047681)
+* See: `examples\seven_segment_hex_example.py`
+* [WokWi](https://wokwi.com/projects/360462223276690433)
 
 Tested Implementations
 ----------------------
@@ -67,12 +67,33 @@ try:
 except ImportError:
     print("Ignoring MicroPython includes")
 
+# Import the Python type libraries if available
+try:
+    from typing import Union
+except ImportError:
+    print("The Python type library isn't present. Ignoring.")
+
+##
+## Constants
+##
+
+ASCII_UPPERCASE = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+""" Constant for the set of ASCII letters """
+ASCII_DIGITS = set("0123456789")
+""" Constant for the set of ASCII digits """
+ASCII_HEX_DIGITS = set("0123456789ABCDEF")
+""" Constant for the set of ASCII hexadecimal decimal digits,
+including _only_ those which don't fit into `ASCII_DIGITS`"""
+ASCII_HEX_EXTRA_DIGITS = set("ABCDEF")
+""" Constant for the set of ASCII hexadecimal decimal digits,
+including _only_ those which don't fit into `ASCII_DIGITS`"""
+
 ##
 ## Classes
 ##
 
 
-class SegDisplay:
+class SegHexDisplay:
     char_list = [
         [False, False, False, False, False, False, True],
         [True, False, False, True, True, True, True],
@@ -84,6 +105,12 @@ class SegDisplay:
         [False, False, False, True, True, True, True],
         [False, False, False, False, False, False, False],
         [False, False, False, True, True, False, False],
+        [True, False, False, False, False, False, False],
+        [False, False, True, True, False, False, False],
+        [False, True, True, False, False, False, True],
+        [False, False, False, True, True, False, False],
+        [False, True, True, False, False, False, False],
+        [True, True, True, False, False, False, False],
     ]
     """
     Defines how characters are rendered, from zero ('0') in the first entry to
@@ -104,16 +131,15 @@ class SegDisplay:
 
         .. Note::
             This list of entries in the `gpio_request` _must_ be exactly seven
-            entries long, or the class will throw a `ValueError` in the
-            constructor.
+            entries long, or the class will throw a `ValueError` in the constructor.
 
         Parameters
         ----------
 
         gpio_request: list
             The pin-ordered list of GPIO pins to use for the segment positions
-            'a' (as the first entry in the list) to 'g' (as the last entry in
-            the list).
+            'a' (as the first entry in the list) to 'g' (as the last entry
+            in the list).
 
             **NOTE**: The `SegDisplay` class will also attempt to create the
             underlying GPIO object for each of the entries in the list. If
@@ -136,40 +162,80 @@ class SegDisplay:
             for segment in range(7):
                 self.pin_list.append(Pin(gpio_request[segment], Pin.OUT))
 
-    def display(self, character: int, inverted: bool = False):
+    def display(self, character: Union[int, str], inverted: bool = False):
         """
         Display the given `character` on the seven-segment display,
-        using the `char_list` as a guide for which pins to turn on or off. By default
-        the `display` method will use the entries in the `char_list` directly: if you
-        need to invert the 'normal' sense, set the `inverted` parameter to `True`.
+        using the `char_list` as a guide for which pins to turn on or off. By default the
+        `display` method will use the entries in the `char_list` directly: if you need to
+        invert the 'normal' sense, set the `inverted` parameter to `True`.
 
         Parameters
         ----------
 
-        character: int
-            The value to be displayed on the seven segment display, which must be
-            between zero ('0') and nine ('9')
+        character: int or str
+            The value to be displayed on the seven segment display. The value must be
+            either a `str` or an `int`, and will be interpreted as follows:
+
+            `int`: The value must be between zero ('0') and sixteen decimal ('F'), and
+            will be interpreted as a single, hexadecimal digit.
+
+            `str`: The value will be interpreted directly as a hexadecimal digit, and
+            must be in the range `[0..F]`.
+
+            If the type does not conform to the above, then a
 
         inverted: bool
-            By default the `display` method assumes that pulling a GPIO pin _low_
-            will turn the relevant segment _on_; i.e. the typical behaviour for a
-            common anode display. If the attached display needs to raise a GPIO pin
-            _high_ to set the segment _on_ (i.e. the typical behaviour for a common
-            cathode display), call the `display` method with `inverted` set to `True`.
+            By default the `display` method assumes that pulling a GPIO pin _low_ will
+            turn the relevant segment _on_; i.e. the typical behaviour for a common
+            anode display. If the attached display needs to raise a GPIO pin _high_ to
+            set the segment _on_ (i.e. the typical behaviour for a common cathode
+            display), call the `display` method with `inverted` set to `True`.
 
         Raises
         ------
 
         * `IndexError` if the `character` is not in a range that can be displayed.
+        * `TypeError` if the `character` is not either an `int` or a `str`
         """
-        if 0 <= character <= 9:
-            if not inverted:
-                for pin in range(7):
-                    self.pin_list[pin].value(self.char_list[character][pin])
+
+        # Convert a decimal integer in the range [0..15], and then display
+        if isinstance(character, int):
+            if 0 <= character <= 15:
+                if not inverted:
+                    for pin in range(7):
+                        self.pin_list[pin].value(self.char_list[character][pin])
+                else:
+                    for pin in range(7):
+                        self.pin_list[pin].value(not self.char_list[character][pin])
             else:
-                for pin in range(7):
-                    self.pin_list[pin].value(not self.char_list[character][pin])
+                raise IndexError(
+                    "The display character must be between zero ('0') and sixteen ('F')"
+                )
+
+        # Convert a string integer in the range [0..F], and then display
+        elif isinstance(character, str):
+            normalised_character = String.upper(character)
+
+            if normalised_character in ASCII_HEX_DIGITS:
+
+                char_list_index = int(normalised_character, 16)
+
+                if not inverted:
+                    for pin in range(7):
+                        self.pin_list[pin].value(self.char_list[char_list_index][pin])
+                else:
+                    for pin in range(7):
+                        self.pin_list[pin].value(
+                            not self.char_list[char_list_index][pin]
+                        )
+            else:
+                raise IndexError(
+                    "The display character must be a string between '0' and 'F'"
+                )
+
+        # If we can't convert the input `character`, raise an exception
         else:
-            raise IndexError(
-                "The display character must be between zero ('0') and nine ('9')"
+            raise TypeError(
+                "The 'character' parameter must either be an integer\
+                ('int') or a string ('str') type."
             )
