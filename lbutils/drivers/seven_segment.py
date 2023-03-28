@@ -48,19 +48,19 @@ except ImportError:
 
 class SegDisplay:
     char_list = [
-        [0, 0, 0, 0, 0, 0, 1],
-        [1, 0, 0, 1, 1, 1, 1],
-        [0, 0, 1, 0, 0, 1, 0],
-        [0, 0, 0, 0, 1, 1, 0],
-        [1, 0, 0, 1, 1, 0, 0],
-        [0, 1, 0, 0, 1, 0, 0],
-        [0, 1, 0, 0, 0, 0, 0],
-        [0, 0, 0, 1, 1, 1, 1],
-        [0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 1, 1, 0, 0],
+        [False, False, False, False, False, False, True],
+        [True, False, False, True, True, True, True],
+        [False, False, True, False, False, True, False],
+        [False, False, False, False, True, True, False],
+        [True, False, False, True, True, False, False],
+        [False, True, False, False, True, False, False],
+        [False, True, False, False, False, False, False],
+        [False, False, False, True, True, True, True],
+        [False, False, False, False, False, False, False],
+        [False, False, False, True, True, False, False],
     ]
     """
-    Defines how characters are rendered, from zero ('0') in the first entry to nine ('9') as the last entry. Note that pins which are listed here as `0` will be _on_ using the default options to the `display` method.
+    Defines how characters are rendered, from zero ('0') in the first entry to nine ('9') as the last entry. Note that pins which are listed here as `False` will be _on_ using the default options to the `display` method.
     """
 
     def __init__(self, gpio_reqest: list):
@@ -109,8 +109,12 @@ class SegDisplay:
             By default the `display` method assumes that pulling a GPIO pin _low_ will turn the relevant segment _on_; i.e. the typical behaviour for a common anode display. If the attached display needs to raise a GPIO pin _high_ to set the segment _on_ (i.e. the typical behaviour for a common cathode display), call the `display` method with `inverted` set to `True`.
         """
         if 0 <= character <= 9:
-            for pin in range(7):
-                self.pin_list[pin].value(self.char_list[character][pin])
+            if not inverted:
+                for pin in range(7):
+                    self.pin_list[pin].value(self.char_list[character][pin])
+            else:
+                for pin in range(7):
+                    self.pin_list[pin].value(not self.char_list[character][pin])
         else:
             raise ValueError(
                 "The display character must be between zero ('0') and nine ('9')"
