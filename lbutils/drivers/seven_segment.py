@@ -12,6 +12,7 @@ standard pattern, shown below. Once the constructor has been called, no further
 changes are possible: and the driver will also assume exclusive use of the
 relevant GPIO pins.
 
+````
      - A -
    |       |
    F       B
@@ -19,20 +20,27 @@ relevant GPIO pins.
    E       C
    |       |
      - D -
+````
 
 **Figure 1: Assumed Layout of the Seven Segment Display**
 
 To display a character, the `display` method of the class is used: passing in an
 integer in the range 0..9 representing the number to show on the seven segment.
 Not that by default the `display` method assumes that GPIO pins must be held
-_low_ for the segment to display: i.e. the behaviour normally used by common
+*low* for the segment to display: i.e. the behaviour normally used by common
 anode seven-segment displays. If you need the requested GPIO pin to be held
-_high_ to display a segment, pass in `True` to the `inverted` parameter of the
+*high* to display a segment, pass in `True` to the `inverted` parameter of the
 `display` method.
 
 .. Note: This driver will only display characters in the range '0' to 'F', and
 will raise a `ValueError` exception if the requested character is not in an
 appropriate range.
+
+.. DANGER::
+   Beware killer rabbits!
+
+!!! note
+    You should note that the title will be automatically capitalized.
 
 Examples
 --------
@@ -100,7 +108,7 @@ class SegDisplay:
     """
     Defines how characters are rendered, from zero ('0') in the first entry to
     nine ('9') as the last entry. Note that pins which are listed here as
-    `False` will be _on_ using the default options to the `display` method.
+    `False` will be *on* using the default options to the `display` method.
     """
 
     def __init__(self, gpio_request: list):
@@ -110,12 +118,12 @@ class SegDisplay:
         drive.
 
         This class also assume a common anode seven-segment display by default,
-        and so will assume that pulling a GPIO pin _low_ will turn the relevant
-        segment _on_. If you need to modify this behaviour, see the `inverted`
+        and so will assume that pulling a GPIO pin *low* will turn the relevant
+        segment *on*. If you need to modify this behaviour, see the `inverted`
         parameter for the `display` method.
 
         .. Note::
-            This list of entries in the `gpio_request` _must_ be exactly seven
+            This list of entries in the `gpio_request` *must* be exactly seven
             entries long, or the class will throw a `ValueError` in the
             constructor.
 
@@ -127,10 +135,10 @@ class SegDisplay:
             'a' (as the first entry in the list) to 'g' (as the last entry in
             the list).
 
-            **NOTE**: The `SegDisplay` class will also attempt to create the
+            .. Note:: The `SegDisplay` class will also attempt to create the
             underlying GPIO object for each of the entries in the list. If
             the GPIO pins need to be initialised first, this must be done
-            _before_ calling this constructor.
+            *before* calling this constructor.
 
         Raises
         ------
@@ -163,10 +171,10 @@ class SegDisplay:
             between zero ('0') and nine ('9')
 
         inverted: bool
-            By default the `display` method assumes that pulling a GPIO pin _low_
-            will turn the relevant segment _on_; i.e. the typical behaviour for a
+            By default the `display` method assumes that pulling a GPIO pin *low*
+            will turn the relevant segment *on*; i.e. the typical behaviour for a
             common anode display. If the attached display needs to raise a GPIO pin
-            _high_ to set the segment _on_ (i.e. the typical behaviour for a common
+            *high* to set the segment *on* (i.e. the typical behaviour for a common
             cathode display), call the `display` method with `inverted` set to `True`.
 
         Raises
@@ -189,7 +197,7 @@ class SegDisplay:
                 # ... if the request is to display in the inverted form, then
                 # select the row in `char_list` corresponding to the character to
                 # be displayed and then set in turn each of the GPIO pins corresponding
-                # to the segment values either high or low depending on the _inverse_ of
+                # to the segment values either high or low depending on the *inverse* of
                 # the column value in `char_list` for that segment value
                 for pin in range(7):
                     self.pin_list[pin].value(not self.char_list[character][pin])
