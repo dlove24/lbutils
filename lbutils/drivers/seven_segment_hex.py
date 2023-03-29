@@ -182,7 +182,7 @@ class SegHexDisplay:
             `str`: The value will be interpreted directly as a hexadecimal digit, and
             must be in the range `[0..F]`.
 
-            If the type does not conform to the above, then a
+            If the type does not conform to the above, then a `TypeError` will be raised.
 
         inverted: bool
             By default the `display` method assumes that pulling a GPIO pin _low_ will

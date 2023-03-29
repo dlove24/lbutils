@@ -256,7 +256,7 @@ class SegHexDisplay:
             `str`: The value will be interpreted directly as a hexadecimal digit, and
             must be in the range `[0..F]`.
 
-            If the type does not conform to the above, then a
+            If the type does not conform to the above, then a `TypeError` will be raised.
 
         inverted: bool
             By default the `display` method assumes that pulling a GPIO pin _low_ will
@@ -473,7 +473,7 @@ seven elements in the list.</li>
             `str`: The value will be interpreted directly as a hexadecimal digit, and
             must be in the range `[0..F]`.
 
-            If the type does not conform to the above, then a
+            If the type does not conform to the above, then a `TypeError` will be raised.
 
         inverted: bool
             By default the `display` method assumes that pulling a GPIO pin _low_ will
@@ -560,7 +560,7 @@ either a <code>str</code> or an <code>int</code>, and will be interpreted as fol
 will be interpreted as a single, hexadecimal digit.</p>
 <p><code>str</code>: The value will be interpreted directly as a hexadecimal digit, and
 must be in the range <code>[0..F]</code>.</p>
-<p>If the type does not conform to the above, then a</p>
+<p>If the type does not conform to the above, then a <code>TypeError</code> will be raised.</p>
 </dd>
 <dt><strong><code>inverted</code></strong> :&ensp;<code>bool</code></dt>
 <dd>By default the <code>display</code> method assumes that pulling a GPIO pin <em>low</em> will
@@ -598,7 +598,7 @@ display), call the <code>display</code> method with <code>inverted</code> set to
         `str`: The value will be interpreted directly as a hexadecimal digit, and
         must be in the range `[0..F]`.
 
-        If the type does not conform to the above, then a
+        If the type does not conform to the above, then a `TypeError` will be raised.
 
     inverted: bool
         By default the `display` method assumes that pulling a GPIO pin _low_ will
