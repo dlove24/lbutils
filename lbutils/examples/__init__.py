@@ -18,6 +18,7 @@ Many of the examples require a working board to reproduce, and so where possible
 Current demonstrations are
 
 * `lbutils.drivers.SegDisplay`: [7-Segment Display](https://wokwi.com/projects/360451068863047681)
+* `lbutils.drivers.SegHexDisplay`: [7-Segment Hex Digits Display](https://wokwi.com/projects/360462223276690433)
 
 Tested Implementations
 ----------------------
@@ -51,4 +52,4 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
-__pdoc__ = {"seven_segment_example": False}
+__pdoc__ = {"seven_segment_example": False, "seven_segment_hex_example": False}

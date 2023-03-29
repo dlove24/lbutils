@@ -97,7 +97,11 @@ FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
 COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-&#34;&#34;&#34;</code></pre>
+&#34;&#34;&#34;
+
+### Expose the `drivers` module interface as a full package
+from .seven_segment import SegDisplay
+from .seven_segment_hex import SegHexDisplay</code></pre>
 </details>
 </section>
 <section>
@@ -105,7 +109,11 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 <dl>
 <dt><code class="name"><a title="lbutils.drivers.seven_segment" href="seven_segment.html">lbutils.drivers.seven_segment</a></code></dt>
 <dd>
-<div class="desc"><p>Simple driver for a seven-segment display, requiring seven GPIO pins …</p></div>
+<div class="desc"><p>Simple (decimal) numeric driver for a seven-segment display, requiring seven GPIO pins …</p></div>
+</dd>
+<dt><code class="name"><a title="lbutils.drivers.seven_segment_hex" href="seven_segment_hex.html">lbutils.drivers.seven_segment_hex</a></code></dt>
+<dd>
+<div class="desc"><p>Simple hexadecimal driver for a seven-segment display, requiring seven GPIO pins …</p></div>
 </dd>
 </dl>
 </section>
@@ -134,6 +142,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
 <li><code><a title="lbutils.drivers.seven_segment" href="seven_segment.html">lbutils.drivers.seven_segment</a></code></li>
+<li><code><a title="lbutils.drivers.seven_segment_hex" href="seven_segment_hex.html">lbutils.drivers.seven_segment_hex</a></code></li>
 </ul>
 </li>
 </ul>
