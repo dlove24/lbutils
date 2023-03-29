@@ -177,7 +177,6 @@ class SegDisplay:
 
         # For a character in the valid range...
         if 0 <= character <= 9:
-
             if not inverted:
                 # ... if the request is to display in the non-inverted form, then
                 # select the row in `char_list` corresponding to the character to

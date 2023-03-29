@@ -212,10 +212,8 @@ class SegHexDisplay:
 
         # Convert a decimal integer in the range [0..15], and then display
         if isinstance(character, int):
-
             # For a character in the valid range...
             if 0 <= character <= 15:
-
                 if not inverted:
                     # ... if the request is to display in the non-inverted form, then
                     # select the row in `char_list` corresponding to the character to
@@ -239,13 +237,11 @@ class SegHexDisplay:
 
         # Convert a string integer in the range [0..F], and then display
         elif isinstance(character, str):
-
             # Normalise the character by converting to upper case
             normalised_character = character.upper()
 
             # Check if this normalise character is a valid hexadecimal digit...
             if normalised_character in ASCII_HEX_DIGITS:
-
                 # ... if so, convert the hexadecimal string to an integer, so we can use
                 # this as the index for the character lookup
                 char_list_index = int(normalised_character, 16)

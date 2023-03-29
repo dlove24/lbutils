@@ -42,7 +42,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 # Import MicroPython libraries for GPIO access if available
 try:
-
     from machine import ADC
     from machine import Pin
 except ImportError:
