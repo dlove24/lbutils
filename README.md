@@ -1,5 +1,7 @@
 # LBUtils
 
+[![Documentation Status](https://readthedocs.org/projects/lbutils/badge/?version=latest)](https://lbutils.readthedocs.io/en/latest/?badge=latest)
+
 ## Background
 
 This library is designed to install all of the common drivers, library code, and helper code used within modules at Leeds Beckett University. It is principally targeted at MicroPython on the Pico H/W micro-controllers: but compatibility is also maintained with CPython 3.10 where possible (or relevant).
