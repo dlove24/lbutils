@@ -1,3 +1,24 @@
+# This module, and all included code, is made available under the terms of the MIT Licence
+#
+# Copyright (c) 2023 Roz Wyatt-Millington, David Love
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal in
+# the Software without restriction, including without limitation the rights to
+# use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+# the Software, and to permit persons to whom the Software is furnished to do so,
+# subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+# FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+# COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+# IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+# CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 """
 Simple hexadecimal driver for a seven-segment display, requiring seven GPIO pins.
 
@@ -30,9 +51,10 @@ anode seven-segment displays. If you need the requested GPIO pin to be held
 _high_ to display a segment, pass in `True` to the `inverted` parameter of the
 `display` method.
 
-.. Note: This driver will only display characters in the range '0' to 'F', and
-will raise a `ValueError` exception if the requested character is not in an
-appropriate range.
+!!! Note
+    This driver will only display characters in the range '0' to 'F', and
+    will raise a `ValueError` exception if the requested character is not in an
+    appropriate range.
 
 Examples
 --------
@@ -47,29 +69,6 @@ This version is written for MicroPython 3.4, and has been tested on:
 
 * Raspberry Pi Pico H/W
 
-Licence
--------
-
-This module, and all included code, is made available under the terms of the MIT Licence
-
-> Copyright (c) 2023 Roz Wyatt-Millington, David Love
-
-> Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
-
-> The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
 # Import MicroPython libraries for GPIO access if available
@@ -106,7 +105,16 @@ including _only_ those which don't fit into `ASCII_DIGITS`"""
 
 
 class SegHexDisplay:
-    char_list = [
+    """
+    Simple hexadecimal driver for a seven-segment display, requiring seven GPIO pins.
+
+    !!! Warning
+        This driver will only display characters in the range '0' to 'F', and
+        will raise a `ValueError` exception if the requested character is not in an
+        appropriate range.
+    """
+
+    _char_list = [
         [False, False, False, False, False, False, True],
         [True, False, False, True, True, True, True],
         [False, False, True, False, False, True, False],
@@ -141,8 +149,8 @@ class SegHexDisplay:
         segment _on_. If you need to modify this behaviour, see the `inverted`
         parameter for the `display` method.
 
-        .. Note::
-            This list of entries in the `gpio_request` _must_ be exactly seven
+        !!! Note
+            This list of entries in the `gpio_request` _must_ be **exactly** seven
             entries long, or the class will throw a `ValueError` in the constructor.
 
         Parameters
@@ -161,8 +169,9 @@ class SegHexDisplay:
         Raises
         ------
 
-        * `ValueError` if the `gpio_request` is empty, or does not have exactly
-          seven elements in the list.
+        ValueError
+            If the `gpio_request` is empty, or does not have exactly
+            seven elements in the list.
         """
         self.pin_list = []
 
@@ -177,8 +186,8 @@ class SegHexDisplay:
     def display(self, character: Union[int, str], inverted: bool = False):
         """
         Display the given `character` on the seven-segment display,
-        using the `char_list` as a guide for which pins to turn on or off. By default the
-        `display` method will use the entries in the `char_list` directly: if you need to
+        using the `_char_list` as a guide for which pins to turn on or off. By default the
+        `display` method will use the entries in the `_char_list` directly: if you need to
         invert the 'normal' sense, set the `inverted` parameter to `True`.
 
         Parameters
@@ -195,7 +204,6 @@ class SegHexDisplay:
             must be in the range `[0..F]`.
 
             If the type does not conform to the above, then a `TypeError` will be raised.
-
         inverted: bool
             By default the `display` method assumes that pulling a GPIO pin _low_ will
             turn the relevant segment _on_; i.e. the typical behaviour for a common
@@ -206,8 +214,10 @@ class SegHexDisplay:
         Raises
         ------
 
-        * `IndexError` if the `character` is not in a range that can be displayed.
-        * `TypeError` if the `character` is not either an `int` or a `str`
+        IndexError
+            If the `character` is not in a range that can be displayed.
+        TypeError
+            If the `character` is not either an `int` or a `str`
         """
 
         # Convert a decimal integer in the range [0..15], and then display
@@ -216,20 +226,20 @@ class SegHexDisplay:
             if 0 <= character <= 15:
                 if not inverted:
                     # ... if the request is to display in the non-inverted form, then
-                    # select the row in `char_list` corresponding to the character to
+                    # select the row in `_char_list` corresponding to the character to
                     # be displayed and then set in turn each of the GPIO pins corresponding
                     # to the segment values either high or low depending on the column
-                    # value in `char_list` for that segment value
+                    # value in `_char_list` for that segment value
                     for pin in range(7):
-                        self.pin_list[pin].value(self.char_list[character][pin])
+                        self.pin_list[pin].value(self._char_list[character][pin])
                 else:
                     # ... if the request is to display in the inverted form, then
-                    # select the row in `char_list` corresponding to the character to
+                    # select the row in `_char_list` corresponding to the character to
                     # be displayed and then set in turn each of the GPIO pins corresponding
                     # to the segment values either high or low depending on the _inverse_ of
-                    # the column value in `char_list` for that segment value
+                    # the column value in `_char_list` for that segment value
                     for pin in range(7):
-                        self.pin_list[pin].value(not self.char_list[character][pin])
+                        self.pin_list[pin].value(not self._char_list[character][pin])
             else:
                 raise IndexError(
                     "The display character must be between zero ('0') and sixteen ('F')"
@@ -244,26 +254,26 @@ class SegHexDisplay:
             if normalised_character in ASCII_HEX_DIGITS:
                 # ... if so, convert the hexadecimal string to an integer, so we can use
                 # this as the index for the character lookup
-                char_list_index = int(normalised_character, 16)
+                _char_list_index = int(normalised_character, 16)
 
                 if not inverted:
                     # If the request is to display in the non-inverted form, then
-                    # select the row in `char_list` corresponding to the `char_list_index` to
+                    # select the row in `_char_list` corresponding to the `_char_list_index` to
                     # be displayed and then set in turn each of the GPIO pins corresponding
                     # to the segment values either high or low depending on the column
-                    # value in `char_list` for that segment value
+                    # value in `_char_list` for that segment value
                     for pin in range(7):
-                        self.pin_list[pin].value(self.char_list[char_list_index][pin])
+                        self.pin_list[pin].value(self._char_list[_char_list_index][pin])
 
                 else:
                     # If the request is to display in the inverted form, then
-                    # select the row in `char_list` corresponding to the `char_list_index` to
+                    # select the row in `_char_list` corresponding to the `_char_list_index` to
                     # be displayed and then set in turn each of the GPIO pins corresponding
                     # to the segment values either high or low depending on the _inverse_ of
-                    # the column value in `char_list` for that segment value
+                    # the column value in `_char_list` for that segment value
                     for pin in range(7):
                         self.pin_list[pin].value(
-                            not self.char_list[char_list_index][pin]
+                            not self._char_list[_char_list_index][pin]
                         )
             else:
                 raise IndexError(

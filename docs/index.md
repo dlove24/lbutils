@@ -6,7 +6,7 @@ This library is designed to install all of the common drivers, library code, and
 
 Examples for how to use the library can be found in the '`examples`' folder: or [in the documentation](https://dlove24.github.io/lbutils/lbutils/examples/index.html). Otherwise the library is organised as follows
 
-- **`drivers`**: Classes aimed at low-level support of I2C, SPI and other devices requiring board-level support.
+- [**`drivers`**][drivers]: Classes aimed at low-level support of I2C, SPI and other devices requiring board-level support.
 - **`helpers`**: Functions and classes which help replace boiler-plate code for tasks such as setting up network access.
 - **`pmod`**: Drivers and support for the [Digilent peripheral modules](https://digilent.com/reference/pmod/start).
 
@@ -19,8 +19,6 @@ For manual installation, everything under the `lbutils` directory should be copi
 ## Notes
 
 - This library is principally a teaching library, so the [Documentation](https://dlove24.github.io/urest/urest) should be at least as important as the 'code'. Where possible all algorithms and implementation techniques should also be explained as fully as possible, or at least linked to reference standards/implementations
-
-- All documentation should be organised according to the [Diátaxis](https://diataxis.fr/) framework: ideally with examples that do not require specific board set-ups.
 
 - For consistency, all code should also be in the format standardised by the [Black](https://github.com/psf/black) library. This makes it easier to co-ordinate external code and documentation with the implementation documented here.
 
