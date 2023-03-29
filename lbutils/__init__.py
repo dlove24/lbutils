@@ -5,7 +5,7 @@ Background
 
 This library is designed to install all of the common drivers, library code, and helper code used within modules at Leeds Beckett University. It is principally targeted at MicroPython on the Pico H/W micro-controllers: but compatibility is also maintained with CPython 3.10 where possible (or relevant).
 
-Examples for how to use the library can be found in the '`examples`' folder: or [in the documentation](https://dlove24.github.io/urest/lbutils/examples/index.html). Otherwise the library is organised as follows
+Examples for how to use the library can be found in the '`examples`' folder: or [in the documentation](https://dlove24.github.io/lbutils/lbutils/index.html). Otherwise the library is organised as follows
 
 * **`drivers`**: Classes aimed at low-level support of I2C, SPI and other devices requiring board-level support.
 * **`helpers`**: Functions and classes which help replace boiler-plate code for tasks such as setting up network access.
