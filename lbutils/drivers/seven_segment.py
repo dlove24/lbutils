@@ -172,7 +172,6 @@ class SegDisplay:
         character: int
             The value to be displayed on the seven segment display, which must be
             between zero ('0') and nine ('9')
-
         inverted: bool
             By default the `display` method assumes that pulling a GPIO pin *low*
             will turn the relevant segment *on*; i.e. the typical behaviour for a

@@ -1,6 +1,7 @@
 # LBUtils
 
 [![Documentation Status](https://readthedocs.org/projects/lbutils/badge/?version=latest)](https://lbutils.readthedocs.io/en/latest/?badge=latest)
+[![PyPI version](https://badge.fury.io/py/lbutils-mp.svg)](https://badge.fury.io/py/lbutils-mp)
 
 ## Background
 
