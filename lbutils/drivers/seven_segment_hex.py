@@ -7,8 +7,20 @@ Overview
 During initialisation the user must supply a list of exactly seven GPIO pins,
 using the numeric pin identifier (e.g. 16 for GPIO Pin 16). Each entry in the
 list corresponds to the segment 'a' (for the first entry) to 'g' (for the last
-entry). Once the constructor has been called, no further changes are possible:
-and the driver will also assume exclusive use of the relevant GPIO pins.
+entry). Physically, each LED segment is also assumed to be laid out in the
+standard pattern, shown below. Once the constructor has been called, no further
+changes are possible: and the driver will also assume exclusive use of the
+relevant GPIO pins.
+
+     - A -
+   |       |
+   F       B
+   | - G - |
+   E       C
+   |       |
+     - D -
+
+**Figure 1: Assumed Layout of the Seven Segment Display**
 
 To display a character, the `display` method of the class is used: passing in an
 integer in the range 0..F representing the number to show on the seven segment.
@@ -200,11 +212,24 @@ class SegHexDisplay:
 
         # Convert a decimal integer in the range [0..15], and then display
         if isinstance(character, int):
+
+            # For a character in the valid range...
             if 0 <= character <= 15:
+
                 if not inverted:
+                    # ... if the request is to display in the non-inverted form, then
+                    # select the row in `char_list` corresponding to the character to
+                    # be displayed and then set in turn each of the GPIO pins corresponding
+                    # to the segment values either high or low depending on the column
+                    # value in `char_list` for that segment value
                     for pin in range(7):
                         self.pin_list[pin].value(self.char_list[character][pin])
                 else:
+                    # ... if the request is to display in the inverted form, then
+                    # select the row in `char_list` corresponding to the character to
+                    # be displayed and then set in turn each of the GPIO pins corresponding
+                    # to the segment values either high or low depending on the _inverse_ of
+                    # the column value in `char_list` for that segment value
                     for pin in range(7):
                         self.pin_list[pin].value(not self.char_list[character][pin])
             else:
@@ -214,16 +239,32 @@ class SegHexDisplay:
 
         # Convert a string integer in the range [0..F], and then display
         elif isinstance(character, str):
+
+            # Normalise the character by converting to upper case
             normalised_character = character.upper()
 
+            # Check if this normalise character is a valid hexadecimal digit...
             if normalised_character in ASCII_HEX_DIGITS:
 
+                # ... if so, convert the hexadecimal string to an integer, so we can use
+                # this as the index for the character lookup
                 char_list_index = int(normalised_character, 16)
 
                 if not inverted:
+                    # If the request is to display in the non-inverted form, then
+                    # select the row in `char_list` corresponding to the `char_list_index` to
+                    # be displayed and then set in turn each of the GPIO pins corresponding
+                    # to the segment values either high or low depending on the column
+                    # value in `char_list` for that segment value
                     for pin in range(7):
                         self.pin_list[pin].value(self.char_list[char_list_index][pin])
+
                 else:
+                    # If the request is to display in the inverted form, then
+                    # select the row in `char_list` corresponding to the `char_list_index` to
+                    # be displayed and then set in turn each of the GPIO pins corresponding
+                    # to the segment values either high or low depending on the _inverse_ of
+                    # the column value in `char_list` for that segment value
                     for pin in range(7):
                         self.pin_list[pin].value(
                             not self.char_list[char_list_index][pin]

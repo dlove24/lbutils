@@ -7,8 +7,20 @@ Overview
 During initialisation the user must supply a list of exactly seven GPIO pins,
 using the numeric pin identifier (e.g. 16 for GPIO Pin 16). Each entry in the
 list corresponds to the segment 'a' (for the first entry) to 'g' (for the last
-entry). Once the constructor has been called, no further changes are possible:
-and the driver will also assume exclusive use of the relevant GPIO pins.
+entry). Physically, each LED segment is also assumed to be laid out in the
+standard pattern, shown below. Once the constructor has been called, no further
+changes are possible: and the driver will also assume exclusive use of the
+relevant GPIO pins.
+
+     - A -
+   |       |
+   F       B
+   | - G - |
+   E       C
+   |       |
+     - D -
+
+**Figure 1: Assumed Layout of the Seven Segment Display**
 
 To display a character, the `display` method of the class is used: passing in an
 integer in the range 0..9 representing the number to show on the seven segment.
@@ -162,11 +174,24 @@ class SegDisplay:
 
         * `IndexError` if the `character` is not in a range that can be displayed.
         """
+
+        # For a character in the valid range...
         if 0 <= character <= 9:
+
             if not inverted:
+                # ... if the request is to display in the non-inverted form, then
+                # select the row in `char_list` corresponding to the character to
+                # be displayed and then set in turn each of the GPIO pins corresponding
+                # to the segment values either high or low depending on the column
+                # value in `char_list` for that segment value
                 for pin in range(7):
                     self.pin_list[pin].value(self.char_list[character][pin])
             else:
+                # ... if the request is to display in the inverted form, then
+                # select the row in `char_list` corresponding to the character to
+                # be displayed and then set in turn each of the GPIO pins corresponding
+                # to the segment values either high or low depending on the _inverse_ of
+                # the column value in `char_list` for that segment value
                 for pin in range(7):
                     self.pin_list[pin].value(not self.char_list[character][pin])
         else:
