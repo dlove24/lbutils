@@ -25,7 +25,7 @@ appropriate range.
 Examples
 --------
 
-* See: `examples\seven_segment_hex_example.py`
+* Examples Folder: `seven_segment_hex_example.py`
 * [WokWi](https://wokwi.com/projects/360462223276690433)
 
 Tested Implementations
@@ -214,7 +214,7 @@ class SegHexDisplay:
 
         # Convert a string integer in the range [0..F], and then display
         elif isinstance(character, str):
-            normalised_character = String.upper(character)
+            normalised_character = character.upper()
 
             if normalised_character in ASCII_HEX_DIGITS:
 

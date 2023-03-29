@@ -25,7 +25,7 @@ appropriate range.
 Examples
 --------
 
-* See: `examples\seven_segment_example.py`
+* Examples Folder: `seven_segment_example.py`
 * [WokWi](https://wokwi.com/projects/360451068863047681)
 
 Tested Implementations
