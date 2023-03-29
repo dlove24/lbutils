@@ -170,7 +170,7 @@ class SegHexDisplay:
         ------
 
         ValueError
-            If the `gpio_request` is empty, or does not have exactly
+            The `gpio_request` is empty, or does not have exactly
             seven elements in the list.
         """
         self.pin_list = []
@@ -215,9 +215,9 @@ class SegHexDisplay:
         ------
 
         IndexError
-            If the `character` is not in a range that can be displayed.
+            The `character` is not in a range that can be displayed.
         TypeError
-            If the `character` is not either an `int` or a `str`
+            The `character` is not either an `int` or a `str`
         """
 
         # Convert a decimal integer in the range [0..15], and then display

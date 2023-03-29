@@ -146,7 +146,7 @@ class SegDisplay:
         ------
 
         ValueError
-            If the `gpio_request` is empty, or does not have exactly
+            The `gpio_request` is empty, or does not have exactly
             seven elements in the list.
         """
         self.pin_list = []
@@ -183,7 +183,7 @@ class SegDisplay:
         ------
 
         IndexError
-            If the `character` is not in a range that can be displayed.
+            The `character` is not in a range that can be displayed.
         """
 
         # For a character in the valid range...
