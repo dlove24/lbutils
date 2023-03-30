@@ -28,6 +28,7 @@ The library is organised into the following modules, which are designed to be st
 
 * **[`drivers`][drivers]**: Classes aimed at low-level support of I2C, SPI and
   other devices requiring board-level support.
+* **[`font`][fonts]**: Classes providing glyph and character support for display drivers.
 * **`helpers`**: Functions and classes which help replace boiler-plate code for
   tasks such as setting up network access.
 * **`pmod`**: Drivers and support for the
