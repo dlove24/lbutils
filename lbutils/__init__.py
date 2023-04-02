@@ -20,18 +20,14 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Utilities and Drivers for MicroPython used at Leeds Beckett University
+"""Utilities and Drivers for MicroPython used at Leeds Beckett University. The library is organised into the following modules, which are designed to be stand-alone
 
-## Organisation and Usage
-
-The library is organised into the following modules, which are designed to be stand-alone
-
-* **[`drivers`][drivers]**: Classes aimed at low-level support of I2C, SPI and
+* **[`drivers`][lbutils.drivers]**: Classes aimed at low-level support of I2C, SPI and
   other devices requiring board-level support.
-* **[`font`][fonts]**: Classes providing glyph and character support for display drivers.
-* **`helpers`**: Functions and classes which help replace boiler-plate code for
+* **[`fonts`][lbutils.fonts]**: Classes providing glyph and character support for display drivers.
+* **[`helpers`][lbutils.helpers]**: Functions and classes which help replace boiler-plate code for
   tasks such as setting up network access.
-* **`pmod`**: Drivers and support for the
+* **[`pmod`][lbutils.pmod]**: Drivers and support for the
   [Digilent peripheral modules](https://digilent.com/reference/pmod/start).
 
 Each module can be imported in its entirety to expose the individual drivers, for instance as

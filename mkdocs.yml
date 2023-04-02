@@ -10,18 +10,35 @@ plugins:
         python:
           options:
             docstring_style: numpy
-            heading_level: 4
+            heading_level: 2
+            separate_signature: True
+            docstring_section_style: list
+            show_root_heading: True
+            show_signature_annotations: True
+            show_category_heading: True
+            show_source: False
+
+
 
 markdown_extensions:
   - admonition
+  - attr_list
+  - md_in_html
   - pymdownx.details
   - pymdownx.superfences
 
 nav:
   - Home: 'index.md'
-  - examples.md
+  - tutorials.md
+  - 'How-To':
+    - 'Set-up the Pico H/W': 'how_to/pico_setup.md'
+    - 'Run Library Tests': 'how_to/run_tests.md'
   - 'Reference':
     - 'Guide to the API': 'ref/reference.md'
-    - 'Driver Classes': 'ref/drivers/drivers.md'
+    - 'Fonts and Font Selection': 'ref/fonts/font_guide.md'
     - 'Seven Segment Drivers': 'ref/drivers/seven_segment.md'
+    - 'Helper I2C/SPI Classes and Functions': 'ref/helpers/bus_utilities.md'
   - explanation.md
+
+watch:
+  - lbutils

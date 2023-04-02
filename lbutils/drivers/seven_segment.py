@@ -113,7 +113,7 @@ class SegDisplay:
     `False` will be *on* using the default options to the `display` method.
     """
 
-    def __init__(self, gpio_request: list):
+    def __init__(self, gpio_request: list) -> None:
         """
         Initialise a seven-segment display, using the user supplied
         list of GPIO pins in `gpio_request` as reference for pins to
@@ -159,7 +159,7 @@ class SegDisplay:
             for segment in range(7):
                 self.pin_list.append(Pin(gpio_request[segment], Pin.OUT))
 
-    def display(self, character: int, inverted: bool = False):
+    def display(self, character: int, inverted: bool = False) -> None:
         """
         Display the given `character` on the seven-segment display,
         using the `_char_list` as a guide for which pins to turn on or off. By default
@@ -172,7 +172,7 @@ class SegDisplay:
         character: int
             The value to be displayed on the seven segment display, which must be
             between zero ('0') and nine ('9')
-        inverted: bool
+        inverted: bool, optional
             By default the `display` method assumes that pulling a GPIO pin *low*
             will turn the relevant segment *on*; i.e. the typical behaviour for a
             common anode display. If the attached display needs to raise a GPIO pin

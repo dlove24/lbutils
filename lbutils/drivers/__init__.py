@@ -20,14 +20,13 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 """
-Drivers for low-level components, including those using the SPI or I2C busses
+Drivers for low-level components, including those using the SPI or I2C busses.
+This is mostly a collection of drivers, some third-party, which provide
+low-level access to devices. In most cases additional code will be required to
+_use_ these devices: the focus of the code in here is only on providing _access_
+to those devices.
 
-Overview
---------
-
-This is mostly a collection of drivers, some third-party, which provide low-level access to devices. In most cases additional code will be required to _use_ these devices: the focus of the code in here is only on providing _access_ to those devices.
-
-Examples for how to use the library can be found in the '`examples`' folder: or [in the documentation](https://dlove24.github.io/lbutils/examples/index.html).
+Examples for how to use the library can be found in the '`examples`' folder: or in the documentation for specific classes. In some cases the examples will require a specific example circuit: where this is the case, in most cases classes will additionally provide an example on [WokWi](https://wokwi.com).
 
 !!! Note
     The Digilent '`pmod`' devices are split into their own special section, and should be imported using the '`pmod`' libraries.
@@ -38,6 +37,7 @@ Tested Implementations
 This version is written for MicroPython 3.4, and has been tested on:
 
   * Raspberry Pi Pico H/W
+
 """
 
 ### Expose the `drivers` module interface as a full package

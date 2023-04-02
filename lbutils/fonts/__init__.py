@@ -1,6 +1,7 @@
-# This module, and all included code, is made available under the terms of the MIT Licence
+# This module, and all included code, is made available under the terms of the MIT
+# Licence
 #
-# Copyright (c) 2023 David Love
+# Copyright 2022-2023, David Love
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal in
@@ -19,13 +20,18 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+"""Fonts for the LED and OLED displays; especially the those using the 'pmod' packages.
+
+## Tested Implementations
+
+*   Raspberry Pi Pico W (MicroPython 3.4)
+*   CPython (3.10)
+
 """
-Helper code and utilities, mostly helping to automate common tasks and replace boiler-plate code. Many of the classes and utilities in this collection are aimed at supporting the Leeds Beckett micro-controller development board, but may also be helpful for bare Pico H/W support.
 
-Tested Implementations
-----------------------
+### Expose the `fonts` module interface as a full package
+from .PFX_Font import PFx_Font
+from .font06 import font06
+from .font08 import font08
+from .org_01 import org_01
 
-This version is written for MicroPython 3.4, and has been tested on:
-
-  * Raspberry Pi Pico H/W
-"""

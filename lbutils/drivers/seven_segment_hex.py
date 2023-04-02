@@ -138,7 +138,7 @@ class SegHexDisplay:
     `False` will be _on_ using the default options to the `display` method.
     """
 
-    def __init__(self, gpio_request: list):
+    def __init__(self, gpio_request: list) -> None:
         """
         Initialise a seven-segment display, using the user supplied
         list of GPIO pins in `gpio_request` as reference for pins to
@@ -183,7 +183,7 @@ class SegHexDisplay:
             for segment in range(7):
                 self.pin_list.append(Pin(gpio_request[segment], Pin.OUT))
 
-    def display(self, character: Union[int, str], inverted: bool = False):
+    def display(self, character: Union[int, str], inverted: bool = False) -> None:
         """
         Display the given `character` on the seven-segment display,
         using the `_char_list` as a guide for which pins to turn on or off. By default the
@@ -204,7 +204,7 @@ class SegHexDisplay:
             must be in the range `[0..F]`.
 
             If the type does not conform to the above, then a `TypeError` will be raised.
-        inverted: bool
+        inverted: bool, optional
             By default the `display` method assumes that pulling a GPIO pin _low_ will
             turn the relevant segment _on_; i.e. the typical behaviour for a common
             anode display. If the attached display needs to raise a GPIO pin _high_ to

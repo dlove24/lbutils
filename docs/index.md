@@ -6,9 +6,13 @@ This library is designed to install all of the common drivers, library code, and
 
 Examples for how to use the library can be found in the '`examples`' folder: or [in the documentation](https://dlove24.github.io/lbutils/lbutils/examples/index.html). Otherwise the library is organised as follows
 
-- [**`drivers`**][drivers]: Classes aimed at low-level support of I2C, SPI and other devices requiring board-level support.
-- **`helpers`**: Functions and classes which help replace boiler-plate code for tasks such as setting up network access.
-- **`pmod`**: Drivers and support for the [Digilent peripheral modules](https://digilent.com/reference/pmod/start).
+* **[`drivers`][lbutils.drivers]**: Classes aimed at low-level support of I2C, SPI and
+  other devices requiring board-level support.
+* **[`fonts`][lbutils.fonts]**: Classes providing glyph and character support for display drivers.
+* **[`helpers`][lbutils.helpers]**: Functions and classes which help replace boiler-plate code for
+  tasks such as setting up network access.
+* **`pmod`**: Drivers and support for the
+  [Digilent peripheral modules](https://digilent.com/reference/pmod/start).
 
 ## Installation
 
