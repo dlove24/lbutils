@@ -67,3 +67,20 @@ li.field-body > b {
 li.field-body::marker {
   color: #ccc;
 }
+
+/**
+ ** Source Code. Stop the clash between the source code summary
+ ** and the other page elements. Visually integrate as well
+ ** whilst we are here.
+ **
+ */
+
+summary {
+  margin: 24px;
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+summary::marker {
+  color: #6ab0de;
+}

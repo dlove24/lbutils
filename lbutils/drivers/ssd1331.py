@@ -186,6 +186,6 @@ class SSD1331:
         return x + _cursor
 
     def putText(self, x, y, txt, color):
-        if not self.font is None:
+        if self.font is not None:
             for c in txt:
                 x = self.putChar(x, y, c, color)

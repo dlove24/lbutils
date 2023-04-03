@@ -19,7 +19,7 @@ plugins:
             show_root_heading: True
             show_signature_annotations: True
             show_category_heading: True
-            show_source: False
+            show_source: True
 
 
 
