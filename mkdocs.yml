@@ -3,6 +3,9 @@ site_name: LBUtils Library
 theme:
   name: readthedocs
 
+extra_css:
+  - css/extra.css
+
 plugins:
   - autorefs
   - mkdocstrings:
