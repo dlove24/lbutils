@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Reformat the code into the correct style
-black .
+black --preview .
 
 # Check for obvious errors/style violations
 flake8

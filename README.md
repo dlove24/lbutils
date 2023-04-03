@@ -1,5 +1,6 @@
 # LBUtils
 
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Documentation Status](https://readthedocs.org/projects/lbutils/badge/?version=latest)](https://lbutils.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/lbutils-mp.svg)](https://badge.fury.io/py/lbutils-mp)
 

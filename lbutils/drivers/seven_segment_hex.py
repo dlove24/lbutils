@@ -283,6 +283,6 @@ class SegHexDisplay:
         # If we can't convert the input `character`, raise an exception
         else:
             raise TypeError(
-                "The 'character' parameter must either be an integer\
-                ('int') or a string ('str') type."
+                "The 'character' parameter must either be an integer ('int') or a"
+                " string ('str') type."
             )
