@@ -40,7 +40,7 @@ except ImportError:
 
 # Import the LB Utils driver for the Pmod OLEDrgb
 try:
-    from lbutils.pmod import OLEDrgb as SSD
+    from lbutils.pmod.spi import OLEDrgb as SSD
 except ImportError:
     raise RuntimeError("Error: Cannot find the Pmod OLEDrgb driver!")
 
