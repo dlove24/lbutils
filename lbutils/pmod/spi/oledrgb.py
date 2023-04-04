@@ -19,7 +19,51 @@
 # SOFTWARE.
 
 """
-Simple display driver for the Pmod OLEDrgb, based on the ['ssd1331'](https://github.com/danjperron/pico_mpu6050_ssd1331) driver by From Daniel Perron.
+Simple display driver for the [Pmod
+OLEDrgb](https://digilent.com/reference/pmod/pmodoledrgb/start), based on the
+['ssd1331'](https://github.com/danjperron/pico_mpu6050_ssd1331) driver by From
+Daniel Perron. The [Pmod
+OLEDrgb](https://digilent.com/reference/pmod/pmodoledrgb/start) provides an OLED
+screen with a 96×64 pixel display capable of 16-bit RGB color resolution.
+
+!!! note
+
+    Enabling the functionality of this module requires an extensive set-up
+    routine detailed in the [official reference
+    documentation](https://digilent.com/reference/pmod/pmodoledrgb/reference-manual)
+    . In the normal use of this driver, the initialising command sequence is sent as
+    part of the class construction. It therefore recommended to keep (or call) the
+    constructor of this class in any sub-classes.
+
+## Pin Layout
+
+The table below shows the standard pin numbers for the Leeds Beckett
+micron-controller development board, using the standard PMod header below.
+
+![PMod J1 Header Layout](https://digilent.com/reference/_media/reference/pmod/pmod-pinout-2x6.png)
+
+|        | Pin Name      | Number       | Description                         |
+|--------|---------------|--------------|-------------------------------------|
+| Pin 1  | CS            |              | SPI Chip Select                     |
+| Pin 2  | SDO           |              | SPI Serial Data Out                 |
+| Pin 3  | Not Connected |              | Not Connected                       |
+| Pin 4  | SCK           |              | SPI Serial Clock                    |
+| Pin 5  | GND           |              | Ground                              |
+| Pin 6  | VCC           |              | VCC (+3.3V)                         |
+| Pin 7  | D/C           |              | Data/Commands. Display Data.        |
+| Pin 8  | RES           |              | Reset the display controller        |
+| Pin 9  | VCC_EN        |              | VCC Enable (Enable/Disable Display) |
+| Pin 10 | PMODEN        |              | Power Supply to GND. Low-Power Mode |
+| Pin 11 | GND           |              | Ground                              |
+| Pin 12 | VCC           |              | VCC (+3.3V)                         |
+
+## References
+
+* **Reference Manual:**
+[OLEDrgb](https://digilent.com/reference/pmod/pmodoledrgb/reference-manual)
+* **Primary IC:**
+[ssd1331](https://cdn-shop.adafruit.com/datasheets/SSD1331_1.2.pdf)
+
 """
 
 import ustruct
@@ -91,6 +135,21 @@ class OLEDrgb:
     _ENCODE_RECT = ">BBBBBBBBBB"
 
     def __init__(self, spi, dc, cs, rst=None, width=96, height=64):
+        """
+        Initialise the SPI interface, and sent the sequence of commands
+        required for the device startup. The full command sequence is
+        documented [here](https://digilent.com/reference/pmod/pmodoledrgb/reference-manual), and is recorded in the (private) `_INIT` array.
+
+        Client are not expected to modify the contents of the `INIT` array,
+        but instead provide the details of specific devices in the `width`
+        and `height` parameters. Both the `width` and the `height` are set
+        to the defaults of the OLEDrgb Pmod: but this driver may be useful
+        for other variations of the underlying display controller.
+
+        Parameters
+        ----------
+        """
+
         self.spi = spi
         self.dc = dc
         self.cs = cs
