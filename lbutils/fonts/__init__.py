@@ -45,6 +45,7 @@ Currently the `fontconvert` utility only extracts the printable 7-bit ASCII char
 
 ### Expose the `fonts` module interface as a full package
 from .pfx_font import PFx_Font
-from .font06 import Font06
-from .font08 import Font08
+
+from .font06 import Font_06
+from .font08 import Font_08
 from .org_01 import Org_01

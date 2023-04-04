@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from display.fonts.pfx_font import PFx_Font
+from .pfx_font import PFx_Font
 
 
 class Org_01(PFx_Font):

@@ -1,5 +1,27 @@
-# From Daniel Perron
-# https://github.com/danjperron/pico_mpu6050_ssd1331
+# Copyright (c) 2021 Daniel Perron; 2023 David Love
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+"""
+Simple display driver for the Pmod OLEDrgb, based on the ['ssd1331'](https://github.com/danjperron/pico_mpu6050_ssd1331) driver by From Daniel Perron.
+"""
+
 import ustruct
 import utime
 from micropython import const
@@ -37,7 +59,7 @@ _VCOMH = const(0xBE)
 _LOCK = const(0xFD)
 
 
-class SSD1331:
+class OLEDrgb:
     _INIT = (
         (_DISPLAYOFF, b""),
         (_LOCK, b"\x0b"),
@@ -68,6 +90,18 @@ class SSD1331:
     _ENCODE_LINE = ">BBBBBBB"
     _ENCODE_RECT = ">BBBBBBBBBB"
 
+    def __init__(self, spi, dc, cs, rst=None, width=96, height=64):
+        self.spi = spi
+        self.dc = dc
+        self.cs = cs
+        self.rst = rst
+        self.width = width
+        self.height = height
+        self.reset()
+        for command, data in self._INIT:
+            self._write(command, data)
+        self.font = None
+
     def line(self, x1, y1, x2, y2, color):
         r = (color >> 10) & 0x3E
         g = (color >> 5) & 0x3E
@@ -96,18 +130,6 @@ class SSD1331:
 
     def fill(self, color=0):
         self.rectangle(0, 0, self.width, self.height, color, color)
-
-    def __init__(self, spi, dc, cs, rst=None, width=96, height=64):
-        self.spi = spi
-        self.dc = dc
-        self.cs = cs
-        self.rst = rst
-        self.width = width
-        self.height = height
-        self.reset()
-        for command, data in self._INIT:
-            self._write(command, data)
-        self.font = None
 
     def _write(self, command=None, data=None):
         if command is None:
