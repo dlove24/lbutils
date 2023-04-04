@@ -20,14 +20,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-"""
-Created by [`fontconvert`](https://github.com/danjperron/ssd1331_micropython.git)
-"""
+from display.fonts.pfx_font import PFx_Font
 
-from display.fonts.PFx_Font import PFx_Font
+class Font_06(PFx_Font):
+    """
+    Created by [`fontconvert`](https://github.com/danjperron/ssd1331_micropython.git)
+    """
 
-
-class font06(PFx_Font):
     def __init__(self):
         super().__init__(self.bitmap, self.index, self.glyph)
 

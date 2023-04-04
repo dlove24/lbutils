@@ -20,14 +20,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-"""
-Created by [`fontconvert`](https://github.com/danjperron/ssd1331_micropython.git)
-"""
-
-from display.fonts.PFx_Font import PFx_Font
+from display.fonts.pfx_font import PFx_Font
 
 
-class org_01(PFx_Font):
+class Org_01(PFx_Font):
+    """
+    A tiny, stylized font with all characters within a 6 pixel height. Created by [`fontconvert`](https://github.com/danjperron/ssd1331_micropython.git), from the `Org_v01` by [Orgdot](www.orgdot.com/aliasfonts).
+    """
+
     def __init__(self):
         super().__init__(self.bitmap, self.index, self.glyph)
 
