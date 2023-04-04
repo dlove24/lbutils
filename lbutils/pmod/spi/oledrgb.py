@@ -44,18 +44,18 @@ micron-controller development board, using the standard PMod header below.
 
 |        | Pin Name      | Number       | Description                         |
 |--------|---------------|--------------|-------------------------------------|
-| Pin 1  | CS            |              | SPI Chip Select                     |
-| Pin 2  | SDO           |              | SPI Serial Data Out                 |
-| Pin 3  | Not Connected |              | Not Connected                       |
-| Pin 4  | SCK           |              | SPI Serial Clock                    |
-| Pin 5  | GND           |              | Ground                              |
-| Pin 6  | VCC           |              | VCC (+3.3V)                         |
-| Pin 7  | D/C           |              | Data/Commands. Display Data.        |
-| Pin 8  | RES           |              | Reset the display controller        |
-| Pin 9  | VCC_EN        |              | VCC Enable (Enable/Disable Display) |
-| Pin 10 | PMODEN        |              | Power Supply to GND. Low-Power Mode |
-| Pin 11 | GND           |              | Ground                              |
-| Pin 12 | VCC           |              | VCC (+3.3V)                         |
+| Pin 1  | CS            | 14           | SPI Chip Select                     |
+| Pin 2  | SDO           | 19           | SPI Serial Data Out                 |
+| Pin 3  | Not Connected | No Connection| Not Connected                       |
+| Pin 4  | SCK           | 18           | SPI Serial Clock                    |
+| Pin 5  | GND           | 3            | Ground                              |
+| Pin 6  | VCC           | 5            | VCC (+3.3V)                         |
+| Pin 7  | D/C           | 15           | Data/Commands. Display Data.        |
+| Pin 8  | RES           | 17           | Reset the display controller        |
+| Pin 9  | VCC_EN        | 22           | VCC Enable (Enable/Disable Display) |
+| Pin 10 | PMODEN        | No Connection| Power Supply to GND. Low-Power Mode |
+| Pin 11 | GND           | 3            | Ground                              |
+| Pin 12 | VCC           | 5            | VCC (+3.3V)                         |
 
 ## References
 

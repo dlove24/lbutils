@@ -30,25 +30,25 @@ Specification Version
 specification-1_2_0.pdf) at least two pins are additionally required for +3.3V
 (Pins 6 and 12) and 0V (Pin 5 and 11). This means that for most PMods using the
 12-pin SPI jumper interface, the following basic pattern will hold (numbers
-refer to the default pin assignment on the Leeds Beckett micro-controller
+refer to the default GPIO pin assignment on the Leeds Beckett micro-controller
 development board)
 
 ![PMod J1 Header Layout](https://digilent.com/reference/_media/reference/pmod/pmod-pinout-2x6.png)
 
 |        | Pin Name      | Number       | Description                         |
 |--------|---------------|--------------|-------------------------------------|
-| Pin 1  | CS            |              | SPI Chip Select                     |
-| Pin 2  | SDO           |              | SPI Serial Data Out                 |
-| Pin 3  | SDI           |              | SPI Serial Data In                  |
-| Pin 4  | SCK           |              | SPI Serial Clock                    |
-| Pin 5  | GND           |              | Ground                              |
-| Pin 6  | VCC           |              | VCC (+3.3V)                         |
+| Pin 1  | CS            | 14           | SPI Chip Select                     |
+| Pin 2  | SDO           | 19           | SPI Serial Data Out                 |
+| Pin 3  | SDI           | 16           | SPI Serial Data In                  |
+| Pin 4  | SCK           | 17           | SPI Serial Clock                    |
+| Pin 5  | GND           | 3            | Ground                              |
+| Pin 6  | VCC           | 5            | VCC (+3.3V)                         |
 | Pin 7  |               |              |                                     |
 | Pin 8  |               |              |                                     |
 | Pin 9  |               |              |                                     |
 | Pin 10 |               |              |                                     |
-| Pin 11 | GND           |              | Ground                              |
-| Pin 12 | VCC           |              | VCC (+3.3V)                         |
+| Pin 11 | GND           | 3            | Ground                              |
+| Pin 12 | VCC           | 5            | VCC (+3.3V)                         |
 
 Examples for specific pin interfaces for individual modules can be found in the '`examples`' folder: or [in the documentation](https://lbutils.readthedocs.io/en/latest/) for each class below.
 
