@@ -79,7 +79,7 @@ reconstructed from the font data.
 """
 
 
-class PFx_Font:
+class BaseFont:
     def __init__(self, bitmap: list[bytes], index: list, glyph: list) -> None:
         """
         Take the byte array of `bitmap`s with the `index` of font characters and use these together with the `glyph` list to reconstruct the required font. This method is typically called by a sub-class in the constructor
@@ -113,7 +113,7 @@ class PFx_Font:
         Set the internal state to draw the glyph of the character
         given in `utf8_char`. This internal state is not exposed
         to the calling method or function: but will be used in
-        subsequent calls to [`getBit`][lbutils.graphics.fonts.pfx_font.PFx_Font.getBit] or [`getNext`][lbutils.graphics.fonts.pfx_font.PFx_Font.getNext].
+        subsequent calls to [`getBit`][lbutils.graphics.fonts.base_font.BaseFont.getBit] or [`getNext`][lbutils.graphics.fonts.base_font.BaseFont.getNext].
 
         Parameters
         ----------

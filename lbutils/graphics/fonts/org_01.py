@@ -20,10 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .pfx_font import PFx_Font
+from .BaseFont import BaseFont
 
 
-class Org_01(PFx_Font):
+class Org_01(BaseFont):
     """
     A tiny, stylized font with all characters within a 6 pixel height. Created by [`fontconvert`](https://github.com/danjperron/ssd1331_micropython.git), from the `Org_v01` by [Orgdot](www.orgdot.com/aliasfonts).
     """

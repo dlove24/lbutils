@@ -20,10 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .pfx_font import PFx_Font
+from .BaseFont import BaseFont
 
 
-class Font_08(PFx_Font):
+class Font_08(BaseFont):
     """
     8x8 pixel sans-serif font, created by [`fontconvert`](https://github.com/danjperron/ssd1331_micropython.git).
     """

@@ -250,9 +250,9 @@ class OLEDrgb:
         Attributes
         ----------
 
-        font: Type[PFx_Font]
+        font: Type[BaseFont]
             The current font in use for the display, which will be
-            an instance of [`lbutils.graphics.fonts.pfx_font`][lbutils.graphics.fonts.pfx_font.PFx_Font].
+            an instance of [`lbutils.graphics.fonts.BaseFont`][lbutils.graphics.fonts.BaseFont.BaseFont].
             All subsequent text methods (e.g. `write_text`) will make use of
             the specified `font` until this attribute is changed.
 

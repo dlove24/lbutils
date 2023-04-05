@@ -22,7 +22,7 @@
 
 """Fonts for the LED and OLED displays; especially the those using the 'pmod' packages. These fonts are based on open-source font files, and converted with the [`fontconvert`](https://github.com/danjperron/ssd1331_micropython) utility written by Daniel Perron.S.
 
-Most of the work of this library consists of rebuilding the font representation as described below. This reconstruction is undertaken by the [`PFx_Font`][lbutils.graphics.fonts.pfx_font.PFx_Font] class, and abstract class which must be sub-classed for a specific font. Currently the fonts (and subclasses) exposed in this library are
+Most of the work of this library consists of rebuilding the font representation as described below. This reconstruction is undertaken by the [`BaseFont`][lbutils.graphics.fonts.base_font.BaseFont] class, and abstract class which must be sub-classed for a specific font. Currently the fonts (and subclasses) exposed in this library are
 
   * [`Font06`][lbutils.graphics.fonts.font06.Font_06]. 6x6 pixel sans-serif font.
   * [`Font08`][lbutils.graphics.fonts.font08.Font_08]. 8x8 pixel sans-serif font.
@@ -44,7 +44,7 @@ Currently the `fontconvert` utility only extracts the printable 7-bit ASCII char
 """
 
 ### Expose the `fonts` module interface as a full package
-from .pfx_font import PFx_Font
+from .base_font import BaseFont
 
 from .font06 import Font_06
 from .font08 import Font_08

@@ -4,7 +4,7 @@
     options:
         show_category_heading: False
 
-::: lbutils.graphics.fonts.pfx_font
+::: lbutils.graphics.fonts.BaseFont
     options:
         heading_level: 2
         show_category_heading: False

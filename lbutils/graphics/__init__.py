@@ -31,9 +31,4 @@ which are then expected to be instantiated as sub-class of one of the driver cla
 
 """
 
-### Expose the `fonts` module interface as a full package
-from .pfx_font import PFx_Font
-
-from .font06 import Font_06
-from .font08 import Font_08
-from .org_01 import Org_01
+### Expose the `graphics` module interface as a full package

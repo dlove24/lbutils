@@ -84,7 +84,9 @@ oled_display.fill(0)
 ##
 
 buffer = bytearray(oled_display.width * oled_display.height * 2)
-fb = framebuf.FrameBuffer(buffer, oled_display.width, oled_display.height, framebuf.RGB565)
+fb = framebuf.FrameBuffer(
+    buffer, oled_display.width, oled_display.height, framebuf.RGB565
+)
 
 # test frame buffer
 white = oled_display.colour565(255, 255, 255)
@@ -152,4 +154,3 @@ while True:
         oled_display.block(0, 0, 96, 64, buffer)
 
         utime.sleep(1)
-
