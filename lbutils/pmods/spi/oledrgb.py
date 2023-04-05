@@ -132,7 +132,7 @@ class OLEDrgb:
     _INIT = (
         (_DISPLAYOFF, b""),
         (_LOCK, b"\x0b"),
-        (_SETREMAP, b"\x72"),  # RGB Color
+        (_SETREMAP, b"\x72"),  # RGB Colour
         (_STARTLINE, b"\x00"),
         (_DISPLAYOFFSET, b"\x00"),
         (_NORMALDISPLAY, b""),
@@ -252,7 +252,7 @@ class OLEDrgb:
 
         font: Type[PFx_Font]
             The current font in use for the display, which will be
-            an instance of [`lbutils.fonts.pfx_font`][lbutils.fonts.pfx_font.PFx_Font].
+            an instance of [`lbutils.graphics.fonts.pfx_font`][lbutils.graphics.fonts.pfx_font.PFx_Font].
             All subsequent text methods (e.g. `write_text`) will make use of
             the specified `font` until this attribute is changed.
 
@@ -339,7 +339,7 @@ class OLEDrgb:
         return self._font
 
     @font.setter
-    def font(self, font: class) -> None:
+    def font(self, font) -> None:
         if font is not None:
             self._font = font
 
@@ -504,8 +504,8 @@ class OLEDrgb:
         Parameters
         ----------
 
-        color: int
-           The packaged byte representation of the colour to be used
+        colour: int
+            The packaged byte representation of the colour to be used
             when the interior of the rectangle. Defaults to black.
         """
         self.draw_rectangle(0, 0, self.width, self.height, colour, colour)
@@ -527,7 +527,7 @@ class OLEDrgb:
     def write_char(self, x: int, y: int, utf8Char: str, colour: int) -> int:
         """
         Write a `utf8Char` character (using the current `font`) starting
-        at the pixel position (`x`, `y`) in the specified `color`.
+        at the pixel position (`x`, `y`) in the specified `colour`.
 
         !!! note
             Whilst the `utf8Char` character _must_ be a valid UTF-8
@@ -579,7 +579,7 @@ class OLEDrgb:
     def write_text(self, x: int, y: int, txt_str: str, colour: int) -> None:
         """
         Write the string `txt_str` (using the current `font`) starting
-        at the pixel position (`x`, `y`) in the specified `color` to
+        at the pixel position (`x`, `y`) in the specified `colour` to
         the display.
 
         !!! note

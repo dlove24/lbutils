@@ -22,4 +22,4 @@ classifiers = [
 "Documentation" = "https://dlove24.github.io/lbutils/lbutils/index.html"
 
 [tool.setuptools]
-packages = ["lbutils", "lbutils.drivers", "lbutils.fonts", "lbutils.helpers", "lbutils.pmod"]
+packages = ["lbutils", "lbutils.drivers", "lbutils.graphics", "lbutils.helpers", "lbutils.pmods"]

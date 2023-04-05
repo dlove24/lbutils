@@ -1,5 +1,7 @@
 # Pmod Drivers
 
+::: lbutils.pmods
+
 ## Current Support
 
 This library provides utilities and drivers designed to support for the Digilent

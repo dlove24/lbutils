@@ -20,7 +20,7 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 """
-Functions and attributes for setting up, scanning and manipulating the I2C busses. Classes for direct manipulation of the I2C bus can be found in the standard MicroPython library `machine.I2C`, and the classes for the I2C 'pmods' in `lbutils.pmod`. This library contains only helper functions, and attributes with the defaults for the Leeds Beckett micro-controller development board.
+Functions and attributes for setting up, scanning and manipulating the I2C busses. Classes for direct manipulation of the I2C bus can be found in the standard MicroPython library `machine.I2C`, and the classes for the I2C 'pmods' in `lbutils.pmods`. This library contains only helper functions, and attributes with the defaults for the Leeds Beckett micro-controller development board.
 
 """
 

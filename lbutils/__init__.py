@@ -24,10 +24,10 @@
 
 * **[`drivers`][lbutils.drivers]**: Classes aimed at low-level support of I2C, SPI and
   other devices requiring board-level support.
-* **[`fonts`][lbutils.fonts]**: Classes providing glyph and character support for display drivers.
+* **[`fonts`][lbutils.graphics.fonts]**: Classes providing glyph and character support for display drivers.
 * **[`helpers`][lbutils.helpers]**: Functions and classes which help replace boiler-plate code for
   tasks such as setting up network access.
-* **[`pmod`][lbutils.pmod]**: Drivers and support for the
+* **[`pmod`][lbutils.pmods]**: Drivers and support for the
   [Digilent peripheral modules](https://digilent.com/reference/pmod/start).
 
 Each module can be imported in its entirety to expose the individual drivers, for instance as

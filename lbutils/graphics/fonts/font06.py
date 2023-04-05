@@ -25,7 +25,7 @@ from .pfx_font import PFx_Font
 
 class Font_06(PFx_Font):
     """
-    Created by [`fontconvert`](https://github.com/danjperron/ssd1331_micropython.git)
+    6x6 pixel sans-serif font, created by [`fontconvert`](https://github.com/danjperron/ssd1331_micropython.git).
     """
 
     def __init__(self):

@@ -113,7 +113,7 @@ class PFx_Font:
         Set the internal state to draw the glyph of the character
         given in `utf8_char`. This internal state is not exposed
         to the calling method or function: but will be used in
-        subsequent calls to [`getBit`][lbutils.fonts.pfx_font.PFx_Font.getBit] or [`getNext`][lbutils.fonts.pfx_font.PFx_Font.getNext].
+        subsequent calls to [`getBit`][lbutils.graphics.fonts.pfx_font.PFx_Font.getBit] or [`getNext`][lbutils.graphics.fonts.pfx_font.PFx_Font.getNext].
 
         Parameters
         ----------

@@ -40,13 +40,13 @@ except ImportError:
 
 # Import the LB Utils driver for the Pmod OLEDrgb
 try:
-    from lbutils.pmod.spi import OLEDrgb
+    from lbutils.pmods.spi import OLEDrgb
 except ImportError:
     raise RuntimeError("Error: Cannot find the Pmod OLEDrgb driver!")
 
 # Import the lbutils fonts (and font handler)
 try:
-    import lbutils.fonts as fonts
+    import lbutils.graphics.fonts as fonts
 except ImportError:
     raise RuntimeError("Error: Missing required font libraries")
 
@@ -84,9 +84,7 @@ oled_display.fill(0)
 ##
 
 buffer = bytearray(oled_display.width * oled_display.height * 2)
-fb = framebuf.FrameBuffer(
-    buffer, oled_display.width, oled_display.height, framebuf.RGB565
-)
+fb = framebuf.FrameBuffer(buffer, oled_display.width, oled_display.height, framebuf.RGB565)
 
 # test frame buffer
 white = oled_display.colour565(255, 255, 255)
@@ -154,3 +152,4 @@ while True:
         oled_display.block(0, 0, 96, 64, buffer)
 
         utime.sleep(1)
+

@@ -8,10 +8,10 @@ Examples for how to use the library can be found in the '`examples`' folder: or 
 
 * **[`drivers`][lbutils.drivers]**: Classes aimed at low-level support of I2C, SPI and
   other devices requiring board-level support.
-* **[`fonts`][lbutils.fonts]**: Classes providing glyph and character support for display drivers.
+* **[`graphics`][lbutils.graphics]**: Classes providing basic drawing and font support for display drivers.
 * **[`helpers`][lbutils.helpers]**: Functions and classes which help replace boiler-plate code for
   tasks such as setting up network access.
-* **`pmod`**: Drivers and support for the
+* **[`pmods`][lbutils.pmods]**: Drivers and support for the
   [Digilent peripheral modules](https://digilent.com/reference/pmod/start).
 
 ## Installation
