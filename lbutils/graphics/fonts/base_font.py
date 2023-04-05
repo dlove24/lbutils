@@ -78,8 +78,27 @@ reconstructed from the font data.
 
 """
 
-
 class BaseFont:
+    """
+    A Base Class which implements the access methods required to use the
+    individual font representations of the sub-classes. Those sub-classes
+    provide only the _bitmap_ representation of the font: the reconstruction
+    of that bitmap is handled here by `BaseFont`.
+
+    Methods
+    ----------
+
+    * `get_bit()`. Returns the state ('0' or '1') of the bit specified by
+    the current cursor `position` within the current glyph bitmap.
+
+    * `get_next()`. Return the state of the current bit within the bitmap
+    being displayed, and then advance the internal cursor to
+    the next position: ready for the next call.
+
+    * `set_position()`. Set the internal state to draw the glyph of the character in the next natural position.
+
+    """
+
     def __init__(self, bitmap: list[bytes], index: list, glyph: list) -> None:
         """
         Take the byte array of `bitmap`s with the `index` of font characters and use these together with the `glyph` list to reconstruct the required font. This method is typically called by a sub-class in the constructor
@@ -108,12 +127,12 @@ class BaseFont:
         self.current_char = 0
         self.current_glyph = glyph[0]
 
-    def setPosition(self, utf8_char: str) -> None:
+    def set_position(self, utf8_char: str) -> None:
         """
         Set the internal state to draw the glyph of the character
         given in `utf8_char`. This internal state is not exposed
         to the calling method or function: but will be used in
-        subsequent calls to [`getBit`][lbutils.graphics.fonts.base_font.BaseFont.getBit] or [`getNext`][lbutils.graphics.fonts.base_font.BaseFont.getNext].
+        subsequent calls to [`get_bit`][lbutils.graphics.fonts.base_font.BaseFont.get_bit] or [`get_next`][lbutils.graphics.fonts.base_font.BaseFont.get_next].
 
         Parameters
         ----------
@@ -145,10 +164,10 @@ class BaseFont:
         # use
         self.position = self.current_glyph[0] * 8
 
-    def getBit(self, position: int) -> int:
+    def get_bit(self, position: int) -> int:
         """
         Returns the state ('0' or '1') of the bit specified by
-        the current cursor `position` within the current glyph bitmap
+        the current cursor `position` within the current glyph bitmap.
 
         Parameters
         ----------
@@ -171,7 +190,7 @@ class BaseFont:
 
         return c_flag
 
-    def getNext(self) -> int:
+    def get_next(self) -> int:
         """
         Return the state of the current bit within the bitmap
         being displayed, and then advance the internal cursor to
@@ -185,7 +204,7 @@ class BaseFont:
             of the current cursor position within the glyph.
         """
 
-        flag = self.getBit(self.position)
+        flag = self.get_bit(self.position)
         self.position = self.position + 1
 
         return flag

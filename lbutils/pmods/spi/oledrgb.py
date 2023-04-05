@@ -129,6 +129,48 @@ _LOCK = const(0xFD)
 
 
 class OLEDrgb:
+    """
+    An implemention of a [`Canvas`] for the 'OLEDrgb' PMod.
+
+    Attributes
+    ----------
+
+    bg_colour:
+        The background [`Colour`][lbutils.graphics.colour.Colour] to use when drawing.
+    font:
+        The sub-class of [`BaseFont`][lbutils.graphics.fonts.base_font.BaseFont]
+        to use when drawing characters.
+    fg_colour:
+        The foreground [`Colour`][lbutils.graphics.colour.Colour] to use when
+        drawing.
+    height:
+        A read-only value for the height of the canvas in pixels.
+    width:
+        A read-only value for the width of the canvas in pixels.
+
+    Methods
+    ----------
+
+    * `draw_line()`. Draw a line from two co-ordinates.
+
+    * `draw_rectangle()`. Draw a rectangle at the co-ordinate (x, y) of height and width, using the linecolour for the frame of the rectangle and fillcolour as the interior colour.
+
+    * `fill()`. Fill the entire `Canvas` with the background colour.
+
+    * `read_pixel()`. Return the [`Colour`][lbutils.graphics.colour.Colour] of
+    the specified pixel.
+
+    * `reset()`. Resets the display, clearing the current contents.
+
+    * `write_char()`. Write a character (using the current font) starting at the stated pixel position.
+
+    * `write_pixel()`. Set the pixel at the specified position to the foreground
+    colour value.
+
+    * `write_text()`. Write the a string (using the current font) starting at the
+    specified pixel position in the specified colour.
+    """
+
     _INIT = (
         (_DISPLAYOFF, b""),
         (_LOCK, b"\x0b"),
@@ -252,7 +294,7 @@ class OLEDrgb:
 
         font: Type[BaseFont]
             The current font in use for the display, which will be
-            an instance of [`lbutils.graphics.fonts.BaseFont`][lbutils.graphics.fonts.BaseFont.BaseFont].
+            an instance of [`lbutils.graphics.fonts.BaseFont`][lbutils.graphics.fonts.base_font.BaseFont].
             All subsequent text methods (e.g. `write_text`) will make use of
             the specified `font` until this attribute is changed.
 
@@ -383,42 +425,6 @@ class OLEDrgb:
 
         #          self._write(None,bytearray([colour >> 8, colour &0xff]))
         self.draw_line(x, y, x, y, colour)
-
-    def colour565(self, r: int, g: int, b: int) -> int:
-        """
-        Construct a packed byte representation of a colour value, from the
-        three bytes `r` (red), `g` (green) and `b` (blue). The bottom five
-        bytes of the three input variables are used, and on the ARM platform
-        the packed byte representation looks like
-
-        ````
-        G2 G1 G0 B4 B3 B2 B1 B0 R4 R3 R2 R1 R0 G5 G4 G3
-        ````
-
-        Parameters
-        ----------
-
-        r:
-            The red component of the packed byte value, of which the lower five bytes are selected.
-        g:
-            The green component of the packed byte value, of which the lower five bytes are selected.
-        b:
-            The red component of the packed byte value, of which the lower five bytes are selected.
-
-        Returns
-        -------
-
-        int:
-            A packed byte value of the colour representation.
-
-        """
-        #  5  4  3  2  1  0  9  8  7  6  5  4  3  2  1  0
-        #  R4 R3 R2 R1 R0 G5 G4 G3 G2 G1 G0 B4 B3 B2 B1 B0
-        # return  (r & 0xf8) << 8 | (g & 0xfc) << 3 | b >> 3
-
-        #  for ARM need  to swap byte
-        #  G2 G1 G0 B4 B3 B2 B1 B0 R4 R3 R2 R1 R0 G5 G4 G3
-        return (g & 0x1C) << 1 | (b >> 3) | (r & 0xF8) | g >> 5
 
     def draw_line(self, x1: int, y1: int, x2: int, y2: int, colour: int) -> None:
         """
@@ -562,7 +568,7 @@ class OLEDrgb:
         if self.font is None:
             return x
         # {offset, width, height, advance cursor, x offset, y offset} */
-        self.font.setPosition(utf8Char)
+        self.font.set_position(utf8Char)
         _offset, _width, _height, _cursor, x_off, y_off = self.font.current_glyph
         # print("_offset",_offset)
         # print("Width",_width)
@@ -572,7 +578,7 @@ class OLEDrgb:
         # print("yoff",y_off)
         for y1 in range(_height):
             for x1 in range(_width):
-                if self.font.getNext():
+                if self.font.get_next():
                     self.write_pixel(x + x1 + x_off, y + y1 + y_off, colour)
         return x + _cursor
 
