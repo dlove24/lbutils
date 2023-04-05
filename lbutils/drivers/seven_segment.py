@@ -61,7 +61,7 @@ anode seven-segment displays. If you need the requested GPIO pin to be held
 Examples
 --------
 
-* Examples Folder: `seven_segment_example.py`
+* Examples Folder: `examples/drivers/seven_segment_example.py`
 * [WokWi](https://wokwi.com/projects/360451068863047681)
 
 Tested Implementations

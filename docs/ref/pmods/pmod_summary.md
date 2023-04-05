@@ -1,8 +1,6 @@
 # Pmod Drivers
 
-## Summary
-
-### Current Support
+## Current Support
 
 This library provides utilities and drivers designed to support for the Digilent
 Peripheral Modules. This library is designed to provide drivers and support for
@@ -11,7 +9,7 @@ Not all boards are supported: and in some cases only certain busses are
 supported (e.g. using only the I2C bus, even though the `pmod` supports both I2C
 and SPI).
 
-### SPI Conventions
+## SPI Conventions
 
 !!! note "Modern SPI Name in Use"
      For this module, and all SPI references in the library, the [modern SPI
@@ -30,8 +28,8 @@ Specification Version
 specification-1_2_0.pdf) at least two pins are additionally required for +3.3V
 (Pins 6 and 12) and 0V (Pin 5 and 11). This means that for most PMods using the
 12-pin SPI jumper interface, the following basic pattern will hold (numbers
-refer to the default GPIO pin assignment on the Leeds Beckett micro-controller
-development board)
+refer to the default GPIO pin assignment for the Pico H/W on the Leeds Beckett
+micro-controller development board)
 
 ![PMod J1 Header Layout](https://digilent.com/reference/_media/reference/pmod/pmod-pinout-2x6.png)
 
@@ -52,16 +50,12 @@ development board)
 
 Examples for specific pin interfaces for individual modules can be found in the '`examples`' folder: or [in the documentation](https://lbutils.readthedocs.io/en/latest/) for each class below.
 
-### Tested Implementations
+## Tested Implementations
 
 This version is written for MicroPython 3.4, and has been tested on:
 
   * Raspberry Pi Pico H/W
 
-## SPI Drivers
 
-Modules which have SPI interface support (i.e. the majority of modules) are described in the drivers below.
 
-::: lbutils.pmod.spi.oledrgb
 
-## I2C Drivers

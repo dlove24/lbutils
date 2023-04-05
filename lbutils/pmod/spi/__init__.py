@@ -41,8 +41,8 @@ Specification Version
 specification-1_2_0.pdf) at least two pins are additionally required for +3.3V
 (Pins 6 and 12) and 0V (Pin 5 and 11). This means that for most PMods using the
 12-pin SPI jumper interface, the following basic pattern will hold (numbers
-refer to the default GPIO pin assignment on the Leeds Beckett micro-controller
-development board)
+refer to the default GPIO pin assignment for the Pico H/W on the Leeds Beckett
+micro-controller development board)
 
 ![PMod J1 Header Layout](https://digilent.com/reference/_media/reference/pmod/pmod-pinout-2x6.png)
 

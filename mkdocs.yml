@@ -39,6 +39,8 @@ nav:
   - 'Reference':
     - 'Guide to the API': 'ref/reference.md'
     - 'Pmod Drivers': 'ref/pmods/pmod_summary.md'
+    - 'Pmod Drivers - SPI': 'ref/pmods/pmod_spi.md'
+    - 'Pmod Drivers - I2C': 'ref/pmods/pmod_i2c.md'
     - 'Fonts and Font Selection': 'ref/fonts/font_guide.md'
     - 'Seven Segment Drivers': 'ref/drivers/seven_segment.md'
     - 'Helper I2C/SPI Classes and Functions': 'ref/helpers/bus_utilities.md'

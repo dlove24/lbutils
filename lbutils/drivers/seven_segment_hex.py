@@ -59,7 +59,7 @@ _high_ to display a segment, pass in `True` to the `inverted` parameter of the
 Examples
 --------
 
-* Examples Folder: `seven_segment_hex_example.py`
+* Examples Folder: `examples/drivers/seven_segment_hex_example.py`
 * [WokWi](https://wokwi.com/projects/360462223276690433)
 
 Tested Implementations

@@ -48,8 +48,8 @@ This version is written for MicroPython 3.4, and has been tested on:
 
 ### Examples Folder
 
-* `examples/seven_segment_example.py`
-* `examples/seven_segment_hex_example.py`
+* `examples/drivers/seven_segment_example.py`
+* `examples/drivers/seven_segment_hex_example.py`
 
 ### WokWi
 
