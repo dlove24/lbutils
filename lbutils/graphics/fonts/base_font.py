@@ -78,6 +78,7 @@ reconstructed from the font data.
 
 """
 
+
 class BaseFont:
     """
     A Base Class which implements the access methods required to use the

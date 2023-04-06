@@ -27,7 +27,7 @@
  **/
 
 /**
- ** Class and Function Identifiers. Make these look more like
+ ** Class, Attribute and Method Identifiers. Make these look more like
  ** the Sphinx theme, but visually separate classes more than
  ** functions.
  **
@@ -40,11 +40,22 @@ span.doc.doc-object-name.doc-class-name {
   padding: 6px;
 }
 
+span.doc.doc-object-name.doc-attribute-name {
+  border-left: solid 3px #ccc;
+  background: #e7f2fa;
+  color: #555;
+  padding: 6px;
+}
+
 span.doc.doc-object-name.doc-function-name {
   border-left: solid 3px #ccc;
   background: #f0f0f0;
   color: #555;
   padding: 6px;
+}
+
+.doc-class>div>ul>li::marker {
+  color: #ccc;
 }
 
 /**
