@@ -71,11 +71,18 @@ header below.
 
 """
 
-# Import the typing hints if available
+# Import the typing hints if available. Use our backup version
+# if the offical library is missing
 try:
     from typing import Type
 except ImportError:
-    print("Cannot find the type library")
+    from lbutils.typing import Type
+
+# Import the lbutils graphics library
+try:
+    import lbutils.graphics as graphics
+except ImportError:
+    raise RuntimeError("Error: Missing required LBUtils graphics library")
 
 # Import the core libraries
 import ustruct
@@ -128,20 +135,20 @@ _LOCK = const(0xFD)
 ###
 
 
-class OLEDrgb:
+class OLEDrgb(graphics.Canvas):
     """
-    An implemention of a [`Canvas`] for the 'OLEDrgb' PMod.
+    An implemention of a [`Canvas`][lbutils.graphics.Canvas] for the 'OLEDrgb' PMod.
 
     Attributes
     ----------
 
     bg_colour:
-        The background [`Colour`][lbutils.graphics.colour.Colour] to use when drawing.
+        The background [`Colour`][lbutils.graphics.colours.Colour] to use when drawing.
     font:
         The sub-class of [`BaseFont`][lbutils.graphics.fonts.base_font.BaseFont]
         to use when drawing characters.
     fg_colour:
-        The foreground [`Colour`][lbutils.graphics.colour.Colour] to use when
+        The foreground [`Colour`][lbutils.graphics.colours.Colour] to use when
         drawing.
     height:
         A read-only value for the height of the canvas in pixels.
@@ -157,7 +164,7 @@ class OLEDrgb:
 
     * `fill()`. Fill the entire `Canvas` with the background colour.
 
-    * `read_pixel()`. Return the [`Colour`][lbutils.graphics.colour.Colour] of
+    * `read_pixel()`. Return the [`Colour`][lbutils.graphics.colours.Colour] of
     the specified pixel.
 
     * `reset()`. Resets the display, clearing the current contents.
@@ -424,9 +431,9 @@ class OLEDrgb:
         self._write(_SETROW, bytearray([y, y]))
 
         #          self._write(None,bytearray([colour >> 8, colour &0xff]))
-        self.draw_line(x, y, x, y, colour)
+        self.draw_line(x, y, x, y)
 
-    def draw_line(self, x1: int, y1: int, x2: int, y2: int, colour: int) -> None:
+    def draw_line(self, x1: int, y1: int, x2: int, y2: int) -> None:
         """
         Draw a line from co-ordinates (`x2`, `y2`) to (`x2`, `y2`) using the
         specified RGB colour. Use the [`color565`] method to construct a suitable RGB
@@ -447,11 +454,17 @@ class OLEDrgb:
             The packaged byte representation of the colour to be used
             when drawing the line.
         """
-        r = (colour >> 10) & 0x3E
-        g = (colour >> 5) & 0x3E
-        b = (colour & 0x1F) << 1
 
-        data = ustruct.pack(self._ENCODE_LINE, x1, y1, x2, y2, r, g, b)
+        data = ustruct.pack(
+            self._ENCODE_LINE,
+            x1,
+            y1,
+            x2,
+            y2,
+            self.fg_colour.r,
+            self.fg_colour.g,
+            self.fg_colour.b,
+        )
         self._write(_DRAWLINE, data)
 
     def draw_rectangle(
@@ -530,10 +543,10 @@ class OLEDrgb:
             utime.sleep(0.1)
             self.reset_pin.value(1)
 
-    def write_char(self, x: int, y: int, utf8Char: str, colour: int) -> int:
+    def write_char(self, x: int, y: int, utf8Char: str) -> int:
         """
         Write a `utf8Char` character (using the current `font`) starting
-        at the pixel position (`x`, `y`) in the specified `colour`.
+        at the pixel position (`x`, `y`) in the current `fg_colour`.
 
         !!! note
             Whilst the `utf8Char` character _must_ be a valid UTF-8
@@ -551,9 +564,6 @@ class OLEDrgb:
             The Y co-ordinate of the pixel for the character start position.
         utf8Char:
             The character to write to the display.
-        colour: int
-            The packaged byte representation of the colour to be used
-            when drawing the character.
 
         Returns
         -------
@@ -579,13 +589,13 @@ class OLEDrgb:
         for y1 in range(_height):
             for x1 in range(_width):
                 if self.font.get_next():
-                    self.write_pixel(x + x1 + x_off, y + y1 + y_off, colour)
+                    self.write_pixel(x + x1 + x_off, y + y1 + y_off)
         return x + _cursor
 
-    def write_text(self, x: int, y: int, txt_str: str, colour: int) -> None:
+    def write_text(self, x: int, y: int, txt_str: str) -> None:
         """
         Write the string `txt_str` (using the current `font`) starting
-        at the pixel position (`x`, `y`) in the specified `colour` to
+        at the pixel position (`x`, `y`) in the current `fg_colour` to
         the display.
 
         !!! note
@@ -604,10 +614,7 @@ class OLEDrgb:
             The Y co-ordinate of the pixel for the text start position.
         txt_str:
             The string of characters to write to the display.
-        colour: int
-            The packaged byte representation of the colour to be used
-            when drawing the character.
         """
         if self.font is not None:
             for c in txt_str:
-                x = self.write_char(x, y, c, colour)
+                x = self.write_char(x, y, c)

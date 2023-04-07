@@ -38,17 +38,18 @@ try:
 except ImportError:
     raise RuntimeError("Error: Missing required MicroPython includes!")
 
-# Import the LB Utils driver for the Pmod OLEDrgb
+# Import the lbutils graphics library
 try:
-    from lbutils.pmods.spi import OLEDrgb
-except ImportError:
-    raise RuntimeError("Error: Cannot find the Pmod OLEDrgb driver!")
-
-# Import the lbutils fonts (and font handler)
-try:
+    import lbutils.graphics as graphics
     import lbutils.graphics.fonts as fonts
 except ImportError:
-    raise RuntimeError("Error: Missing required font libraries")
+    raise RuntimeError("Error: Missing required LBUtils graphics library")
+
+# Import the LB Utils driver for the Pmod OLEDrgb
+try:
+    from lbutils.pmod.spi import OLEDrgb
+except ImportError:
+    raise RuntimeError("Error: Cannot find the Pmod OLEDrgb driver!")
 
 # Import the core libraries
 import gc
@@ -88,69 +89,76 @@ fb = framebuf.FrameBuffer(
     buffer, oled_display.width, oled_display.height, framebuf.RGB565
 )
 
-# test frame buffer
-white = oled_display.colour565(255, 255, 255)
+##
+## Font Examples
+##
+
+# Clear the display
+oled_display.fill(0)
+
+# Display the `Font_08` font class in red
+print("Running the screen test for the `Font_08` font...")
+
+oled_display.fg_colour = graphics.colours.COLOUR_RED
+oled_display.font = fonts.Font_08()
+
+oled_display.write_text(0, 20, "ABCDEFGHIJKLMN")
+oled_display.write_text(0, 30, "OPQRSTUVWXYZ")
+oled_display.write_text(0, 40, "abcdefghijklmn")
+oled_display.write_text(0, 50, "opqrstuvwxyz")
+oled_display.write_text(0, 60, "0123456789")
+
+utime.sleep(10)
+
+# Clear the display
+oled_display.fill(0)
+
+# Display the `Font_06` font class in green
+print("Running the screen test for the `Font_06` font...")
+
+oled_display.fg_colour = graphics.colours.COLOUR_LIME
+oled_display.font = fonts.Font_06()
+
+oled_display.write_text(0, 20, "ABCDEFGHIJKLMN")
+oled_display.write_text(0, 30, "OPQRSTUVWXYZ")
+oled_display.write_text(0, 40, "abcdefghijklmn")
+oled_display.write_text(0, 50, "opqrstuvwxyz")
+oled_display.write_text(0, 60, "0123456789")
+
+utime.sleep(10)
+
+# Clear the display
+oled_display.fill(0)
+
+# Display the `Org_01` font class in blue
+print("Running the screen test for the `Org_01` font...")
+
+oled_display.fg_colour = graphics.colours.COLOUR_BLUE
+oled_display.font = fonts.Org_01()
+
+oled_display.write_text(0, 20, "ABCDEFGHIJKLMN")
+oled_display.write_text(0, 30, "OPQRSTUVWXYZ")
+oled_display.write_text(0, 40, "abcdefghijklmn")
+oled_display.write_text(0, 50, "opqrstuvwxyz")
+oled_display.write_text(0, 60, "0123456789")
+
+utime.sleep(10)
+
+##
+## Colour Rotation of the Full Display
+##
+
 colors = []
 for i in range(8):
     r = (i & 1) * 255
     g = ((i >> 1) & 1) * 255
     b = ((i >> 2) & 1) * 255
-    colors.append(oled_display.colour565(r, g, b))
+    colors.append(graphics.colours.Colour(r, g, b))
 
-##
-## Font Examples
-##
-
-# Display the `Font_08` font class
-print("Running the screen test for the `Font_08` font...")
-
-oled_display.fill(0)
-
-oled_display.font = fonts.Font_08()
-
-oled_display.write_text(0, 20, "ABCDEFGHIJKLMN", 0xFFFF)
-oled_display.write_text(0, 30, "OPQRSTUVWXYZ", 0xFFFF)
-oled_display.write_text(0, 40, "abcdefghijklmn", 0xFFFF)
-oled_display.write_text(0, 50, "opqreset_pinuvwxyz", 0xFFFF)
-oled_display.write_text(0, 60, "0123456789", 0xFFFF)
-
-utime.sleep(10)
-
-# Display the `Font_06` font class
-print("Running the screen test for the `Font_06` font...")
-
-oled_display.fill(0)
-
-oled_display.font = fonts.Font_06()
-
-oled_display.write_text(0, 20, "ABCDEFGHIJKLMN", 0xFFFF)
-oled_display.write_text(0, 30, "OPQRSTUVWXYZ", 0xFFFF)
-oled_display.write_text(0, 40, "abcdefghijklmn", 0xFFFF)
-oled_display.write_text(0, 50, "opqreset_pinuvwxyz", 0xFFFF)
-oled_display.write_text(0, 60, "0123456789", 0xFFFF)
-
-utime.sleep(10)
-
-# Display the `Org_01` font class
-print("Running the screen test for the `Org_01` font...")
-
-oled_display.fill(0)
-
-oled_display.font = fonts.Org_01()
-
-oled_display.write_text(0, 20, "ABCDEFGHIJKLMN", 0xFFFF)
-oled_display.write_text(0, 30, "OPQRSTUVWXYZ", 0xFFFF)
-oled_display.write_text(0, 40, "abcdefghijklmn", 0xFFFF)
-oled_display.write_text(0, 50, "opqreset_pinuvwxyz", 0xFFFF)
-oled_display.write_text(0, 60, "0123456789", 0xFFFF)
-
-utime.sleep(10)
-
-# Display a full screvcc_enable of rotating colours
 print("Running the colour test...")
 while True:
     for color in colors:
-        fb.fill(color)
+        fb.fill(color.as_565)
         oled_display.block(0, 0, 96, 64, buffer)
 
         utime.sleep(1)

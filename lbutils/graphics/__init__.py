@@ -21,14 +21,25 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 """
-Provides a simple graphics library for the supported screen devices (controllers)
-of the Pico H and Pico W. Most of this interface provides abstract base classes,
-which are then expected to be instantiated as sub-class of one of the driver classes, e.g. [`lbutils.pmods.spi.OLEDrgb`][lbutils.pmods.spi.OLEDrgb].
+Provides a simple graphics library for the supported screen devices
+(controllers) of the Pico H and Pico W. Most of this interface provides abstract
+base classes, which are then expected to be instantiated as sub-class of one of
+the driver classes, e.g.
+[`lbutils.pmods.spi.OLEDrgb`][lbutils.pmods.spi.OLEDrgb].
 
-Note that font selection, and font representation is dealt with [here][lbutils.graphics.fonts]. Other aspects of the library can be found in the following sections
+Note that font selection, and font representation is dealt with
+[here][lbutils.graphics.fonts]. Other aspects of the library can be found in the
+following sections
 
-* **[Colour Support and Representation][lbutils.graphics.colour]**. Classes such as `Colour` which holds the internal colour representations used by the graphics library.
-* **[Helper Classes][lbutils.graphics.helpers]**. Provides utility classes and functions which ease the abstraction of the main graphics Canvas library, e.g. `Pixel`.
+* **[Canvas and Drawing Primitives][lbutils.graphics.canvas]**. The core
+`Canvas` class of the library, together with the drawing primitives implemented
+by all graphics drivers.
+* **[Colour Support and Representation][lbutils.graphics.colour]**. Classes such
+as `Colour` which holds the internal colour representations used by the graphics
+library.
+* **[Helper Classes][lbutils.graphics.helpers]**. Provides utility classes and
+functions which ease the abstraction of the main graphics Canvas library, e.g.
+`Pixel`.
 
 ## Tested Implementations
 
@@ -37,5 +48,5 @@ Note that font selection, and font representation is dealt with [here][lbutils.g
 """
 
 ### Expose the `graphics` module interface as a full package
-from .colour import Colour
+from .colours import Colour
 from .canvas import Canvas

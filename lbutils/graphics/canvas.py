@@ -21,12 +21,14 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 """
-Implements an abstract `Canvas` class, used to represent the drawing surface
-required by the underlying display drivers. This class is close to a
-`framebuffer`: but exposes more 'utility' methods for drawing lines and
-rectangles than the underlying `framebuffer`. It also provides support for
-colour representation (through the [`Colour`][lbutils.graphics.colour.Colour] class), and also font support
-(through sub-classes of [`BaseFont`][lbutils.graphics.fonts.base_font.BaseFont].)
+Implements an abstract [`Canvas`][lbutils.graphics.canvas.Canvas] class, used to
+represent the drawing surface implemented by the underlying display drivers.
+This class is close to a [`framebuffer`](https://docs.micropython.org/en/latest/library/framebuf.html): but exposes more 'utility' methods for
+drawing lines, rectangles, circles, etc. than the underlying [`framebuffer`](https://docs.micropython.org/en/latest/library/framebuf.html). It
+also provides support for colour representation on displays (through the
+[`Colour`][lbutils.graphics.colours.Colour] class), as well as also font support
+(through sub-classes of
+[`BaseFont`][lbutils.graphics.fonts.base_font.BaseFont]).
 
 ## Tested Implementations
 
@@ -34,8 +36,18 @@ colour representation (through the [`Colour`][lbutils.graphics.colour.Colour] cl
 
 """
 
-from abc import ABC, abstractmethod
+# Import the ABC module if available. Use our backup version
+# if the offical library is missing
+try:
+    from abc import ABC, abstractmethod
+except ImportError:
+    from lbutils.abc import ABC, abstractmethod
 
+# Import the lbutils graphics library
+try:
+    import lbutils.graphics as graphics
+except ImportError:
+    raise RuntimeError("Error: Missing required LBUtils graphics library")
 
 class Canvas(ABC):
     """
@@ -48,12 +60,12 @@ class Canvas(ABC):
     ----------
 
     bg_colour:
-        The background [`Colour`][lbutils.graphics.colour.Colour] to use when drawing.
+        The background [`Colour`][lbutils.graphics.colours.Colour] to use when drawing.
     font:
         The sub-class of [`BaseFont`][lbutils.graphics.fonts.base_font.BaseFont]
         to use when drawing characters.
     fg_colour:
-        The foreground [`Colour`][lbutils.graphics.colour.Colour] to use when
+        The foreground [`Colour`][lbutils.graphics.colours.Colour] to use when
         drawing.
     height:
         A read-only value for the height of the canvas in pixels.
@@ -69,7 +81,7 @@ class Canvas(ABC):
 
     * `fill()`. Fill the entire `Canvas` with the background colour.
 
-    * `read_pixel()`. Return the [`Colour`][lbutils.graphics.colour.Colour] of
+    * `read_pixel()`. Return the [`Colour`][lbutils.graphics.colours.Colour] of
     the specified pixel.
 
     * `write_char()`. Write a character (using the current font) starting at the stated pixel position.
@@ -88,7 +100,6 @@ class Canvas(ABC):
     for speed. In most cases the sub-classes can (and should) use the
     accelerated drawing primitives available on specific hardware to
     improve the routines provided here.
-
     """
 
     ##
@@ -118,6 +129,11 @@ class Canvas(ABC):
         self._r = r
         self._g = g
         self._b = b
+
+        # Set the Attribute Values. Note use the properties to ensure
+        # that the type being set is correct
+        self.bg_colour = graphics.colours.COLOUR_BLACK
+        self.fg_colour = graphics.colours.COLOUR_WHITE
 
     ##
     ## Properties

@@ -33,12 +33,20 @@ colour accuracy for instance
 which can make use of the colour representations: and without having to replicate
 the detailed bit manipulation that colour storage and conversion involves.
 
+In addition to the `Colour` class, a list of 16 'VGA' colours defined in the
+HTML 4.01 specification is also provided. These provide common, named, colour
+representations suitable for most displays.
+
 ## Tested Implementations
 
 *   Raspberry Pi Pico W (MicroPython 3.4)
 *   CPython (3.10)
 
 """
+
+###
+### Classes
+###
 
 
 class Colour:
@@ -51,11 +59,19 @@ class Colour:
 
     Attributes
     ----------
-
-    as_565: int
-
+    r: int, read-only
+        The byte (`0..255`) of the red component of the colour
+    g: int, read-only
+        The byte (`0..255`) of the green component of the colour
+    b: int, read-only
+        The byte (`0..255`) of the blue component of the colour
+    as_565: int, read-only
         Provides the colour value in the RGB565 format, using the
         standard representation.
+    isARM: bool, read-write
+        Flag indicating if the colour value should use the ARM byte
+        packing order in colour conversions. Defaults to `True` as
+        set by the default constructor.
 
     """
 
@@ -72,12 +88,12 @@ class Colour:
         ----------
 
         r: int
-            The red component of the packed byte value, of which the lower five bytes are selected.
+            The byte (`0..255`) representing the red component of the colour.
         g: int
-            The green component of the packed byte value, of which the lower six bytes are selected.
+            The byte (`0..255`) representing the green component of the colour.
         b: int
-            The red component of the packed byte value, of which the lower five bytes are selected.
-        isARM: bool
+            The byte (`0..255`) representing the blue component of the colour.
+        isARM: bool, optional
             Determines if the current platform is an ARM processor or not. This
             value is used to determine which order for the `word` representation
             of the colour returned to the caller. Defaults to `True` as required
@@ -87,9 +103,29 @@ class Colour:
         self._g = g
         self._b = b
 
+        self.isARM = isARM
+
+        # Cached values
+        self._565 = None
+
     ##
     ## Properties
     ##
+
+    @property
+    def r(self) -> int:
+        """The red component of the packed byte value, of which the lower five bytes are selected."""
+        return self._r
+
+    @property
+    def g(self) -> int:
+        """The green component of the packed byte value, of which the lower six bytes are selected."""
+        return self._g
+
+    @property
+    def b(self) -> int:
+        """The red component of the packed byte value, of which the lower five bytes are selected."""
+        return self._b
 
     @property
     def as_565(self) -> int:
@@ -120,9 +156,42 @@ class Colour:
 
         """
 
-        if self._is_ARM:
-            return (
-                (self._g & 0x1C) << 1 | (self._b >> 3) | (self._r & 0xF8) | self._g >> 5
-            )
-        else:
-            return (self._r & 0xF8) << 8 | (self._g & 0xFC) << 3 | self._b >> 3
+        # Check for a cached value ...
+        if self._565 is None:
+
+            # ... if there isn't one, calculate what the byte representation
+            #     should look like
+            if self.isARM:
+                self._565 = (
+                    (self._g & 0x1C) << 1
+                    | (self._b >> 3)
+                    | (self._r & 0xF8)
+                    | self._g >> 5
+                )
+            else:
+                self._565(self._r & 0xF8) << 8 | (self._g & 0xFC) << 3 | self._b >> 3
+
+        # Return the calculated value to the client
+        return self._565
+
+
+###
+### Named Colours
+###
+
+COLOUR_BLACK = Colour(0, 0, 0)
+COLOUR_BLUE = Colour(0, 0, 255)
+COLOUR_CYAN = Colour(0, 255, 255)
+COLOUR_GRAY = Colour(128, 128, 128)
+COLOUR_GREEN = Colour(0, 128, 0)
+COLOUR_LIME = Colour(0, 255, 0)
+COLOUR_MAGENTA = Colour(255, 0, 255)
+COLOUR_MAROON = Colour(128, 0, 0)
+COLOUR_NAVY = Colour(0, 0, 128)
+COLOUR_OLIVE = Colour(128, 128, 0)
+COLOUR_PURPLE = Colour(128, 0, 128)
+COLOUR_RED = Colour(255, 0, 0)
+COLOUR_SILVER = Colour(192, 192, 192)
+COLOUR_TEAL = Colour(0, 128, 128)
+COLOUR_WHITE = Colour(255, 255, 255)
+COLOUR_YELLOW = Colour(255, 255, 0)

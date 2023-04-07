@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from .BaseFont import BaseFont
+from .base_font import BaseFont
 
 
 class Font_08(BaseFont):
