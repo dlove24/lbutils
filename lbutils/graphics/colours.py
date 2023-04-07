@@ -59,11 +59,11 @@ class Colour:
 
     Attributes
     ----------
-    r: int, read-only
+    bR: int, read-only
         The byte (`0..255`) of the red component of the colour
-    g: int, read-only
+    bG: int, read-only
         The byte (`0..255`) of the green component of the colour
-    b: int, read-only
+    bB: int, read-only
         The byte (`0..255`) of the blue component of the colour
     as_565: int, read-only
         Provides the colour value in the RGB565 format, using the
@@ -73,6 +73,18 @@ class Colour:
         packing order in colour conversions. Defaults to `True` as
         set by the default constructor.
 
+    Implementation
+    --------------
+
+    Where possible attribute values are cached, and so the first
+    call of the attribute will be slightly slower than subsequent calls.
+
+    !!! warning "Immutable Class"
+        To ensure the accuracy of the returned value, the Colour is also
+        assumed to be immutable once the constructor has completed. If
+        the private (non-public) attributes are modified outside the
+        constructor the behaviour of the class is undefined.
+
     """
 
     ##
@@ -81,51 +93,66 @@ class Colour:
 
     def __init__(self, r: int, g: int, b: int, isARM: bool = True) -> None:
         """
-        Creates a (packed) representation of a colour value, from the
-        three bytes `r` (red), `g` (green) and `b` (blue).
+        Creates a representation of a colour value, from the
+        three integers `r` (red), `g` (green) and `b` (blue). The class will
+        accept anything which can be coerced to an integer as arguments: the
+        access through the attributes will determine the representation used
+        when displaying the colour.
 
         Parameters
         ----------
 
         r: int
-            The byte (`0..255`) representing the red component of the colour.
+            The integer representing the red component of the colour.
         g: int
-            The byte (`0..255`) representing the green component of the colour.
+            The integer representing the green component of the colour.
         b: int
-            The byte (`0..255`) representing the blue component of the colour.
+            The integer representing the blue component of the colour.
         isARM: bool, optional
             Determines if the current platform is an ARM processor or not. This
             value is used to determine which order for the `word` representation
             of the colour returned to the caller. Defaults to `True` as required
             by the Pico H/W platform of the micro-controller development board.
         """
-        self._r = r
-        self._g = g
-        self._b = b
+        self._r = int(r)
+        self._g = int(g)
+        self._b = int(b)
 
         self.isARM = isARM
 
         # Cached values
         self._565 = None
+        self._bR = None
+        self._bG = None
+        self._bB = None
 
     ##
     ## Properties
     ##
 
     @property
-    def r(self) -> int:
-        """The red component of the packed byte value, of which the lower five bytes are selected."""
-        return self._r
+    def bR(self) -> int:
+        """The red component of the colour value, packed to a single byte."""
+        if self._bR is None:
+            self._bR = self._r & 0xFF
+
+        return self._bR
 
     @property
-    def g(self) -> int:
-        """The green component of the packed byte value, of which the lower six bytes are selected."""
-        return self._g
+    def bG(self) -> int:
+        """The green component of the colour value, packed to a single byte."""
+        if self._bG is None:
+            self._bG = self._g & 0xFF
+
+        return self._bG
 
     @property
-    def b(self) -> int:
-        """The red component of the packed byte value, of which the lower five bytes are selected."""
-        return self._b
+    def bB(self) -> int:
+        """The blue component of the colour value, packed to a single byte."""
+        if self._bB is None:
+            self._bB = self._b & 0xFF
+
+        return self._bB
 
     @property
     def as_565(self) -> int:

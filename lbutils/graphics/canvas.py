@@ -49,6 +49,7 @@ try:
 except ImportError:
     raise RuntimeError("Error: Missing required LBUtils graphics library")
 
+
 class Canvas(ABC):
     """
     A Base Class which implements a drawing surface, and which
