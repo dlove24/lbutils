@@ -177,8 +177,8 @@ class Canvas(ABC):
         y2: int
              The Y co-ordinate of the pixel for the end point of the line.
         colour: int
-        The packaged byte representation of the colour to be used
-          when drawing the line.
+             The packaged byte representation of the colour to be used
+             when drawing the line.
         """
 
     @abstractmethod
