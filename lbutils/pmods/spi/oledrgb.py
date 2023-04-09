@@ -162,7 +162,7 @@ class OLEDrgb(graphics.Canvas):
 
     * `draw_rectangle()`. Draw a rectangle at the co-ordinate (x, y) of height and width, using the linecolour for the frame of the rectangle and fillcolour as the interior colour.
 
-    * `fill()`. Fill the entire `Canvas` with the background colour.
+    * `fill_screen()`. Fill the entire `Canvas` with the background colour.
 
     * `read_pixel()`. Return the [`Colour`][lbutils.graphics.colours.Colour] of
     the specified pixel.
@@ -219,8 +219,8 @@ class OLEDrgb(graphics.Canvas):
         data_cmd_pin: int = 15,
         chip_sel_pin: int = 14,
         reset_pin: int = 17,
-        width=96,
-        height=64,
+        width:int=96,
+        height:int=64,
     ) -> None:
         """
         Initialise the SPI interface, and sent the sequence of commands required
@@ -313,54 +313,47 @@ class OLEDrgb(graphics.Canvas):
             [`machine.SPI`](https://docs.micropython.org/en/latest/library/machine.SPI.html)
             class, used to specify the SPI interface that should be used by this driver to
             interface to the display controller.
-        data_cmd_pin: int
+        data_cmd_pin: int, optional
             The '`D/C`' or 'Data/Command' pin; used to send low-level
-            instructions to the display driver.
-        chip_sel_pin: int
-            SPI `CS` (Chip Select) pin.
-        reset_pin: int = 17,
+            instructions to the display driver. Defaults to GPIO Pin 14.
+        chip_sel_pin: int, optional
+            SPI `CS` (Chip Select) pin. Defaults to GPIO Pin 15.
+        reset_pin: int, optional
             Normally 'low': when held 'high', clears the current display buffer.
-            Used to clear the display without having to rewrite each pixel.
-        width=96
-            The width in pixels of the display.
-        height=64
-            The height in pixels of the display.
+            Used to clear the display without having to rewrite each pixel. Defaults
+			to GPIO Pin 17.
+        width: int, optional
+            The width in pixels of the display. Defaults to 96.
+        heightL int, optional
+            The height in pixels of the display. Defaults to 64.
         """
-
+		
+		# Set the ancestor values
+		super().__init__(width=width, height=height, isARM=True)
+		
+		# Set the local attributes
         self.spi_controller = spi_controller
         self.data_cmd_pin = data_cmd_pin
         self.chip_sel_pin = chip_sel_pin
         self.reset_pin = reset_pin
         self.width = width
         self.height = height
+        self.font = None
+		
+		# Initalise the diaplay
         self.reset()
         for command, data in self._INIT:
             self._write(command, data)
-        self.font = None
 
     ##
     ## Private (Non-Public) Methods
     ##
 
-    def _write(self, command=None, data=None):
-        """
-        Write a command over the `data_cmd_pin` to the display
-        driver.
-        """
-        if command is None:
-            self.data_cmd_pin.value(1)
-        else:
-            self.data_cmd_pin.value(0)
-
-        self.chip_sel_pin.value(0)
-
-        if command is not None:
-            self.spi_controller.write(bytearray([command]))
-        if data is not None:
-            self.spi_controller.write(data)
-
-        self.chip_sel_pin.value(1)
-
+	def _block(self, x, y, width, height, data):
+        self._write(_SETCOLUMN, bytearray([x, x + width - 1]))
+        self._write(_SETROW, bytearray([y, y + height - 1]))
+        self._write(None, data)
+		
     def _read(self, command=None, count=0):
         """
         Decode a command read on the `data_cmd_pin` from the display
@@ -378,6 +371,25 @@ class OLEDrgb(graphics.Canvas):
         self.chip_sel_pin.value(1)
 
         return data
+		
+	def _write(self, command=None, data=None):
+        """
+        Write a command over the `data_cmd_pin` to the display
+        driver.
+        """
+        if command is None:
+            self.data_cmd_pin.value(1)
+        else:
+            self.data_cmd_pin.value(0)
+
+        self.chip_sel_pin.value(0)
+
+        if command is not None:
+            self.spi_controller.write(bytearray([command]))
+        if data is not None:
+            self.spi_controller.write(data)
+
+			self.chip_sel_pin.value(1)
 
     ##
     ## Properties
@@ -433,7 +445,7 @@ class OLEDrgb(graphics.Canvas):
         #          self._write(None,bytearray([colour >> 8, colour &0xff]))
         self.draw_line(x, y, x, y)
 
-    def draw_line(self, x1: int, y1: int, x2: int, y2: int) -> None:
+    def draw_line(self, x1: int, y1: int, x2: int, y2: int, fg_colour: int = None, pen = None) -> None:
         """
         Draw a line from co-ordinates (`x2`, `y2`) to (`x2`, `y2`) using the
         specified RGB colour. Use the [`color565`] method to construct a suitable RGB
@@ -450,10 +462,17 @@ class OLEDrgb(graphics.Canvas):
             The X co-ordinate of the pixel for the end point of the line.
         y2: int
             The Y co-ordinate of the pixel for the end point of the line.
-        colour: int
-            The packaged byte representation of the colour to be used
-            when drawing the line.
-        """
+        fg_colour: int, optional
+        	The colour to be used when drawing the line. If not specified, use the
+			preference order for the foreground colour of the `Canvas` to find a
+			suitable colour.
+		pen: optional
+			The pen to be used when drawing the line. If not specified, use the
+			preference order for the foreground colour of the `Canvas` to find a
+			suitable colour.
+			"""
+			
+		fg_colour = self.select_fg_color(fg_colour=fg_colour,pen=pen)
 
         data = ustruct.pack(
             self._ENCODE_LINE,
@@ -461,14 +480,16 @@ class OLEDrgb(graphics.Canvas):
             y1,
             x2,
             y2,
-            self.fg_colour.r,
-            self.fg_colour.g,
-            self.fg_colour.b,
+            fg_colour.r,
+            fg_colour.g,
+            fg_colour.b,
         )
         self._write(_DRAWLINE, data)
 
+	@abstractmethod
     def draw_rectangle(
-        self, x: int, y: int, width: int, height: int, linecolour: int, fillcolour: int
+        self, x: int, y: int, width: int, height: int, fg_colour: int = None, bg_colour: int = None,
+		pen = None, filled:bool = True
     ) -> None:
         """
         Draw a rectangle at the co-ordinate (`x`, `y`) of `height` and `width`,
@@ -479,60 +500,47 @@ class OLEDrgb(graphics.Canvas):
         ----------
 
         x: int
-            The X co-ordinate of the pixel for the start point of the rectangle.
+             The X co-ordinate of the pixel for the start point of the rectangle.
         y: int
-            The Y co-ordinate of the pixel for the start point of the rectangle.
+             The Y co-ordinate of the pixel for the start point of the rectangle.
         width: int
-            The width of the rectangle in pixels.
+             The width of the rectangle in pixels.
         height: int
-            The hight of the rectangle in pixels.
-        linecolour: int
-            The packaged byte representation of the colour to be used
-            when drawing the frame of the rectangle.
-        fillcolour: int
-            The packaged byte representation of the colour to be used
-            when the interior of the rectangle. May be `None` if no fill is
-            to be used.
-        """
-        if fillcolour is None:
-            self._write(_FILL, b"\x00")
-            br = 0
-            bg = 0
-            bb = 0
-        else:
-            self._write(_FILL, b"\x01")
-            br = (fillcolour >> 10) & 0x3E
-            bg = (fillcolour >> 5) & 0x3E
-            bb = (fillcolour & 0x1F) << 1
+             The hight of the rectangle in pixels.
+        fg_colour: int, optional
+        	The colour to be used when drawing the rectangle. If not specified, use the
+			preference order for the foreground colour of the `Canvas` to find a
+			suitable colour.
+        bg_colour: int, optional
+        	The colour to be used when filling the rectangle. If not specified, use the
+			preference order for the background colour of the `Canvas` to find a
+			suitable colour.
+		pen: optional
+			The pen to be used when drawing the rectangle, using the forground colour for
+			the frame and the background colour for the fill. If not specified, use the
+			preference order for the foreground and background colours of the `Canvas` 
+			to find suitable colours.
+		filled: bool, optional
+			If `True` (the default) the rectangle is filled with the background colour:
+			otherwise the rectangle is not filled.			
+		"""
+		
+		fg_colour = self.select_fg_color(fg_colour=fg_colour,pen=pen)
+		bg_colour = self.select_bg_color(bg_colour=bg_colour,pen=pen)
+		
+		# Send the commands to fill, or not fill, the rectangle
+		if filled:
+			self._write(_FILL, b"\x01")
+		else:
+			self._write(_FILL, b"\x00")
 
-        r = (linecolour >> 10) & 0x3E
-        g = (linecolour >> 5) & 0x3E
-        b = (linecolour & 0x1F) << 1
-
+		# Send the drawing command (the colour data is ignored if the rectangle is
+		# not filled)				
         data = ustruct.pack(
-            self._ENCODE_RECT, x, y, x + width - 1, y + height - 1, r, g, b, br, bg, bb
+            self._ENCODE_RECT, x, y, x + width - 1, y + height - 1, fg_colour.bR, fg_colour.bG, fg_colour.bB, bg_colour.bR, bg_colour.bG, bg_colour.bB
         )
 
         self._write(_DRAWRECT, data)
-
-    def fill(self, colour: int = 0) -> None:
-        """
-        Fill the entire display with the specified colour. By default this
-        will set the display to black, if no `colour` is specified.
-
-        Parameters
-        ----------
-
-        colour: int
-            The packaged byte representation of the colour to be used
-            when the interior of the rectangle. Defaults to black.
-        """
-        self.draw_rectangle(0, 0, self.width, self.height, colour, colour)
-
-    def block(self, x, y, width, height, data):
-        self._write(_SETCOLUMN, bytearray([x, x + width - 1]))
-        self._write(_SETROW, bytearray([y, y + height - 1]))
-        self._write(None, data)
 
     def reset(self) -> None:
         """
@@ -543,36 +551,46 @@ class OLEDrgb(graphics.Canvas):
             utime.sleep(0.1)
             self.reset_pin.value(1)
 
-    def write_char(self, x: int, y: int, utf8Char: str) -> int:
+    def write_char(self, x: int, y: int, utf8Char: str, fg_colour: int = None, pen = None) -> int:
         """
         Write a `utf8Char` character (using the current `font`) starting
-        at the pixel position (`x`, `y`) in the current `fg_colour`.
+        at the pixel position (`x`, `y`) in the specified `colour`.
 
         !!! note
-            Whilst the `utf8Char` character _must_ be a valid UTF-8
-            character, most fonts only support the equivalent of the (7-bit) ASCII character
-            set. This method _will not_ display character values that cannot be supported by
-            the underlying font. See the font description for the exact values that are
-            valid for the specific font being used.
+             Whilst the `utf8Char` character _must_ be a valid UTF-8
+             character, most fonts only support the equivalent of the (7-bit) ASCII character
+             set. This method _will not_ display character values that cannot be supported by
+             the underlying font. See the font description for the exact values that are
+             valid for the specific font being used.
 
         Parameters
         ----------
 
         x: int
-            The X co-ordinate of the pixel for the character start position.
+             The X co-ordinate of the pixel for the character start position.
         y: int
-            The Y co-ordinate of the pixel for the character start position.
+             The Y co-ordinate of the pixel for the character start position.
         utf8Char:
-            The character to write to the display.
+             The character to write to the display.
+        fg_colour: int, optional
+        	The colour to be used when drawing the line. If not specified, use the
+			preference order for the foreground colour of the `Canvas` to find a
+			suitable colour.
+		pen: optional
+			The pen to be used when drawing the line. If not specified, use the
+			preference order for the foreground colour of the `Canvas` to find a
+			suitable colour.
 
         Returns
         -------
 
         int:
-            The X pixel co-ordinate immediately following the character written
-            in the specified font. This can be used to easily locate multiple characters at
-            a given Y position: see also `write_text()`.
-        """
+             The X pixel co-ordinate immediately following the character written
+             in the specified font. This can be used to easily locate multiple characters at
+             a given Y position: see also `write_text()`.
+		"""
+		
+		fg_colour = self.select_fg_color(fg_colour=fg_colour,pen=pen)
 
         # print("write_char(x={},y={},c={},colour={})".format(x,y,utf8Char,colour))
         if self.font is None:
@@ -589,32 +607,5 @@ class OLEDrgb(graphics.Canvas):
         for y1 in range(_height):
             for x1 in range(_width):
                 if self.font.get_next():
-                    self.write_pixel(x + x1 + x_off, y + y1 + y_off)
+                    self.write_pixel(x + x1 + x_off, y + y1 + y_off, fg_colour)
         return x + _cursor
-
-    def write_text(self, x: int, y: int, txt_str: str) -> None:
-        """
-        Write the string `txt_str` (using the current `font`) starting
-        at the pixel position (`x`, `y`) in the current `fg_colour` to
-        the display.
-
-        !!! note
-            Whilst the `txt_str` character _must_ be a valid UTF-8
-            string, most fonts only support the equivalent of the (7-bit) ASCII character
-            set. This method _will not_ display character values that cannot be supported by
-            the underlying font. See the font description for the exact values that are
-            valid for the specific font being used.
-
-        Parameters
-        ----------
-
-        x: int
-            The X co-ordinate of the pixel for the text start position.
-        y: int
-            The Y co-ordinate of the pixel for the text start position.
-        txt_str:
-            The string of characters to write to the display.
-        """
-        if self.font is not None:
-            for c in txt_str:
-                x = self.write_char(x, y, c)

@@ -94,7 +94,7 @@ fb = framebuf.FrameBuffer(
 ##
 
 # Clear the display
-oled_display.fill(0)
+oled_display.fill_screen(COLOUR_BLACK)
 
 # Display the `Font_08` font class in red
 print("Running the screen test for the `Font_08` font...")
@@ -111,7 +111,7 @@ oled_display.write_text(0, 60, "0123456789")
 utime.sleep(10)
 
 # Clear the display
-oled_display.fill(0)
+oled_display.fill_screen(COLOUR_BLACK)
 
 # Display the `Font_06` font class in green
 print("Running the screen test for the `Font_06` font...")
@@ -128,7 +128,7 @@ oled_display.write_text(0, 60, "0123456789")
 utime.sleep(10)
 
 # Clear the display
-oled_display.fill(0)
+oled_display.fill_screen(COLOUR_BLACK)
 
 # Display the `Org_01` font class in blue
 print("Running the screen test for the `Org_01` font...")
@@ -158,7 +158,6 @@ for i in range(8):
 print("Running the colour test...")
 while True:
     for color in colors:
-        fb.fill(color.as_565)
-        oled_display.block(0, 0, 96, 64, buffer)
+        oled_display.fill_screen(color.as_565)
 
         utime.sleep(1)
