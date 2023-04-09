@@ -184,8 +184,7 @@ class Canvas(ABC):
         -------
 
         int:
-             The packaged byte representation of the colour at the pixel location
-             (x, y).
+             The colour representation of the pixel located at (x, y).
         """
 		
 	@abstractmethod
@@ -201,8 +200,8 @@ class Canvas(ABC):
         y: int
             The Y co-ordinate of the pixel to set.
         colour: int
-            The packaged byte representation of the colour to be used
-            when setting the pixel. Defaults to black.
+            The representation of the colour to be used when setting the pixel. 
+			Defaults to black.
 			"""
 			
 	@abstractmethod
@@ -272,6 +271,46 @@ class Canvas(ABC):
 			otherwise the rectangle is not filled.			
 		"""
 			
+	@abstractmethod
+    def write_char(self, x: int, y: int, utf8Char: str, fg_colour: int = None, pen = None) -> int:
+        """
+        Write a `utf8Char` character (using the current `font`) starting
+        at the pixel position (`x`, `y`) in the specified `colour`.
+
+        !!! note
+             Whilst the `utf8Char` character _must_ be a valid UTF-8
+             character, most fonts only support the equivalent of the (7-bit) ASCII character
+             set. This method _will not_ display character values that cannot be supported by
+             the underlying font. See the font description for the exact values that are
+             valid for the specific font being used.
+
+        Parameters
+        ----------
+
+        x: int
+             The X co-ordinate of the pixel for the character start position.
+        y: int
+             The Y co-ordinate of the pixel for the character start position.
+        utf8Char:
+             The character to write to the display.
+        fg_colour: int, optional
+        	The colour to be used when drawing the line. If not specified, use the
+			preference order for the foreground colour of the `Canvas` to find a
+			suitable colour.
+		pen: optional
+			The pen to be used when drawing the line. If not specified, use the
+			preference order for the foreground colour of the `Canvas` to find a
+			suitable colour.
+
+        Returns
+        -------
+
+        int:
+             The X pixel co-ordinate immediately following the character written
+             in the specified font. This can be used to easily locate multiple characters at
+             a given Y position: see also `write_text()`.
+			 """
+		
     ##
     ## Methods
     ##
@@ -392,50 +431,7 @@ class Canvas(ABC):
 	    self.draw_rectangle(0,0,width=self.width,height=self.height,fg_colour=bg_colour,
 	    bg_colour=bg_colour, filled=True)
 		
-    @abstractmethod
-    def write_char(self, x: int, y: int, utf8Char: str, fg_colour: int = None, pen = None) -> int:
-        """
-        Write a `utf8Char` character (using the current `font`) starting
-        at the pixel position (`x`, `y`) in the specified `colour`.
-
-        !!! note
-             Whilst the `utf8Char` character _must_ be a valid UTF-8
-             character, most fonts only support the equivalent of the (7-bit) ASCII character
-             set. This method _will not_ display character values that cannot be supported by
-             the underlying font. See the font description for the exact values that are
-             valid for the specific font being used.
-
-        Parameters
-        ----------
-
-        x: int
-             The X co-ordinate of the pixel for the character start position.
-        y: int
-             The Y co-ordinate of the pixel for the character start position.
-        utf8Char:
-             The character to write to the display.
-        fg_colour: int, optional
-        	The colour to be used when drawing the line. If not specified, use the
-			preference order for the foreground colour of the `Canvas` to find a
-			suitable colour.
-		pen: optional
-			The pen to be used when drawing the line. If not specified, use the
-			preference order for the foreground colour of the `Canvas` to find a
-			suitable colour.
-
-        Returns
-        -------
-
-        int:
-             The X pixel co-ordinate immediately following the character written
-             in the specified font. This can be used to easily locate multiple characters at
-             a given Y position: see also `write_text()`.
-        """
-
-		
-
-    @abstractmethod
-    def write_text(self, x: int, y: int, txt_str: str, colour: int) -> None:
+	def write_text(self, x: int, y: int, txt_str: str, fg_colour: int = None, pen = None) -> None:
         """
         Write the string `txt_str` (using the current `font`) starting
         at the pixel position (`x`, `y`) in the specified `colour` to
@@ -457,7 +453,16 @@ class Canvas(ABC):
              The Y co-ordinate of the pixel for the text start position.
         txt_str:
              The string of characters to write to the display.
-        colour: int
-             The packaged byte representation of the colour to be used
-             when drawing the character.
+        fg_colour: int, optional
+        	The colour to be used when drawing the line. If not specified, use the
+			preference order for the foreground colour of the `Canvas` to find a
+			suitable colour.
+		pen: optional
+			The pen to be used when drawing the line. If not specified, use the
+			preference order for the foreground colour of the `Canvas` to find a
+			suitable colour.
         """
+		
+		if self.font is not None:
+            for c in txt_str:
+                x = self.write_char(x, y, c, fg_colour=fg_colour, pen=pen)
