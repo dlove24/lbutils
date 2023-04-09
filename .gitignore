@@ -7,3 +7,5 @@
 # Temporary packaging files
 dist/
 lbutils_mp.egg-info/
+
+*.swp
