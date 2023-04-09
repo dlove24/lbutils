@@ -185,7 +185,6 @@ class Colour:
 
         # Check for a cached value ...
         if self._565 is None:
-
             # ... if there isn't one, calculate what the byte representation
             #     should look like
             if self.isARM:
