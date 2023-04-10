@@ -142,7 +142,7 @@ class Canvas(ABC):
 
         width: int
              The width in pixels of the display.
-        heightL int
+        height: int
              The height in pixels of the display.
         isARM: bool, optional
              Determines if the current platform is an ARM processor or not. This
@@ -150,9 +150,6 @@ class Canvas(ABC):
              of the colour returned to the caller. Defaults to `True` as required
              by the Pico H/W platform of the micro-controller development board.
         """
-        self._r = r
-        self._g = g
-        self._b = b
 
         # Set the Attribute Values. Note use the properties to ensure
         # that the type being set is correct
@@ -328,7 +325,7 @@ class Canvas(ABC):
     ## Methods
     ##
 
-    def select_fg_color(fg_colour=None, pen=None):
+    def select_fg_color(self, fg_colour=None, pen=None):
         """
         Return the colour to be used for drawing in the forground, taking into
         account the (optional) overrides specified in `color` and `pen`. The
@@ -377,7 +374,7 @@ class Canvas(ABC):
         else:
             return graphics.colours.COLOUR_WHITE
 
-    def select_bg_color(bg_colour=None, pen=None):
+    def select_bg_color(self, bg_colour=None, pen=None):
         """
         Return the colour to be used for drawing in the background, taking into
         account the (optional) overrides specified in `bg_color` and `pen`. The
@@ -439,15 +436,15 @@ class Canvas(ABC):
              The colour to be used to fill the screen. Defaults to using the
              colour search order of the `Canvas` to find a colour.
         """
-        bg_color = self.select_bg_color(bg_colour=bg_colour)
+        fill_colour = self.select_bg_color(bg_colour=bg_colour)
 
         self.draw_rectangle(
             0,
             0,
             width=self.width,
             height=self.height,
-            fg_colour=bg_colour,
-            bg_colour=bg_colour,
+            fg_colour=fill_colour,
+            bg_colour=fill_colour,
             filled=True,
         )
 

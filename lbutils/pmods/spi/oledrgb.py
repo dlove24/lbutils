@@ -324,7 +324,7 @@ class OLEDrgb(graphics.Canvas):
                         to GPIO Pin 17.
         width: int, optional
             The width in pixels of the display. Defaults to 96.
-        heightL int, optional
+        height: int, optional
             The height in pixels of the display. Defaults to 64.
         """
 
@@ -488,7 +488,6 @@ class OLEDrgb(graphics.Canvas):
         )
         self._write(_DRAWLINE, data)
 
-    @abstractmethod
     def draw_rectangle(
         self,
         x: int,

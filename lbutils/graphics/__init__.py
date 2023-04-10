@@ -34,10 +34,10 @@ following sections
 * **[Canvas and Drawing Primitives][lbutils.graphics.canvas]**. The core
 `Canvas` class of the library, together with the drawing primitives implemented
 by all graphics drivers.
-* **[Colour Support and Representation][lbutils.graphics.colours]**. Classes such
-as `Colour` which holds the internal colour representations used by the graphics
-library. Also provides methods to convert beteween common colour formats
-	and representations.
+* **[Colour Support and Representation][lbutils.graphics.colours]**. Classes
+such as `Colour` which holds the internal colour representations used by the
+graphics library. Also provides methods to convert between common colour formats
+and representations.
 * **[Helper Classes][lbutils.graphics.helpers]**. Provides utility classes and
 functions which ease the abstraction of the main graphics Canvas library, e.g.
 `Pixel`.

@@ -84,7 +84,7 @@ class Pen:
     def __init__(
         self,
         fg_colour: Type[Colour] = COLOUR_WHITE,
-        fg_colour: Type[Colour] = COLOUR_BLACK,
+        bg_colour: Type[Colour] = COLOUR_BLACK,
         thickness: int = 1,
     ) -> None:
         """
