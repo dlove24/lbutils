@@ -78,7 +78,6 @@ vcc_enable.high()
 # Finally initialise the OLED display driver, and set the display
 # to black
 oled_display = OLEDrgb(spi_controller, data_cmd_pin, chip_sel_pin, reset_pin)
-oled_display.fill(0)
 
 ##
 ## Setup the frame buffer

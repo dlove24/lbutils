@@ -22,25 +22,52 @@
 
 """
 Provides a simple graphics library for the supported screen devices
-(controllers) of the Pico H and Pico W. Most of this interface provides abstract
-base classes, which are then expected to be instantiated as sub-class of one of
-the driver classes, e.g.
-[`lbutils.pmods.spi.OLEDrgb`][lbutils.pmods.spi.OLEDrgb].
+(controllers) of the Pico H and Pico W. Most of this interface is provided
+through a base class called [`Canvas`][lbutils.graphics.Canvas], which is
+expected to be instantiated as sub-class of one of the driver classes, e.g.
+[`lbutils.pmods.spi.OLEDrgb`][lbutils.pmods.spi.OLEDrgb]. The following
+description therefore describes the methods and attributes common to all
+derived drivers: but see the individual drivers for attributes and methods
+that may be specific to the device in question.
 
-Note that font selection, and font representation is dealt with
-[here][lbutils.graphics.fonts]. Other aspects of the library can be found in the
-following sections
+Much of the functionality of the `Canvas` class is provided by related
+'helper' classes. Some of these helper classes such as [`Pen`][lbutils.graphics.Pen] or [`Colour`][lbutils.graphics.Colour] may be useful
+more widely in graphics and drawing routines. Other helper classes such as
+the [`BaseFont`][lbutils.graphics.fonts.BaseFont] are likely to be useful
+only in the context of the `Canvas` class (and sub-classes).
 
-* **[Canvas and Drawing Primitives][lbutils.graphics.canvas]**. The core
-`Canvas` class of the library, together with the drawing primitives implemented
-by all graphics drivers.
+As above, the main aim of the `Canvas` class (and the graphics library generally
+is to provide a basic set of capabilities which can be relied on by all users (and
+higher-level libraries). Those common facilities can be divided into the following
+categories, and are described in more detail in the following sections
+
 * **[Colour Support and Representation][lbutils.graphics.colours]**. Classes
 such as `Colour` which holds the internal colour representations used by the
 graphics library. Also provides methods to convert between common colour formats
-and representations.
+and representations, such as RGB565 and RGB588.
+* **[Common Drawing Primitives][lbutils.graphics.canvas]**. The drawing primitives
+provided by the `Canvas` class of the library, such as circles, rectangles and
+lines. These primitives are guaranteed to be available in all graphics drivers:
+but depending on the driver may or may not be accelerated,
+* **[Fonts and Font Handling][lbutils.graphics.fonts]**. Describes the internal
+font representation used in this library, and the details of the fonts available
+for use.
 * **[Helper Classes][lbutils.graphics.helpers]**. Provides utility classes and
 functions which ease the abstraction of the main graphics Canvas library, e.g.
-`Pixel`.
+[`Pixel`][lbutils.graphics.Pixel]. These are provided outside the main `Canvas`
+class as being the most suitable classes for re-use in other drawing and graphics
+routines.
+
+## Implementation
+
+The only methods _required_ to be implemented in sub-classes of [`Canvas`][lbutils.graphics.Canvas]
+are [`read_pixel`][lbutils.graphics.Canvas.read_pixel] and [`write_pixel`][lbutils.graphics.Canvas.write_pixel]. All the drawing primitives, including font
+support, can be implemented by `Canvas` using only those two methods. However,
+in most cases the drawing speed is unacceptably slow, and so in _most_ cases
+sub-classes will also choose to override methods such as [`draw_line`][lbutils.graphics.Canvas.draw_line] where such facilities are available. The
+details of the accelerated methods, including any changes to the algorithms used
+by [`Canvas`][lbutils.graphics.Canvas] can be found in the documentation for
+the sub-class itself.
 
 ## Tested Implementations
 
@@ -50,5 +77,5 @@ functions which ease the abstraction of the main graphics Canvas library, e.g.
 
 ### Expose the `graphics` module interface as a full package
 from .colours import Colour
-from .canvas import Canvas
+from .canvas import Canvas, FrameBufferCanvas
 from .helpers import Pen, Pixel, BoundPixel

@@ -408,23 +408,30 @@ class OLEDrgb(graphics.Canvas):
     ## Methods
     ##
 
-    def read_pixel(self, x: int, y: int) -> int:
+    def read_pixel(self, x: int, y: int) -> Type[graphics.Colour]:
         """
         Read the colour value of the pixel at position (`x`, `y`) and return to the caller.
+
+        Parameters
+        ----------
+
+        x: int
+            The x co-ordinate of the pixel to read
+        y: int
+            The y co-ordinate of the pixel to read
 
         Returns
         -------
 
-        int:
-            The packaged byte representation of the colour at the pixel location
-            (x, y).
+        Type[Colour]:
+             The [`Colour`][lbutils.graphics.Colour] representation of the pixel located at (x, y).
         """
         self._write(_SETCOLUMN, bytearray([x, x]))
         self._write(_SETROW, bytearray([y, y]))
 
         return self._read(None, 2)
 
-    def write_pixel(self, x: int, y: int, colour: int = 0) -> None:
+    def write_pixel(self, x: int, y: int, colour: Type[graphics.Colour]) -> None:
         """
         Set the pixel at position (`x`, `y`) to the specified colour value.
 
@@ -432,12 +439,11 @@ class OLEDrgb(graphics.Canvas):
         ----------
 
         x: int
-            The X co-ordinate of the pixel to set.
+             The X co-ordinate of the pixel to set.
         y: int
-            The Y co-ordinate of the pixel to set.
-        colour: int
-            The packaged byte representation of the colour to be used
-            when setting the pixel. Defaults to black.
+             The Y co-ordinate of the pixel to set.
+        colour: Type[Colour]
+             The [`Colour`][lbutils.graphics.Colour] representation of the pixel located at (x, y).
         """
         self._write(_SETCOLUMN, bytearray([x, x]))
         self._write(_SETROW, bytearray([y, y]))
@@ -446,12 +452,18 @@ class OLEDrgb(graphics.Canvas):
         self.draw_line(x, y, x, y)
 
     def draw_line(
-        self, x1: int, y1: int, x2: int, y2: int, fg_colour: int = None, pen=None
+        self,
+        x1: int,
+        y1: int,
+        x2: int,
+        y2: int,
+        fg_colour: Type[graphics.Colour] = None,
+        pen: Type[graphics.Pen] = None,
     ) -> None:
         """
         Draw a line from co-ordinates (`x2`, `y2`) to (`x2`, `y2`) using the
-        specified RGB colour. Use the [`color565`] method to construct a suitable RGB
-        colour representation.
+        specified RGB colour. Uses the [`color565`][lbutils.graphics.Colour.color565] method to construct a suitable RGB
+        colour representation for the display.
 
         Parameters
         ----------
@@ -464,12 +476,11 @@ class OLEDrgb(graphics.Canvas):
             The X co-ordinate of the pixel for the end point of the line.
         y2: int
             The Y co-ordinate of the pixel for the end point of the line.
-        fg_colour: int, optional
-            The colour to be used when drawing the line. If not specified, use the
-            preference order for the foreground colour of the `Canvas` to find a
-            suitable colour.
-        pen: optional
-            The pen to be used when drawing the line. If not specified, use the
+        fg_colour: Type[graphics.Colour], optional
+            The [`Colour`][lbutils.graphics.Colour] to be used when drawing the
+            line. If not specified, use the preference order for the foreground colour of the `Canvas` to find a suitable colour.
+        pen: Type[graphics.Pen], optional
+            The [`Pen`][lbutils.graphics.Pen] to be used when drawing the line. If not specified, use the
             preference order for the foreground colour of the `Canvas` to find a
             suitable colour.
         """
@@ -494,9 +505,9 @@ class OLEDrgb(graphics.Canvas):
         y: int,
         width: int,
         height: int,
-        fg_colour: int = None,
-        bg_colour: int = None,
-        pen=None,
+        fg_colour: Type[graphics.Colour] = None,
+        bg_colour: Type[graphics.Colour] = None,
+        pen: Type[graphics.Pen] = None,
         filled: bool = True,
     ) -> None:
         """
@@ -515,22 +526,23 @@ class OLEDrgb(graphics.Canvas):
             The width of the rectangle in pixels.
         height: int
             The hight of the rectangle in pixels.
-        fg_colour: int, optional
-            The colour to be used when drawing the rectangle. If not specified, use the
-            preference order for the foreground colour of the `Canvas` to find a
-            suitable colour.
-        bg_colour: int, optional
-            The colour to be used when filling the rectangle. If not specified, use the
-            preference order for the background colour of the `Canvas` to find a
-            suitable colour.
-        pen: optional
-            The pen to be used when drawing the rectangle, using the forground colour for
-            the frame and the background colour for the fill. If not specified, use the
-            preference order for the foreground and background colours of the `Canvas`
-            to find suitable colours.
+        fg_colour: Type[graphics.Colour], optional
+            The [`Colour`][lbutils.graphics.Colour] to be used when drawing the
+            rectangle. If not specified, use the preference order for the
+            foreground colour of the `Canvas` to find a suitable colour.
+        bg_colour: Type[graphics.Colour], optional
+            The [`Colour`][lbutils.graphics.Colour] to be used when filling the
+            rectangle. If not specified, use the preference order for the
+            background colour of the `Canvas` to find a suitable colour.
+        pen: Type[graphics.Pen], optional
+            The [`Pen`][lbutils.graphics.Pen] to be used when drawing the
+            rectangle, using the foreground colour for the frame and the
+            background colour for the fill. If not specified, use the
+            preference order for the foreground and background colours of the
+            `Canvas` to find suitable colours.
         filled: bool, optional
-            If `True` (the default) the rectangle is filled with the background colour:
-            otherwise the rectangle is not filled.
+            If `True` (the default) the rectangle is filled with the background
+            colour: otherwise the rectangle is not filled.
         """
 
         fg_colour = self.select_fg_color(fg_colour=fg_colour, pen=pen)
@@ -570,7 +582,12 @@ class OLEDrgb(graphics.Canvas):
             self.reset_pin.value(1)
 
     def write_char(
-        self, x: int, y: int, utf8Char: str, fg_colour: int = None, pen=None
+        self,
+        x: int,
+        y: int,
+        utf8Char: str,
+        fg_colour: Type[graphics.Colour] = None,
+        pen: Type[graphics.Pen] = None,
     ) -> int:
         """
         Write a `utf8Char` character (using the current `font`) starting
@@ -592,14 +609,14 @@ class OLEDrgb(graphics.Canvas):
             The Y co-ordinate of the pixel for the character start position.
         utf8Char:
             The character to write to the display.
-        fg_colour: int, optional
-            The colour to be used when drawing the line. If not specified, use the
-            preference order for the foreground colour of the `Canvas` to find a
-            suitable colour.
-        pen: optional
-            The pen to be used when drawing the line. If not specified, use the
-            preference order for the foreground colour of the `Canvas` to find a
-            suitable colour.
+        fg_colour: Type[graphics.Colour], optional
+            The [`Colour`][lbutils.graphics.Colour] to be used when drawing the
+            character. If not specified, use the preference order for the
+            foreground colour of the `Canvas` to find a suitable colour.
+        pen: Type[graphics.Pen], optional
+            The [`Pen`][lbutils.graphics.Pen] to be used when drawing the line.
+            If not specified, use the preference order for the foreground colour
+            of the `Canvas` to find a suitable colour.
 
         Returns
         -------

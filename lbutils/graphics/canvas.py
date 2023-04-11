@@ -21,14 +21,52 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 """
-Implements an abstract [`Canvas`][lbutils.graphics.canvas.Canvas] class, used to
-represent the drawing surface implemented by the underlying display drivers.
-This class is close to a [`framebuffer`](https://docs.micropython.org/en/latest/library/framebuf.html): but exposes more 'utility' methods for
-drawing lines, rectangles, circles, etc. than the underlying [`framebuffer`](https://docs.micropython.org/en/latest/library/framebuf.html). It
-also provides support for colour representation on displays (through the
-[`Colour`][lbutils.graphics.colours.Colour] class), as well as also font support
-(through sub-classes of
-[`BaseFont`][lbutils.graphics.fonts.base_font.BaseFont]).
+Implements an abstract [`Canvas`][lbutils.graphics.Canvas] class, used to
+represent a drawing surface. The specific implemented of the drawing surface
+is left to the derived display drivers, which sub-class [`Canvas`][lbutils.graphics.Canvas]:
+see the _Examples_ section for details.
+
+In most cases the use of the [`Canvas`][lbutils.graphics.Canvas] class is similar
+to the [`framebuffer`](https://docs.micropython.org/en/latest/library/framebuf.html)
+provided by MicroPython. Unlike the [`framebuffer`](https://docs.micropython.org/en/latest/library/framebuf.html)
+class, however, the [`Canvas`][lbutils.graphics.Canvas] class _does not_
+maintain a in-memory copy of the graphics display buffer, This means that the
+[`Canvas`][lbutils.graphics.Canvas] class uses less memory by default (compared
+to the [`framebuffer`](https://docs.micropython.org/en/latest/library/framebuf.html)
+class): but at the cost of some flexibility. In particular it is **not** possible
+to directly manipulate the display buffer of the [`Canvas`][lbutils.graphics.Canvas] class. Instead _all_ drawing or changes to the
+associated display buffer must be done through the [`Canvas`][lbutils.graphics.Canvas] class itself.
+
+The [`Canvas`][lbutils.graphics.Canvas] class also attempts to make as few
+assumptions as possible about the underlying implementation: trading speed for
+flexibility where necessary. In particular the [`Canvas`][lbutils.graphics.Canvas] class
+makes no assumptions about the underlying byte order of the display, not any
+assumptions about a specific colour model. Instead these are abstracted into
+associated classes such as [`Colour`][lbutils.graphics.colours.Colour] class).
+Those 'helper' classes will typically provide support for specific
+implementations, or allow conversion between the internal representation of the
+class and the underlying display protocols.
+
+## Examples
+
+The simplest derived class of [`Canvas`][lbutils.graphics.Canvas] is [FrameBufferCanvas][lbutils.graphics.FrameBufferCanvas]. This backs the
+[`Canvas`][lbutils.graphics.Canvas] with a [`framebuffer`](https://docs.micropython.org/en/latest/library/framebuf.html), as a display
+abstraction. The [FrameBufferCanvas][lbutils.graphics.FrameBufferCanvas] can
+then be created as
+
+````python
+import lbutils.graphics as graphics
+
+display = graphics.FrameBufferCanvas(width: int = 96,
+        height: int = 64)
+````
+
+Once created, the [Canvas][lbutils.graphics.Canvas] drawing methods can
+be used on the [`framebuffer`](https://docs.micropython.org/en/latest/library/framebuf.html). For insance the [`framebuffer`](https://docs.micropython.org/en/latest/library/framebuf.html) can be cleared to black by
+
+````python
+display.fill_screen(graphics.colours.COLOUR_BLACK)
+````
 
 ## Tested Implementations
 
@@ -42,6 +80,12 @@ try:
     from abc import ABC, abstractmethod
 except ImportError:
     from lbutils.abc import ABC, abstractmethod
+
+# Import the typing support
+try:
+    from typing import Type
+except ImportError:
+    from lbutils.typing import Type
 
 # Import the lbutils graphics library
 try:
@@ -92,7 +136,7 @@ class Canvas(ABC):
          The foreground [`Colour`][lbutils.graphics.colours.Colour] to use when
          drawing.
     pen:
-         The pen to use when drawing on the canvas.
+         The [`Pen`][lbutils.graphics.Pen] to use when drawing on the canvas.
     height:
          A read-only value for the height of the canvas in pixels.
     width:
@@ -175,19 +219,27 @@ class Canvas(ABC):
     ##
 
     @abstractmethod
-    def read_pixel(self, x: int, y: int) -> int:
+    def read_pixel(self, x: int, y: int) -> Type[graphics.Colour]:
         """
         Read the colour value of the pixel at position (`x`, `y`) and return to the caller.
+
+        Parameters
+        ----------
+
+        x: int
+            The x co-ordinate of the pixel to read
+        y: int
+            The y co-ordinate of the pixel to read
 
         Returns
         -------
 
-        int:
-             The colour representation of the pixel located at (x, y).
+        Type[Colour]:
+             The [`Colour`][lbutils.graphics.Colour] representation of the pixel located at (x, y).
         """
 
     @abstractmethod
-    def write_pixel(self, x: int, y: int, colour: int = 0) -> None:
+    def write_pixel(self, x: int, y: int, colour: Type[graphics.Colour]) -> None:
         """
         Set the pixel at position (`x`, `y`) to the specified colour value.
 
@@ -198,19 +250,23 @@ class Canvas(ABC):
              The X co-ordinate of the pixel to set.
         y: int
              The Y co-ordinate of the pixel to set.
-        colour: int
-             The representation of the colour to be used when setting the pixel.
-             Defaults to black.
+        colour: Type[Colour]
+             The [`Colour`][lbutils.graphics.Colour] representation of the pixel located at (x, y).
         """
 
     @abstractmethod
     def draw_line(
-        self, x1: int, y1: int, x2: int, y2: int, fg_colour: int = None, pen=None
+        self,
+        x1: int,
+        y1: int,
+        x2: int,
+        y2: int,
+        fg_colour: Type[graphics.Colour] = None,
+        pen: Type[graphics.Pen] = None,
     ) -> None:
         """
         Draw a line from co-ordinates (`x2`, `y2`) to (`x2`, `y2`) using the
-        specified RGB colour. Use the [`color565`] method to construct a suitable RGB
-        colour representation.
+        specified RGB colour.
 
         Parameters
         ----------
@@ -223,12 +279,12 @@ class Canvas(ABC):
              The X co-ordinate of the pixel for the end point of the line.
         y2: int
              The Y co-ordinate of the pixel for the end point of the line.
-        fg_colour: int, optional
-             The colour to be used when drawing the line. If not specified, use the
+        fg_colour: Type[graphics.Colour], optional
+             The [`Colour`][lbutils.graphics.Colour] to be used when drawing the line. If not specified, use the
              preference order for the foreground colour of the `Canvas` to find a
              suitable colour.
-        pen: optional
-             The pen to be used when drawing the line. If not specified, use the
+        pen: Type[graphics.Pen], optional
+             The [`Pen`][lbutils.graphics.Pen] to be used when drawing the line. If not specified, use the
              preference order for the foreground colour of the `Canvas` to find a
              suitable colour.
         """
@@ -240,9 +296,9 @@ class Canvas(ABC):
         y: int,
         width: int,
         height: int,
-        fg_colour: int = None,
-        bg_colour: int = None,
-        pen=None,
+        fg_colour: Type[graphics.Colour] = None,
+        bg_colour: Type[graphics.Colour] = None,
+        pen: Type[graphics.Pen] = None,
         filled: bool = True,
     ) -> None:
         """
@@ -261,27 +317,32 @@ class Canvas(ABC):
              The width of the rectangle in pixels.
         height: int
              The hight of the rectangle in pixels.
-        fg_colour: int, optional
-             The colour to be used when drawing the rectangle. If not specified, use the
+        fg_colour: Type[graphics.Colour], optional
+             The [`Colour`][lbutils.graphics.Colour] to be used when drawing the rectangle. If not specified, use the
              preference order for the foreground colour of the `Canvas` to find a
              suitable colour.
-        bg_colour: int, optional
-             The colour to be used when filling the rectangle. If not specified, use the
+        bg_colour: Type[graphics.Colour], optional
+             The [`Colour`][lbutils.graphics.Colour] to be used when filling the rectangle. If not specified, use the
              preference order for the background colour of the `Canvas` to find a
              suitable colour.
-        pen: optional
-             The pen to be used when drawing the rectangle, using the forground colour for
+        pen: Type[graphics.Pen], optional
+             The [`Pen`][lbutils.graphics.Pen] to be used when drawing the rectangle, using the forground colour for
              the frame and the background colour for the fill. If not specified, use the
              preference order for the foreground and background colours of the `Canvas`
              to find suitable colours.
         filled: bool, optional
-             If `True` (the default) the rectangle is filled with the background colour:
-             otherwise the rectangle is not filled.
+             If `True` (the default) the rectangle is filled with the background
+             colour: otherwise the rectangle is not filled.
         """
 
     @abstractmethod
     def write_char(
-        self, x: int, y: int, utf8Char: str, fg_colour: int = None, pen=None
+        self,
+        x: int,
+        y: int,
+        utf8Char: str,
+        fg_colour: Type[graphics.Colour] = None,
+        pen: Type[graphics.Pen] = None,
     ) -> int:
         """
         Write a `utf8Char` character (using the current `font`) starting
@@ -303,14 +364,13 @@ class Canvas(ABC):
              The Y co-ordinate of the pixel for the character start position.
         utf8Char:
              The character to write to the display.
-        fg_colour: int, optional
-             The colour to be used when drawing the line. If not specified, use the
-             preference order for the foreground colour of the `Canvas` to find a
-             suitable colour.
-        pen: optional
-             The pen to be used when drawing the line. If not specified, use the
-             preference order for the foreground colour of the `Canvas` to find a
-             suitable colour.
+        fg_colour: Type[graphics.Colour], optional
+             The [`Colour`][lbutils.graphics.Colour] to be used when drawing the
+             line. If not specified, use the preference order for the foreground
+             colour of the `Canvas` to find a suitable colour.
+        pen: Type[graphics.Pen], optional
+             The [`Pen`][lbutils.graphics.Pen] to be used when drawing the line.
+             If not specified, use the preference order for the foreground colour of the `Canvas` to find a suitable colour.
 
         Returns
         -------
@@ -325,9 +385,11 @@ class Canvas(ABC):
     ## Methods
     ##
 
-    def select_fg_color(self, fg_colour=None, pen=None):
+    def select_fg_color(
+        self, fg_colour: Type[graphics.Colour] = None, pen: Type[graphics.Pen] = None
+    ):
         """
-        Return the colour to be used for drawing in the forground, taking into
+        Return the colour to be used for drawing in the foreground, taking into
         account the (optional) overrides specified in `color` and `pen`. The
         selected colour will obey the standard colour selection precedence of
         the `Canvas` class, and is guaranteed to return a valid `Colour`][lbutils.graphics.colors.Colour]
@@ -336,31 +398,35 @@ class Canvas(ABC):
         Paramaters
         ----------
 
-        fg_colour: optional
+        fg_colour: Type[graphics.Colour], optional
              Overrides the current `Canvas` forground colour, using the specified
              `fg_colour` instead.
-        pen: optional
+        pen: Type[graphics.Pen], optional
              Overrides the current `Canvas` pen, using the forground colour of the specified
              `pen` to choose the returned `Colour`.
 
         Implementation
         --------------
 
-        The returned `Colour` object is selected according the defined
-        precedence
+        The returned [`Colour`][lbutils.graphics.Colour] object is selected
+        according the defined precedence
 
              1. The `Colour` directly specified in the method call.
-             2. The foreground colour specified by the `Pen` in the method call of the drawing primitive.
-             3. The foreground colour specified by the `Pen` of the `Canvas` object.
+             2. The foreground colour specified by the `Pen` in the method call
+             of the drawing primitive.
+             3. The foreground colour specified by the `Pen` of the `Canvas`
+             object.
              4. The colour specified by as the default forground colour of the
                   `Canvas` object.
-             5. As a default of white (`COLOUR_WHITE`) for the foreground if all other selection methods fail.
+             5. As a default of white (`COLOUR_WHITE`) for the foreground if all
+             other selection methods fail.
 
         Returns
         -------
 
         Type[Colour]:
-             A `Colour` object representing the current foreground colour of the `Canvas`
+             A [`Colour`][lbutils.graphics.Colour] object representing the
+             current foreground colour of the `Canvas`
         """
 
         if pen is not None:
@@ -374,7 +440,9 @@ class Canvas(ABC):
         else:
             return graphics.colours.COLOUR_WHITE
 
-    def select_bg_color(self, bg_colour=None, pen=None):
+    def select_bg_color(
+        self, bg_colour: Type[graphics.Colour] = None, pen: Type[graphics.Pen] = None
+    ):
         """
         Return the colour to be used for drawing in the background, taking into
         account the (optional) overrides specified in `bg_color` and `pen`. The
@@ -385,18 +453,18 @@ class Canvas(ABC):
         Paramaters
         ----------
 
-        bg_colour: optional
-             Overrides the current `Canvas` background colour, using the specified
-             `bg_colour` instead.
-        pen: optional
-             Overrides the current `Canvas` pen, using the background colour of the specified
-             `pen` to choose the returned `Colour`.
+        bg_colour: Type[graphics.Colour], optional
+             Overrides the current `Canvas` background [`Colour`][lbutils.graphics.Colour],
+             using the specified `bg_colour` instead.
+        pen: Type[graphics.Pen], optional
+             Overrides the current `Canvas` pen, using the background colour of
+             the specified `pen` to choose the returned [`Colour`][lbutils.graphics.Colour].
 
         Implementation
         --------------
 
-        The returned `Colour` object is selected according the defined
-        precedence
+        The returned [`Colour`][lbutils.graphics.Colour] object is selected
+        according the defined precedence
 
              1. The `Colour` directly specified in the method call.
              2. The background colour specified by the `Pen` in the method call of the drawing primitive.
@@ -409,7 +477,7 @@ class Canvas(ABC):
         -------
 
         Type[Colour]:
-             A `Colour` object representing the current background colour of the `Canvas`
+             A [`Colour`][lbutils.graphics.Colour] object representing the current background colour of the `Canvas`
         """
 
         if pen is not None:
@@ -423,7 +491,7 @@ class Canvas(ABC):
         else:
             return graphics.colours.COLOUR_BLACK
 
-    def fill_screen(self, bg_colour: int = None) -> None:
+    def fill_screen(self, bg_colour: Type[graphics.Colour] = None) -> None:
         """
         Fill the entire display with the specified colour. By default this
         will use the colour preference order to find a background colour
@@ -432,9 +500,10 @@ class Canvas(ABC):
         Parameters
         ----------
 
-        bg_colour: int, optional
-             The colour to be used to fill the screen. Defaults to using the
-             colour search order of the `Canvas` to find a colour.
+        bg_colour: Type[graphics.Colour], optional
+             The [`Colour`][lbutils.graphics.Colour] to be used to fill the
+             screen. Defaults to using the colour search order of the `Canvas`
+             to find a colour.
         """
         fill_colour = self.select_bg_color(bg_colour=bg_colour)
 
@@ -449,7 +518,12 @@ class Canvas(ABC):
         )
 
     def write_text(
-        self, x: int, y: int, txt_str: str, fg_colour: int = None, pen=None
+        self,
+        x: int,
+        y: int,
+        txt_str: str,
+        fg_colour: Type[graphics.Colour] = None,
+        pen: Type[graphics.Pen] = None,
     ) -> None:
         """
         Write the string `txt_str` (using the current `font`) starting
@@ -472,16 +546,24 @@ class Canvas(ABC):
              The Y co-ordinate of the pixel for the text start position.
         txt_str:
              The string of characters to write to the display.
-        fg_colour: int, optional
-             The colour to be used when drawing the line. If not specified, use the
-             preference order for the foreground colour of the `Canvas` to find a
-             suitable colour.
-        pen: optional
-             The pen to be used when drawing the line. If not specified, use the
-             preference order for the foreground colour of the `Canvas` to find a
-             suitable colour.
+        fg_colour: Type[graphics.Colour], optional
+             The [`Colour`][lbutils.graphics.Colour] to be used when drawing the
+             line. If not specified, use the preference order for the foreground
+             colour of the `Canvas` to find a suitable colour.
+        pen: Type[graphics.Pen], optional
+             The [`Pen`][lbutils.graphics.Pen] to be used when drawing the line.
+             If not specified, use the preference order for the foreground colour
+             of the `Canvas` to find a suitable colour.
         """
 
         if self.font is not None:
             for c in txt_str:
                 x = self.write_char(x, y, c, fg_colour=fg_colour, pen=pen)
+
+
+class FrameBufferCanvas(Canvas):
+    """
+    A [Canvas][lbutils.graphics.Canvas] backed by a [`framebuffer`](https://docs.micropython.org/en/latest/library/framebuf.html).
+    """
+
+    pass
