@@ -33,9 +33,37 @@ colour accuracy for instance
 which can make use of the colour representations: and without having to replicate
 the detailed bit manipulation that colour storage and conversion involves.
 
+## Colour Reference
+
 In addition to the `Colour` class, a list of 16 'VGA' colours defined in the
 HTML 4.01 specification is also provided. These provide common, named, colour
-representations suitable for most displays.
+representations suitable for most displays, for instance as
+
+````python
+fg_colour = COLOUR_CYAN
+````
+
+A complete list of the 16 objects defined by the `lbutils.colours` module is
+shown below
+
+| Colour                                        | Colour Name | Hex Representation | Object Name        |
+|-----------------------------------------------|-------------|--------------------|--------------------|
+| <div style = "color:#000000"> &#9632; </div>  | Black       | `0x000000`         | COLOUR_BLACK       |
+| <div style = "color:#C0C0C0"> &#9632; </div>  | Silver      | `0xC0C0C0`         | COLOUR_SILVER      |
+| <div style = "color:#808080"> &#9632; </div>  | Grey        | `0x808080`         | COLOUR_GREY        |
+| <div style = "color:#FFFFFF"> &#9632; </div>  | White       | `0xFFFFFF`         | COLOUR_WHITE       |
+| <div style = "color:#800000"> &#9632; </div>  | Maroon      | `0x800000`         | COLOUR_MAROON      |
+| <div style = "color:#FF0000"> &#9632; </div>  | Red         | `0xFF0000`         | COLOUR_RED         |
+| <div style = "color:#800000"> &#9632; </div>  | Purple      | `0x800080`         | COLOUR_PURPLE      |
+| <div style = "color:#FF00FF"> &#9632; </div>  | Fuchsia     | `0xFF00FF`         | COLOUR_FUCHSIIA    |
+| <div style = "color:#008000"> &#9632; </div>  | Green       | `0x008000`         | COLOUR_GREEN       |
+| <div style = "color:#00FF00"> &#9632; </div>  | Lime        | `0x00FF00`         | COLOUR_LIME        |
+| <div style = "color:#808000"> &#9632; </div>  | Olive       | `0x808000`         | COLOUR_OLIVE       |
+| <div style = "color:#FFFF00"> &#9632; </div>  | Yellow      | `0xFFFF00`         | COLOUR_YELLOW      |
+| <div style = "color:#000080"> &#9632; </div>  | Navy        | `0x000080`         | COLOUR_NAVY        |
+| <div style = "color:#0000FF"> &#9632; </div>  | Blue        | `0x0000FF`         | COLOUR_BLUE        |
+| <div style = "color:#008080"> &#9632; </div>  | Teal        | `0x008080`         | COLOUR_TEAL        |
+| <div style = "color:#00FFFF"> &#9632; </div>  | Aqua        | `0x00FFFF`         | COLOUR_AQUA        |
 
 ## Tested Implementations
 
@@ -208,7 +236,7 @@ class Colour:
 COLOUR_BLACK = Colour(0, 0, 0)
 COLOUR_BLUE = Colour(0, 0, 255)
 COLOUR_CYAN = Colour(0, 255, 255)
-COLOUR_GRAY = Colour(128, 128, 128)
+COLOUR_GREY = Colour(128, 128, 128)
 COLOUR_GREEN = Colour(0, 128, 0)
 COLOUR_LIME = Colour(0, 255, 0)
 COLOUR_MAGENTA = Colour(255, 0, 255)

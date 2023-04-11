@@ -462,8 +462,8 @@ class OLEDrgb(graphics.Canvas):
     ) -> None:
         """
         Draw a line from co-ordinates (`x2`, `y2`) to (`x2`, `y2`) using the
-        specified RGB colour. Uses the [`color565`][lbutils.graphics.Colour.color565] method to construct a suitable RGB
-        colour representation for the display.
+        specified RGB colour. If the `fg_colour` is `Nonw`, then the default
+        search order is used to locate a suitable colour.
 
         Parameters
         ----------
