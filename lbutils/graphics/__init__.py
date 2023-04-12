@@ -20,15 +20,14 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""
-Provides a simple graphics library for the supported screen devices
-(controllers) of the Pico H and Pico W. Most of this interface is provided
-through a base class called [`Canvas`][lbutils.graphics.Canvas], which is
-expected to be instantiated as sub-class of one of the driver classes, e.g.
-[`lbutils.pmods.spi.OLEDrgb`][lbutils.pmods.spi.OLEDrgb]. The following
-description therefore describes the methods and attributes common to all
-derived drivers: but see the individual drivers for attributes and methods
-that may be specific to the device in question.
+"""Provides a simple graphics library for the supported screen devices (controllers) of
+the Pico H and Pico W. Most of this interface is provided through a base class called
+[`Canvas`][lbutils.graphics.Canvas], which is expected to be instantiated as sub-class
+of one of the driver classes, e.g.
+[`lbutils.pmods.spi.OLEDrgb`][lbutils.pmods.spi.OLEDrgb]. The following description
+therefore describes the methods and attributes common to all derived drivers: but see
+the individual drivers for attributes and methods that may be specific to the device in
+question.
 
 Much of the functionality of the `Canvas` class is provided by related
 'helper' classes. Some of these helper classes such as [`Pen`][lbutils.graphics.Pen] or [`Colour`][lbutils.graphics.Colour] may be useful
@@ -72,7 +71,6 @@ the sub-class itself.
 ## Tested Implementations
 
 *   Raspberry Pi Pico W (MicroPython 3.4)
-
 """
 
 ### Expose the `graphics` module interface as a full package

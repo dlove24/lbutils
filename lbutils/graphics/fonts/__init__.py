@@ -20,7 +20,10 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Fonts for the LED and OLED displays; especially the those using the 'pmod' packages. These fonts are based on open-source font files, and converted with the [`fontconvert`](https://github.com/danjperron/ssd1331_micropython) utility written by Daniel Perron.S.
+"""Fonts for the LED and OLED displays; especially the those using the 'pmod' packages.
+These fonts are based on open-source font files, and converted with the
+[`fontconvert`](https://github.com/danjperron/ssd1331_micropython) utility written by
+Daniel Perron.S.
 
 Most of the work of this library consists of rebuilding the font representation as described below. This reconstruction is undertaken by the [`BaseFont`][lbutils.graphics.fonts.base_font.BaseFont] class, and abstract class which must be sub-classed for a specific font. Currently the fonts (and subclasses) exposed in this library are
 
@@ -40,7 +43,6 @@ Currently the `fontconvert` utility only extracts the printable 7-bit ASCII char
 
 *   Raspberry Pi Pico W (MicroPython 3.4)
 *   CPython (3.10)
-
 """
 
 ### Expose the `fonts` module interface as a full package

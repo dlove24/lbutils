@@ -20,7 +20,11 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Utilities and Drivers for the Drivers and support for the Digilent Peripheral Modules. This library is designed to provide drivers and support for the [Digilent peripheral modules](https://digilent.com/reference/pmod/start). Not all boards are supported: and in some cases only certain busses are supported (e.g. using only the I2C bus, even though the `pmod` supports both I2C and SPI).
+"""Utilities and Drivers for the Drivers and support for the Digilent Peripheral
+Modules. This library is designed to provide drivers and support for the [Digilent
+peripheral modules](https://digilent.com/reference/pmod/start). Not all boards are
+supported: and in some cases only certain busses are supported (e.g. using only the I2C
+bus, even though the `pmod` supports both I2C and SPI).
 
 Examples for how to use the library can be found in the '`examples`' folder: or [in the documentation](https://lbutils.readthedocs.io/en/latest/) for the specific classes.
 
@@ -30,5 +34,4 @@ Tested Implementations
 This version is written for MicroPython 3.4, and has been tested on:
 
   * Raspberry Pi Pico H/W
-
 """

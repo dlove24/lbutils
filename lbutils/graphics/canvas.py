@@ -20,11 +20,10 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""
-Implements an abstract [`Canvas`][lbutils.graphics.Canvas] class, used to
-represent a drawing surface. The specific implemented of the drawing surface
-is left to the derived display drivers, which sub-class [`Canvas`][lbutils.graphics.Canvas]:
-see the _Examples_ section for details.
+"""Implements an abstract [`Canvas`][lbutils.graphics.Canvas] class, used to represent a
+drawing surface. The specific implemented of the drawing surface is left to the derived
+display drivers, which sub-class [`Canvas`][lbutils.graphics.Canvas]: see the _Examples_
+section for details.
 
 In most cases the use of the [`Canvas`][lbutils.graphics.Canvas] class is similar
 to the [`framebuffer`](https://docs.micropython.org/en/latest/library/framebuf.html)
@@ -71,7 +70,6 @@ display.fill_screen(graphics.colours.COLOUR_BLACK)
 ## Tested Implementations
 
 *   Raspberry Pi Pico W (MicroPython 3.4)
-
 """
 
 # Import the ABC module if available. Use our backup version
@@ -95,11 +93,10 @@ except ImportError:
 
 
 class Canvas(ABC):
-    """
-    A Base Class which implements a drawing surface, and which
-    provides utility methods for those drawing surfaces. The aim is to
-    make is easier to use the specific display drivers, such as [`OLEDrgb`][lbutils.pmods.spi.oledrgb.OLEDrgb], and to provide basic drawing
-    support for higher-level libraries.
+    """A Base Class which implements a drawing surface, and which provides utility
+    methods for those drawing surfaces. The aim is to make is easier to use the specific
+    display drivers, such as [`OLEDrgb`][lbutils.pmods.spi.oledrgb.OLEDrgb], and to
+    provide basic drawing support for higher-level libraries.
 
     This drawing support is provided through the following categories of tools
 
@@ -177,9 +174,8 @@ class Canvas(ABC):
     ##
 
     def __init__(self, width: int, height: int, isARM: bool = True) -> None:
-        """
-        Creates a (packed) representation of a colour value, from the
-        three bytes `r` (red), `g` (green) and `b` (blue).
+        """Creates a (packed) representation of a colour value, from the three bytes `r`
+        (red), `g` (green) and `b` (blue).
 
         Parameters
         ----------
@@ -194,7 +190,6 @@ class Canvas(ABC):
              of the colour returned to the caller. Defaults to `True` as required
              by the Pico H/W platform of the micro-controller development board.
         """
-
         # Set the Attribute Values. Note use the properties to ensure
         # that the type being set is correct
         if isARM:
@@ -220,8 +215,8 @@ class Canvas(ABC):
 
     @abstractmethod
     def read_pixel(self, x: int, y: int) -> Type[graphics.Colour]:
-        """
-        Read the colour value of the pixel at position (`x`, `y`) and return to the caller.
+        """Read the colour value of the pixel at position (`x`, `y`) and return to the
+        caller.
 
         Parameters
         ----------
@@ -240,8 +235,7 @@ class Canvas(ABC):
 
     @abstractmethod
     def write_pixel(self, x: int, y: int, colour: Type[graphics.Colour]) -> None:
-        """
-        Set the pixel at position (`x`, `y`) to the specified colour value.
+        """Set the pixel at position (`x`, `y`) to the specified colour value.
 
         Parameters
         ----------
@@ -264,8 +258,7 @@ class Canvas(ABC):
         fg_colour: Type[graphics.Colour] = None,
         pen: Type[graphics.Pen] = None,
     ) -> None:
-        """
-        Draw a line from co-ordinates (`x2`, `y2`) to (`x2`, `y2`) using the
+        """Draw a line from co-ordinates (`x2`, `y2`) to (`x2`, `y2`) using the
         specified RGB colour.
 
         Parameters
@@ -301,10 +294,9 @@ class Canvas(ABC):
         pen: Type[graphics.Pen] = None,
         filled: bool = True,
     ) -> None:
-        """
-        Draw a rectangle at the co-ordinate (`x`, `y`) of `height` and `width`,
-        using the `linecolour` for the frame of the rectangle and `fillcolour` as the
-        interior colour.
+        """Draw a rectangle at the co-ordinate (`x`, `y`) of `height` and `width`, using
+        the `linecolour` for the frame of the rectangle and `fillcolour` as the interior
+        colour.
 
         Parameters
         ----------
@@ -344,9 +336,8 @@ class Canvas(ABC):
         fg_colour: Type[graphics.Colour] = None,
         pen: Type[graphics.Pen] = None,
     ) -> int:
-        """
-        Write a `utf8Char` character (using the current `font`) starting
-        at the pixel position (`x`, `y`) in the specified `colour`.
+        """Write a `utf8Char` character (using the current `font`) starting at the pixel
+        position (`x`, `y`) in the specified `colour`.
 
         !!! note
              Whilst the `utf8Char` character _must_ be a valid UTF-8
@@ -388,11 +379,10 @@ class Canvas(ABC):
     def select_fg_color(
         self, fg_colour: Type[graphics.Colour] = None, pen: Type[graphics.Pen] = None
     ):
-        """
-        Return the colour to be used for drawing in the foreground, taking into
-        account the (optional) overrides specified in `color` and `pen`. The
-        selected colour will obey the standard colour selection precedence of
-        the `Canvas` class, and is guaranteed to return a valid `Colour`][lbutils.graphics.colors.Colour]
+        """Return the colour to be used for drawing in the foreground, taking into
+        account the (optional) overrides specified in `color` and `pen`. The selected
+        colour will obey the standard colour selection precedence of the `Canvas` class,
+        and is guaranteed to return a valid `Colour`][lbutils.graphics.colors.Colour]
         object.
 
         Paramaters
@@ -443,11 +433,10 @@ class Canvas(ABC):
     def select_bg_color(
         self, bg_colour: Type[graphics.Colour] = None, pen: Type[graphics.Pen] = None
     ):
-        """
-        Return the colour to be used for drawing in the background, taking into
-        account the (optional) overrides specified in `bg_color` and `pen`. The
-        selected colour will obey the standard colour selection precedence of
-        the `Canvas` class, and is guaranteed to return a valid `Colour`][lbutils.graphics.colors.Colour]
+        """Return the colour to be used for drawing in the background, taking into
+        account the (optional) overrides specified in `bg_color` and `pen`. The selected
+        colour will obey the standard colour selection precedence of the `Canvas` class,
+        and is guaranteed to return a valid `Colour`][lbutils.graphics.colors.Colour]
         object.
 
         Paramaters
@@ -492,10 +481,9 @@ class Canvas(ABC):
             return graphics.colours.COLOUR_BLACK
 
     def fill_screen(self, bg_colour: Type[graphics.Colour] = None) -> None:
-        """
-        Fill the entire display with the specified colour. By default this
-        will use the colour preference order to find a background colour
-        if `bg_colour` is `None`.
+        """Fill the entire display with the specified colour. By default this will use
+        the colour preference order to find a background colour if `bg_colour` is
+        `None`.
 
         Parameters
         ----------
@@ -525,10 +513,8 @@ class Canvas(ABC):
         fg_colour: Type[graphics.Colour] = None,
         pen: Type[graphics.Pen] = None,
     ) -> None:
-        """
-        Write the string `txt_str` (using the current `font`) starting
-        at the pixel position (`x`, `y`) in the specified `colour` to
-        the display.
+        """Write the string `txt_str` (using the current `font`) starting at the pixel
+        position (`x`, `y`) in the specified `colour` to the display.
 
         !!! note
              Whilst the `txt_str` character _must_ be a valid UTF-8
@@ -562,8 +548,7 @@ class Canvas(ABC):
 
 
 class FrameBufferCanvas(Canvas):
-    """
-    A [Canvas][lbutils.graphics.Canvas] backed by a [`framebuffer`](https://docs.micropython.org/en/latest/library/framebuf.html).
-    """
+    """A [Canvas][lbutils.graphics.Canvas] backed by a
+    [`framebuffer`](https://docs.micropython.org/en/latest/library/framebuf.html)."""
 
     pass

@@ -19,8 +19,10 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""
-Helper code and utilities, mostly helping to automate common tasks and replace boiler-plate code. Many of the classes and utilities in this collection are aimed at supporting the Leeds Beckett micro-controller development board, but may also be helpful for bare Pico H/W support.
+"""Helper code and utilities, mostly helping to automate common tasks and replace
+boiler-plate code. Many of the classes and utilities in this collection are aimed at
+supporting the Leeds Beckett micro-controller development board, but may also be helpful
+for bare Pico H/W support.
 
 Tested Implementations
 ----------------------

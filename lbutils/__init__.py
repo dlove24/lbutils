@@ -20,7 +20,8 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Utilities and Drivers for MicroPython used at Leeds Beckett University. The library is organised into the following modules, which are designed to be stand-alone
+"""Utilities and Drivers for MicroPython used at Leeds Beckett University. The library
+is organised into the following modules, which are designed to be stand-alone.
 
 * **[`drivers`][lbutils.drivers]**: Classes aimed at low-level support of I2C, SPI and
   other devices requiring board-level support.
@@ -54,5 +55,4 @@ which the module exposes.
 
 *   Raspberry Pi Pico W (MicroPython 3.4)
 *   CPython (3.10)
-
 """

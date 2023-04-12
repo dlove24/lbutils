@@ -20,7 +20,10 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Utilities and SPI Drivers for the Digilent Peripheral Modules. This library is designed to provide drivers and support for the [Digilent peripheral modules](https://digilent.com/reference/pmod/start). Not all boards are supported: this module also only supports those with a dedicated SPI interface.
+"""Utilities and SPI Drivers for the Digilent Peripheral Modules. This library is
+designed to provide drivers and support for the [Digilent peripheral
+modules](https://digilent.com/reference/pmod/start). Not all boards are supported: this
+module also only supports those with a dedicated SPI interface.
 
 ## SPI Conventions
 

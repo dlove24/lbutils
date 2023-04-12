@@ -19,8 +19,7 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""
-Simple hexadecimal driver for a seven-segment display, requiring seven GPIO pins.
+"""Simple hexadecimal driver for a seven-segment display, requiring seven GPIO pins.
 
 Overview
 --------
@@ -68,7 +67,6 @@ Tested Implementations
 This version is written for MicroPython 3.4, and has been tested on:
 
 * Raspberry Pi Pico H/W
-
 """
 
 # Import MicroPython libraries for GPIO access if available
@@ -89,15 +87,15 @@ except ImportError:
 ##
 
 ASCII_UPPERCASE = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-""" Constant for the set of ASCII letters """
+"""Constant for the set of ASCII letters."""
 ASCII_DIGITS = set("0123456789")
-""" Constant for the set of ASCII digits """
+"""Constant for the set of ASCII digits."""
 ASCII_HEX_DIGITS = set("0123456789ABCDEF")
-""" Constant for the set of ASCII hexadecimal decimal digits,
-including _only_ those which don't fit into `ASCII_DIGITS`"""
+"""Constant for the set of ASCII hexadecimal decimal digits, including _only_ those
+which don't fit into `ASCII_DIGITS`"""
 ASCII_HEX_EXTRA_DIGITS = set("ABCDEF")
-""" Constant for the set of ASCII hexadecimal decimal digits,
-including _only_ those which don't fit into `ASCII_DIGITS`"""
+"""Constant for the set of ASCII hexadecimal decimal digits, including _only_ those
+which don't fit into `ASCII_DIGITS`"""
 
 ##
 ## Classes
@@ -105,13 +103,11 @@ including _only_ those which don't fit into `ASCII_DIGITS`"""
 
 
 class SegHexDisplay:
-    """
-    Simple hexadecimal driver for a seven-segment display, requiring seven GPIO pins.
+    """Simple hexadecimal driver for a seven-segment display, requiring seven GPIO pins.
 
-    !!! Warning
-        This driver will only display characters in the range '0' to 'F', and
-        will raise a `ValueError` exception if the requested character is not in an
-        appropriate range.
+    !!! Warning     This driver will only display characters in the range '0' to 'F',
+    and     will raise a `ValueError` exception if the requested character is not in an
+    appropriate range.
     """
 
     _char_list = [
@@ -132,17 +128,16 @@ class SegHexDisplay:
         [False, True, True, False, False, False, False],
         [False, True, True, True, False, False, False],
     ]
-    """
-    Defines how characters are rendered, from zero ('0') in the first entry to
-    nine ('9') as the last entry. Note that pins which are listed here as
-    `False` will be _on_ using the default options to the `display` method.
+    """Defines how characters are rendered, from zero ('0') in the first entry to nine
+    ('9') as the last entry.
+
+    Note that pins which are listed here as `False` will be _on_ using the default
+    options to the `display` method.
     """
 
     def __init__(self, gpio_request: list) -> None:
-        """
-        Initialise a seven-segment display, using the user supplied
-        list of GPIO pins in `gpio_request` as reference for pins to
-        drive.
+        """Initialise a seven-segment display, using the user supplied list of GPIO pins
+        in `gpio_request` as reference for pins to drive.
 
         This class also assume a common anode seven-segment display by default,
         and so will assume that pulling a GPIO pin _low_ will turn the relevant
@@ -184,11 +179,10 @@ class SegHexDisplay:
                 self.pin_list.append(Pin(gpio_request[segment], Pin.OUT))
 
     def display(self, character: Union[int, str], inverted: bool = False) -> None:
-        """
-        Display the given `character` on the seven-segment display,
-        using the `_char_list` as a guide for which pins to turn on or off. By default the
-        `display` method will use the entries in the `_char_list` directly: if you need to
-        invert the 'normal' sense, set the `inverted` parameter to `True`.
+        """Display the given `character` on the seven-segment display, using the
+        `_char_list` as a guide for which pins to turn on or off. By default the
+        `display` method will use the entries in the `_char_list` directly: if you need
+        to invert the 'normal' sense, set the `inverted` parameter to `True`.
 
         Parameters
         ----------
@@ -219,7 +213,6 @@ class SegHexDisplay:
         TypeError
             The `character` is not either an `int` or a `str`
         """
-
         # Convert a decimal integer in the range [0..15], and then display
         if isinstance(character, int):
             # For a character in the valid range...

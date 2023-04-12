@@ -20,14 +20,14 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""
-Provides utility classes and functions which ease the abstraction of the main graphics `Canvas` library. These are typically used to abstract and encapsulate common concepts such as a `Pixel`: but which are small enough not a warrant a separate library.
+"""Provides utility classes and functions which ease the abstraction of the main
+graphics `Canvas` library. These are typically used to abstract and encapsulate common
+concepts such as a `Pixel`: but which are small enough not a warrant a separate library.
 
 ## Tested Implementations
 
 *   Raspberry Pi Pico W (MicroPython 3.4)
 *   CPython (3.10)
-
 """
 
 from typing import Type
@@ -40,12 +40,12 @@ from .colours import Colour, COLOUR_WHITE, COLOUR_BLACK
 
 class Pen:
     """Implements a convenience class for the graphics library, which represents a 'pen'
-    with a specified foreground and background colour, and thickness. The primary purpose
-    of this class is to make it easy to swap between common colour and line values; for
-    instance using two pens to allow a swap between 'highlight' and 'normal' text colours.
-    This can be accomplished by defining the foreground and background colour of the
-    [`Canvas`][lbutils.graphics.canvas] as needed: this class simply makes that switch
-    easier.
+    with a specified foreground and background colour, and thickness. The primary
+    purpose of this class is to make it easy to swap between common colour and line
+    values; for instance using two pens to allow a swap between 'highlight' and 'normal'
+    text colours. This can be accomplished by defining the foreground and background
+    colour of the [`Canvas`][lbutils.graphics.canvas] as needed: this class simply makes
+    that switch easier.
 
     Example
     -------
@@ -87,10 +87,8 @@ class Pen:
         bg_colour: Type[Colour] = COLOUR_BLACK,
         thickness: int = 1,
     ) -> None:
-        """
-        Creates a `Pen` instance, using the specified foreground and background colour, and line
-        thickness.
-        """
+        """Creates a `Pen` instance, using the specified foreground and background
+        colour, and line thickness."""
 
         self.bg_colour = bg_colour
         self.fg_colour = fg_colour
@@ -99,12 +97,11 @@ class Pen:
 
 
 class Pixel:
-    """
-    Represents a Cartesian co-ordinate. Used as a convenience class for instances such as
-    cursors where a relationship between a X and a Y co-ordinate must be maintained. This is
-    also useful when two or more co-ordinates need to be tracked, or to be switched between.
-    For instance an 'origin' co-ordinate for a drawing, and a 'current' co-ordinate around the
-    origin where lines are being drawn to and from.
+    """Represents a Cartesian co-ordinate. Used as a convenience class for instances
+    such as cursors where a relationship between a X and a Y co-ordinate must be
+    maintained. This is also useful when two or more co-ordinates need to be tracked, or
+    to be switched between. For instance an 'origin' co-ordinate for a drawing, and a
+    'current' co-ordinate around the origin where lines are being drawn to and from.
 
     !!! note "Implementation Defined Origin"
             As for the [`Canvas`][lbutils.graphics.canvas] class, the interpretation of the
@@ -121,13 +118,11 @@ class Pixel:
             The X co-ordinate value.
     y: int
             The Y co-ordinate value
-
     """
 
     def __init__(self, x: int, y: int):
-        """
-        Creates a `Pixel` instance holding the specified `x` and `y` co-ordinates, together
-        representing the Cartesian point '(`x`, `y`)'.
+        """Creates a `Pixel` instance holding the specified `x` and `y` co-ordinates,
+        together representing the Cartesian point '(`x`, `y`)'.
 
         Parameters
         ----------
@@ -137,18 +132,17 @@ class Pixel:
         y: int
                 The initial Y co-ordinate value
         """
-
         self.y = int(x)
         self.x = int(y)
 
 
 class BoundPixel(Pixel):
-    """
-    Represents a Cartesian co-ordinate between limits. Used as a convenience class for
-    instances such as cursors where a relationship between a X and a Y co-ordinate must be
-    maintained. This is also useful when two or more co-ordinates need to be tracked, or
-    to be switched between. For instance an 'origin' co-ordinate for a drawing, and a
-    'current' co-ordinate around the origin where lines are being drawn to and from.
+    """Represents a Cartesian co-ordinate between limits. Used as a convenience class
+    for instances such as cursors where a relationship between a X and a Y co-ordinate
+    must be maintained. This is also useful when two or more co-ordinates need to be
+    tracked, or to be switched between. For instance an 'origin' co-ordinate for a
+    drawing, and a 'current' co-ordinate around the origin where lines are being drawn
+    to and from.
 
     Unlike the [`Pixel`][lbutils.graphics.Pixel] class, the `BoundPxiel` will also ensure
     that the X and Y co-ordinates are maintained between minimum and maximum value for
@@ -171,7 +165,6 @@ class BoundPixel(Pixel):
             The X co-oridinate value.
     y: int
             The Y co-ordinate value.
-
     """
 
     def __init__(
@@ -184,11 +177,10 @@ class BoundPixel(Pixel):
         min_y: int = 0,
         clip: bool = True,
     ):
-        """
-        Creates a `Pixel` instance holding the specified `x` and `y` co-ordinates, together
-        representing the Cartesian point '(`x`, `y`)'. This `x` and `y` value is guaranteed
-        to be maintained between `min_x` and `max_x` for the `x` co-ordinate, and `min_y`
-        and `max_y` for the `y` co-ordinate.
+        """Creates a `Pixel` instance holding the specified `x` and `y` co-ordinates,
+        together representing the Cartesian point '(`x`, `y`)'. This `x` and `y` value
+        is guaranteed to be maintained between `min_x` and `max_x` for the `x` co-
+        ordinate, and `min_y` and `max_y` for the `y` co-ordinate.
 
         Parameters
         ----------
@@ -243,9 +235,8 @@ class BoundPixel(Pixel):
 
     @property
     def x(self):
-        """
-        The `x` co-ordinate of the `BoundPxiel`, checking that it lies
-        within the specified `min_x` and `max_x` limits.
+        """The `x` co-ordinate of the `BoundPxiel`, checking that it lies within the
+        specified `min_x` and `max_x` limits.
 
         Raises
         ------
@@ -253,7 +244,6 @@ class BoundPixel(Pixel):
         `ValueError`:
                 If `clip` is set to `False`
         """
-
         if self.min_x <= self._x <= self.max_x:
             return self._x
         else:
@@ -284,9 +274,8 @@ class BoundPixel(Pixel):
 
     @property
     def y(self):
-        """
-        The `y` co-ordinate of the `BoundPxiel`, checking that it lies
-        within the specified `min_x` and `max_y` limits.
+        """The `y` co-ordinate of the `BoundPxiel`, checking that it lies within the
+        specified `min_x` and `max_y` limits.
 
         Raises
         ------
@@ -294,7 +283,6 @@ class BoundPixel(Pixel):
         `ValueError`:
                 If `clip` is set to `False`
         """
-
         if self.min_y <= self._y <= self.max_y:
             return self._y
         else:
