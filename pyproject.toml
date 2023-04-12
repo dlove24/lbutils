@@ -21,5 +21,11 @@ classifiers = [
 "Homepage" = "https://github.com/dlove24/lbutils"
 "Documentation" = "https://dlove24.github.io/lbutils/lbutils/index.html"
 
+[tool.docformatter]
+recursive = true
+wrap-summaries = 88
+wrap-descriptions = 88
+
 [tool.setuptools]
 packages = ["lbutils", "lbutils.drivers", "lbutils.graphics", "lbutils.helpers", "lbutils.pmods"]
+
