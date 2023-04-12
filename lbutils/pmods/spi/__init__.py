@@ -20,10 +20,10 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Utilities and SPI Drivers for the Digilent Peripheral Modules. This library is
-designed to provide drivers and support for the [Digilent peripheral
-modules](https://digilent.com/reference/pmod/start). Not all boards are supported: this
-module also only supports those with a dedicated SPI interface.
+"""Utilities and SPI Drivers for the Digilent Peripheral Modules. This library
+is designed to provide drivers and support for the [Digilent peripheral
+modules](https://digilent.com/reference/pmod/start). Not all boards are
+supported: this module also only supports those with a dedicated SPI interface.
 
 ## SPI Conventions
 
@@ -64,7 +64,10 @@ micro-controller development board)
 | Pin 11 | GND           |              | Ground                              |
 | Pin 12 | VCC           |              | VCC (+3.3V)                         |
 
-Examples for specific pin interfaces for individual modules can be found in the '`examples`' folder: or [in the documentation](https://lbutils.readthedocs.io/en/latest/) for each class below.
+Examples for specific pin interfaces for individual modules can be found in the
+'`examples`' folder: or [in the
+
+documentation](https://lbutils.readthedocs.io/en/latest/) for each class below.
 """
 
 ### Expose the `pmod` module interface as a full package

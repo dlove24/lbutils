@@ -23,8 +23,8 @@
 
 """A very minimal 'implementation of the Python Typing library.
 
-Used to avoid
-import errors, and taken from the [pcopy-lib](https://github.com/pfalcon/pycopy-lib/blob/master/typing/typing.py) library.
+Used to avoid import errors, and taken from the
+[pcopy-lib](https://github.com/pfalcon/pycopy-lib/blob/master/typing/typing.py) library.
 """
 
 

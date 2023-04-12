@@ -1,4 +1,5 @@
-# This module, and all included code, is made available under the terms of the MIT
+# This module, and all included code, is made available under the terms of
+# the MIT
 # Licence
 #
 # Copyright 2022-2023, David Love
@@ -20,9 +21,9 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Implements a helper library and `Colour` class which holds the internal colour
-representations used by the graphics library. The `Colour` class aims to achieve three
-goals.
+"""Implements a helper library and `Colour` class which holds the internal
+colour representations used by the graphics library. The `Colour` class aims to
+achieve three goals.
 
 1. To hold the internal (byte) representations of colours typically used by
 small OLED and LED screens.
@@ -78,10 +79,11 @@ shown below
 
 
 class Colour:
-    """A (packed) representation of a colour value, as `r` (red), `g` (green) and `b`
-    (blue) components. The principle purpose of this class is to both hold the internal
-    representation of the colour; and to make the manipulation of those colour values in
-    other graphics routines as straightforward as possible.
+    """A (packed) representation of a colour value, as `r` (red), `g` (green)
+    and `b` (blue) components. The principle purpose of this class is to both
+    hold the internal representation of the colour; and to make the manipulation
+    of those colour values in other graphics routines as straightforward as
+    possible.
 
     Attributes
     ----------
@@ -117,10 +119,11 @@ class Colour:
     ##
 
     def __init__(self, r: int, g: int, b: int, isARM: bool = True) -> None:
-        """Creates a representation of a colour value, from the three integers `r`
-        (red), `g` (green) and `b` (blue). The class will accept anything which can be
-        coerced to an integer as arguments: the access through the attributes will
-        determine the representation used when displaying the colour.
+        """Creates a representation of a colour value, from the three integers
+        `r` (red), `g` (green) and `b` (blue). The class will accept anything
+        which can be coerced to an integer as arguments: the access through the
+        attributes will determine the representation used when displaying the
+        colour.
 
         Parameters
         ----------

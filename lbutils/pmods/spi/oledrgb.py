@@ -20,18 +20,19 @@
 
 """Simple display driver for the [Pmod
 OLEDrgb](https://digilent.com/reference/pmod/pmodoledrgb/start), based on the
-['ssd1331'](https://github.com/danjperron/pico_mpu6050_ssd1331) driver by Daniel Perron.
-The [Pmod OLEDrgb](https://digilent.com/reference/pmod/pmodoledrgb/start) provides an
-OLED screen with a 96×64 pixel display capable of 16-bit RGB colour resolution.
+['ssd1331'](https://github.com/danjperron/pico_mpu6050_ssd1331) driver by Daniel
+Perron. The [Pmod
+OLEDrgb](https://digilent.com/reference/pmod/pmodoledrgb/start) provides an OLED
+screen with a 96×64 pixel display capable of 16-bit RGB colour resolution.
 
 !!! note
 
     Enabling the functionality of this module requires an extensive set-up
     routine detailed in the [official reference
-    documentation](https://digilent.com/reference/pmod/pmodoledrgb/reference-manual)
-    . In the normal use of this driver, the initialising command sequence is sent as
-    part of the class construction. It therefore recommended to keep (or call) the
-    constructor of this class in any sub-classes.
+    documentation](https:// digilent.com/reference/pmod/pmodoledrgb/reference-manual).
+    In the normal use of this driver, the initialising command sequence is sent
+    as part of the class construction. It therefore recommended to keep (or call)
+    the constructor of this class in any sub-classes.
 
 ## Pin Layout
 
@@ -91,8 +92,9 @@ from micropython import const
 ##
 ## Display Commands. Internal list of the command code required by the SSD1331
 ## display driver. These are only used by the `OLEDrgb` class and are not part
-## of the user-facing specification. See the [SSD1331 datasheet](https://cdn-shop.adafruit.com/datasheets/SSD1331_1.2.pdf) for a detailed description of
-## these commands
+## of the user-facing specification. See the
+## [SSD1331 datasheet](https://cdn-shop.adafruit.com/datasheets/SSD1331_1.2.pdf)
+## for a detailed description of these commands
 ##
 
 _DRAWLINE = const(0x21)
@@ -133,13 +135,15 @@ _LOCK = const(0xFD)
 
 
 class OLEDrgb(graphics.Canvas):
-    """An implemention of a [`Canvas`][lbutils.graphics.Canvas] for the 'OLEDrgb' PMod.
+    """An implemention of a [`Canvas`][lbutils.graphics.Canvas] for the
+    'OLEDrgb' PMod.
 
     Attributes
     ----------
 
     bg_colour:
-        The background [`Colour`][lbutils.graphics.colours.Colour] to use when drawing.
+        The background [`Colour`][lbutils.graphics.colours.Colour] to use when
+        drawing.
     font:
         The sub-class of [`BaseFont`][lbutils.graphics.fonts.base_font.BaseFont]
         to use when drawing characters.
@@ -156,7 +160,9 @@ class OLEDrgb(graphics.Canvas):
 
     * `draw_line()`. Draw a line from two co-ordinates.
 
-    * `draw_rectangle()`. Draw a rectangle at the co-ordinate (x, y) of height and width, using the linecolour for the frame of the rectangle and fillcolour as the interior colour.
+    * `draw_rectangle()`. Draw a rectangle at the co-ordinate (x, y) of height
+    and width, using the linecolour for the frame of the rectangle and fillcolour
+    as the interior colour.
 
     * `fill_screen()`. Fill the entire `Canvas` with the background colour.
 
@@ -165,7 +171,8 @@ class OLEDrgb(graphics.Canvas):
 
     * `reset()`. Resets the display, clearing the current contents.
 
-    * `write_char()`. Write a character (using the current font) starting at the stated pixel position.
+    * `write_char()`. Write a character (using the current font) starting at the
+    stated pixel position.
 
     * `write_pixel()`. Set the pixel at the specified position to the foreground
     colour value.
@@ -218,10 +225,10 @@ class OLEDrgb(graphics.Canvas):
         width: int = 96,
         height: int = 64,
     ) -> None:
-        """Initialise the SPI interface, and sent the sequence of commands required for
-        the device startup. The full command sequence is documented
-        [here](https://digilent.com/reference/pmod/pmodoledrgb/reference-manual), and is
-        recorded in the (private) `_INIT` array.
+        """Initialise the SPI interface, and sent the sequence of commands
+        required for the device startup. The full command sequence is documented
+        [here](https://digilent.com/reference/pmod/pmodoledrgb/reference-
+        manual), and is recorded in the (private) `_INIT` array.
 
         Client are not expected to modify the contents of the `INIT` array,
         but instead provide the details of specific devices in the `width`
@@ -238,13 +245,16 @@ class OLEDrgb(graphics.Canvas):
         Example
         -------
 
-        A detailed example can be found in the `examples/pmods/pmod_oled_example.py` folder; which also includes details of the
-        font set-up and selection. The example below covers the _set-up_
-        required by the display driver, and for use either consult the
-        example or see the drawing methods provided by this class below.
+        A detailed example can be found in the `examples/pmods/
+        pmod_oled_example.py` folder; which also includes details of the font
+        set-up and selection. The example below covers the _set-up_ required by
+        the display driver, and for use either consult the example or see the
+        drawing methods provided by this class below.
 
         At a minimum, a client will need to
-        instantiate an appropriate object from the [`machine.SPI`](https://docs.micropython.org/en/latest/library/machine.SPI.html) class
+        instantiate an appropriate object from the
+        [`machine.SPI`](https://docs.micropython.org/en/latest/library/machine.SPI.html)
+        class
 
         ````python
         # Instantiate the SPI interface
@@ -254,7 +264,9 @@ class OLEDrgb(graphics.Canvas):
         The display driver also requires three control pins outside the
         SPI interface: the `data_cmd_pin`, `chip_sel_pin` and `reset_pin`.
         Select appropriate GPIO pins for the interface, and create
-        appropriate objects from the [`machine.Pin`](https://docs.micropython.org/en/latest/library/machine.Pin.html) class
+        appropriate objects from the
+        [`machine.Pin`](https://docs.micropython.org/en/latest/library/machine.Pin.html)
+        class
 
         ````python
         # Add the pins required by the display controller
@@ -296,7 +308,8 @@ class OLEDrgb(graphics.Canvas):
 
         font: Type[BaseFont]
             The current font in use for the display, which will be
-            an instance of [`lbutils.graphics.fonts.BaseFont`][lbutils.graphics.fonts.base_font.BaseFont].
+            an instance of
+            [`lbutils.graphics.fonts.BaseFont`][lbutils.graphics.fonts.base_font.BaseFont].
             All subsequent text methods (e.g. `write_text`) will make use of
             the specified `font` until this attribute is changed.
 
@@ -306,8 +319,8 @@ class OLEDrgb(graphics.Canvas):
         spi_controller: Type[SPI]
             An instance of the
             [`machine.SPI`](https://docs.micropython.org/en/latest/library/machine.SPI.html)
-            class, used to specify the SPI interface that should be used by this driver to
-            interface to the display controller.
+            class, used to specify the SPI interface that should be used by this
+            driver to interface to the display controller.
         data_cmd_pin: int, optional
             The '`D/C`' or 'Data/Command' pin; used to send low-level
             instructions to the display driver. Defaults to GPIO Pin 14.
@@ -315,7 +328,8 @@ class OLEDrgb(graphics.Canvas):
             SPI `CS` (Chip Select) pin. Defaults to GPIO Pin 15.
         reset_pin: int, optional
             Normally 'low': when held 'high', clears the current display buffer.
-            Used to clear the display without having to rewrite each pixel. Defaults
+            Used to clear the display without having to rewrite each pixel.
+            Defaults
                         to GPIO Pin 17.
         width: int, optional
             The width in pixels of the display. Defaults to 96.
@@ -345,7 +359,8 @@ class OLEDrgb(graphics.Canvas):
     ##
 
     def _read(self, command=None, count=0):
-        """Decode a command read on the `data_cmd_pin` from the display driver."""
+        """Decode a command read on the `data_cmd_pin` from the display
+        driver."""
         self.data_cmd_pin.value(0)
         self.chip_sel_pin.value(0)
 
@@ -397,8 +412,8 @@ class OLEDrgb(graphics.Canvas):
     ##
 
     def read_pixel(self, x: int, y: int) -> Type[graphics.Colour]:
-        """Read the colour value of the pixel at position (`x`, `y`) and return to the
-        caller.
+        """Read the colour value of the pixel at position (`x`, `y`) and return
+        to the caller.
 
         Parameters
         ----------
@@ -412,7 +427,8 @@ class OLEDrgb(graphics.Canvas):
         -------
 
         Type[Colour]:
-             The [`Colour`][lbutils.graphics.Colour] representation of the pixel located at (x, y).
+             The [`Colour`][lbutils.graphics.Colour] representation of the pixel
+             located at (x, y).
         """
         self._write(_SETCOLUMN, bytearray([x, x]))
         self._write(_SETROW, bytearray([y, y]))
@@ -430,7 +446,8 @@ class OLEDrgb(graphics.Canvas):
         y: int
              The Y co-ordinate of the pixel to set.
         colour: Type[Colour]
-             The [`Colour`][lbutils.graphics.Colour] representation of the pixel located at (x, y).
+             The [`Colour`][lbutils.graphics.Colour] representation of the pixel
+             located at (x, y).
         """
         self._write(_SETCOLUMN, bytearray([x, x]))
         self._write(_SETROW, bytearray([y, y]))
@@ -448,8 +465,8 @@ class OLEDrgb(graphics.Canvas):
         pen: Type[graphics.Pen] = None,
     ) -> None:
         """Draw a line from co-ordinates (`x2`, `y2`) to (`x2`, `y2`) using the
-        specified RGB colour. If the `fg_colour` is `Nonw`, then the default search
-        order is used to locate a suitable colour.
+        specified RGB colour. If the `fg_colour` is `Nonw`, then the default
+        search order is used to locate a suitable colour.
 
         Parameters
         ----------
@@ -464,11 +481,12 @@ class OLEDrgb(graphics.Canvas):
             The Y co-ordinate of the pixel for the end point of the line.
         fg_colour: Type[graphics.Colour], optional
             The [`Colour`][lbutils.graphics.Colour] to be used when drawing the
-            line. If not specified, use the preference order for the foreground colour of the `Canvas` to find a suitable colour.
+            line. If not specified, use the preference order for the foreground
+            colour of the `Canvas` to find a suitable colour.
         pen: Type[graphics.Pen], optional
-            The [`Pen`][lbutils.graphics.Pen] to be used when drawing the line. If not specified, use the
-            preference order for the foreground colour of the `Canvas` to find a
-            suitable colour.
+            The [`Pen`][lbutils.graphics.Pen] to be used when drawing the line.
+            If not specified, use the preference order for the foreground colour
+            of the `Canvas` to find a suitable colour.
         """
 
         fg_colour = self.select_fg_color(fg_colour=fg_colour, pen=pen)
@@ -496,9 +514,9 @@ class OLEDrgb(graphics.Canvas):
         pen: Type[graphics.Pen] = None,
         filled: bool = True,
     ) -> None:
-        """Draw a rectangle at the co-ordinate (`x`, `y`) of `height` and `width`, using
-        the `linecolour` for the frame of the rectangle and `fillcolour` as the interior
-        colour.
+        """Draw a rectangle at the co-ordinate (`x`, `y`) of `height` and
+        `width`, using the `linecolour` for the frame of the rectangle and
+        `fillcolour` as the interior colour.
 
         Parameters
         ----------
@@ -539,8 +557,8 @@ class OLEDrgb(graphics.Canvas):
         else:
             self._write(_FILL, b"\x00")
 
-        # Send the drawing command (the colour data is ignored if the rectangle is
-        # not filled)
+        # Send the drawing command (the colour data is ignored if the
+        # rectangle is not filled)
         data = ustruct.pack(
             self._ENCODE_RECT,
             x,
@@ -572,15 +590,15 @@ class OLEDrgb(graphics.Canvas):
         fg_colour: Type[graphics.Colour] = None,
         pen: Type[graphics.Pen] = None,
     ) -> int:
-        """Write a `utf8Char` character (using the current `font`) starting at the pixel
-        position (`x`, `y`) in the specified `colour`.
+        """Write a `utf8Char` character (using the current `font`) starting at
+        the pixel position (`x`, `y`) in the specified `colour`.
 
         !!! note
-            Whilst the `utf8Char` character _must_ be a valid UTF-8
-            character, most fonts only support the equivalent of the (7-bit) ASCII character
-            set. This method _will not_ display character values that cannot be supported by
-            the underlying font. See the font description for the exact values that are
-            valid for the specific font being used.
+            Whilst the `utf8Char` character _must_ be a valid UTF-8 character,
+            most fonts only support the equivalent of the (7-bit) ASCII character
+            set. This method _will not_ display character values that cannot be
+            supported by the underlying font. See the font description for the
+            exact values that are valid for the specific font being used.
 
         Parameters
         ----------
@@ -605,8 +623,8 @@ class OLEDrgb(graphics.Canvas):
 
         int:
             The X pixel co-ordinate immediately following the character written
-            in the specified font. This can be used to easily locate multiple characters at
-            a given Y position: see also `write_text()`.
+            in the specified font. This can be used to easily locate multiple
+            characters at a given Y position: see also `write_text()`.
         """
 
         fg_colour = self.select_fg_color(fg_colour=fg_colour, pen=pen)

@@ -26,7 +26,9 @@ from .base_font import BaseFont
 class Org_01(BaseFont):
     """A tiny, stylized font with all characters within a 6 pixel height.
 
-    Created by [`fontconvert`](https://github.com/danjperron/ssd1331_micropython.git), from the `Org_v01` by [Orgdot](www.orgdot.com/aliasfonts).
+    Created by [`fontconvert`](https://github.com/danjperron/
+    ssd1331_micropython.git), from the `Org_v01` by [Orgdot](www.orgdot.com/
+    aliasfonts).
     """
 
     def __init__(self):

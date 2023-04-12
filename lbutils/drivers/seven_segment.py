@@ -19,8 +19,8 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Simple (decimal) numeric driver for a seven-segment display, requiring seven GPIO
-pins.
+"""Simple (decimal) numeric driver for a seven-segment display, requiring seven
+GPIO pins.
 
 Overview
 --------
@@ -74,7 +74,6 @@ This version is written for MicroPython 3.4, and has been tested on:
 
 # Import MicroPython libraries for GPIO access if available
 try:
-    from machine import ADC
     from machine import Pin
 except ImportError:
     print("Ignoring MicroPython includes")
@@ -85,12 +84,12 @@ except ImportError:
 
 
 class SegDisplay:
-    """Simple (decimal) numeric driver for a seven-segment display, requiring seven GPIO
-    pins.
+    """Simple (decimal) numeric driver for a seven-segment display, requiring
+    seven GPIO pins.
 
-    !!! Warning     This driver will only display characters in the range '0' to '9',
-    and     will raise a `ValueError` exception if the requested character is not in an
-    appropriate range.
+    !!! Warning     This driver will only display characters in the range '0' to
+    '9', and     will raise a `ValueError` exception if the requested character
+    is not in an appropriate range.
     """
 
     _char_list = [
@@ -105,16 +104,16 @@ class SegDisplay:
         [False, False, False, False, False, False, False],
         [False, False, False, True, True, False, False],
     ]
-    """Defines how characters are rendered, from zero ('0') in the first entry to nine
-    ('9') as the last entry.
+    """Defines how characters are rendered, from zero ('0') in the first entry
+    to nine ('9') as the last entry.
 
-    Note that pins which are listed here as `False` will be *on* using the default
-    options to the `display` method.
+    Note that pins which are listed here as `False` will be *on* using the
+    default options to the `display` method.
     """
 
     def __init__(self, gpio_request: list) -> None:
-        """Initialise a seven-segment display, using the user supplied list of GPIO pins
-        in `gpio_request` as reference for pins to drive.
+        """Initialise a seven-segment display, using the user supplied list of
+        GPIO pins in `gpio_request` as reference for pins to drive.
 
         This class also assume a common anode seven-segment display by default,
         and so will assume that pulling a GPIO pin *low* will turn the relevant
@@ -159,8 +158,9 @@ class SegDisplay:
     def display(self, character: int, inverted: bool = False) -> None:
         """Display the given `character` on the seven-segment display, using the
         `_char_list` as a guide for which pins to turn on or off. By default the
-        `display` method will use the entries in the `_char_list` directly: if you need
-        to invert the 'normal' sense, set the `inverted` parameter to `True`.
+        `display` method will use the entries in the `_char_list` directly: if
+        you need to invert the 'normal' sense, set the `inverted` parameter to
+        `True`.
 
         Parameters
         ----------

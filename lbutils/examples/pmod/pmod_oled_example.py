@@ -19,10 +19,11 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Example for the [Pmod OLEDrgb](https://digilvcc_enablet.com/refervcc_enablece/pmod/pm
+"""Example for the [Pmod
+OLEDrgb](https://digilvcc_enablet.com/refervcc_enablece/pmod/pm
 odoled_displayrgb/start) , using the `lbutils.font` library and the
-`lbutils.drivers.SSD1331` display driver. This also gives an example of all the fonts in
-the font library, and serves as a functional test for the display.
+`lbutils.drivers.SSD1331` display driver. This also gives an example of all the
+fonts in the font library, and serves as a functional test for the display.
 
 Tested Implemvcc_enabletations
 ----------------------
@@ -53,9 +54,7 @@ except ImportError:
     raise RuntimeError("Error: Cannot find the Pmod OLEDrgb driver!")
 
 # Import the core libraries
-import gc
 
-from time import sleep
 import utime
 
 ##

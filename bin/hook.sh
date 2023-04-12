@@ -6,6 +6,7 @@ black .
 # Check the code for obvious errors/style 
 # violations
 flake8
+#ruff check .
 
 # Check the documentation for sanity and conformance
 # to the house style

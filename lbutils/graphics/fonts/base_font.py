@@ -27,16 +27,17 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-"""Base class for the internal font representations. Based on the [Adafruit GFX Arduino
-library](https://github.com/adafruit/Adafruit-GFX-Library.git), converted by [Daniel
+"""Base class for the internal font representations. Based on the [Adafruit GFX
+Arduino library](https://github.com/adafruit/Adafruit-GFX-Library.git),
+converted by [Daniel
 Perron](https://github.com/danjperron/ssd1331_micropython.git).
 
 !!! note
     The character metrics used here (and produced by `fontconvert`) are slightly
-    different from original Adafruit GFX & ftGFX tools. In the classic Adafruit GFX:
-    the cursor position is the upper-left pixel of each 5x7 character; whilst the
-    lower extent of most glyphs (except those w/descenders) is +6 pixels in Y
-    direction.
+    different from original Adafruit GFX & ftGFX tools. In the classic Adafruit
+    GFX: the cursor position is the upper-left pixel of each 5x7 character;
+    whilst the lower extent of most glyphs (except those w/descenders) is +6
+    pixels in Y direction.
 
 ## Implementation
 
@@ -80,10 +81,10 @@ reconstructed from the font data.
 
 
 class BaseFont:
-    """A Base Class which implements the access methods required to use the individual
-    font representations of the sub-classes. Those sub-classes provide only the _bitmap_
-    representation of the font: the reconstruction of that bitmap is handled here by
-    `BaseFont`.
+    """A Base Class which implements the access methods required to use the
+    individual font representations of the sub-classes. Those sub-classes
+    provide only the _bitmap_ representation of the font: the reconstruction of
+    that bitmap is handled here by `BaseFont`.
 
     Methods
     ----------
@@ -95,14 +96,15 @@ class BaseFont:
     being displayed, and then advance the internal cursor to
     the next position: ready for the next call.
 
-    * `set_position()`. Set the internal state to draw the glyph of the character in the next natural position.
+    * `set_position()`. Set the internal state to draw the glyph of the character
+    in the next natural position.
     """
 
     def __init__(self, bitmap: list[bytes], index: list, glyph: list) -> None:
-        """Take the byte array of `bitmap`s with the `index` of font characters and use
-        these together with the `glyph` list to reconstruct the required font. This
-        method is typically called by a sub-class in the constructor of the sub-class as
-        in.
+        """Take the byte array of `bitmap`s with the `index` of font characters
+        and use these together with the `glyph` list to reconstruct the required
+        font. This method is typically called by a sub-class in the constructor
+        of the sub-class as in.
 
         ````python
         def __init__(self):
@@ -113,11 +115,16 @@ class BaseFont:
         ----------
 
         bitmap: list[bytes]
-            Calculated bit representations of glyph fragments. Used in reconstructing the specified glyphs.
+            Calculated bit representations of glyph fragments. Used in
+            reconstructing the specified glyphs.
         index: list
-            Cross-references the UTF-8 characters to the list of glyphs specified in `glyph`. This provides the main mapping for character values to glyphs.
+            Cross-references the UTF-8 characters to the list of glyphs specified
+            in `glyph`. This provides the main mapping for character values to
+            glyphs.
         glyph: list
-            Specifies the bitmap sequence used to reconstruct a specific glyph. This provides the main definition of the core glphys from the original font definition.
+            Specifies the bitmap sequence used to reconstruct a specific glyph.
+            This provides the main definition of the core glphys from the
+            original font definition.
         """
 
         self.bitmap = bitmap
@@ -164,8 +171,8 @@ class BaseFont:
         self.position = self.current_glyph[0] * 8
 
     def get_bit(self, position: int) -> int:
-        """Returns the state ('0' or '1') of the bit specified by the current cursor
-        `position` within the current glyph bitmap.
+        """Returns the state ('0' or '1') of the bit specified by the current
+        cursor `position` within the current glyph bitmap.
 
         Parameters
         ----------
@@ -189,8 +196,9 @@ class BaseFont:
         return c_flag
 
     def get_next(self) -> int:
-        """Return the state of the current bit within the bitmap being displayed, and
-        then advance the internal cursor to the next position: ready for the next call.
+        """Return the state of the current bit within the bitmap being
+        displayed, and then advance the internal cursor to the next position:
+        ready for the next call.
 
         Returns
         -------

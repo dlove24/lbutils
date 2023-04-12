@@ -20,24 +20,35 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Fonts for the LED and OLED displays; especially the those using the 'pmod' packages.
-These fonts are based on open-source font files, and converted with the
-[`fontconvert`](https://github.com/danjperron/ssd1331_micropython) utility written by
-Daniel Perron.S.
+"""Fonts for the LED and OLED displays; especially the those using the 'pmod'
+packages. These fonts are based on open-source font files, and converted with
+the [`fontconvert`](https://github.com/danjperron/ssd1331_micropython) utility
+written by Daniel Perron.S.
 
-Most of the work of this library consists of rebuilding the font representation as described below. This reconstruction is undertaken by the [`BaseFont`][lbutils.graphics.fonts.base_font.BaseFont] class, and abstract class which must be sub-classed for a specific font. Currently the fonts (and subclasses) exposed in this library are
+Most of the work of this library consists of rebuilding the font representation as
+described below. This reconstruction is undertaken by the [`BaseFont`]
+[lbutils.graphics.fonts.base_font.BaseFont] class, and abstract class which must
+be sub-classed for a specific font. Currently the fonts (and subclasses) exposed
+in this library are
 
   * [`Font06`][lbutils.graphics.fonts.font06.Font_06]. 6x6 pixel sans-serif font.
   * [`Font08`][lbutils.graphics.fonts.font08.Font_08]. 8x8 pixel sans-serif font.
-  * [`Org_01`][lbutils.graphics.fonts.org_01.Org_01]. A tiny, stylized font with all characters within a 6 pixel height. Created by fontconvert, from the Org_v01 by Orgdot.
+  * [`Org_01`][lbutils.graphics.fonts.org_01.Org_01]. A tiny, stylized font with
+  all characters within a 6 pixel height. Created by fontconvert, from the Org_v01
+  by Orgdot.
 
 ## Rebuilding the Fonts
 
-Rebuilding the fonts requires the [`fontconvert`](https://github.com/danjperron/ssd1331_micropython) utility to be built in C **with** [the FreeType library](https://freetype.org). Once built the fonts can be converted using `fontconvert` as
+Rebuilding the fonts requires the [`fontconvert`](https://github.com/danjperron/ssd1331_micropython)
+utility to be built in C **with** [the FreeType library] (https://freetype.org).
+Once built the fonts can be converted using `fontconvert`
+as
 
     ./fontconvert ~/Library/Fonts/FreeSans.ttf 18 > FreeSans18pt7b.py
 
-Currently the `fontconvert` utility only extracts the printable 7-bit ASCII characters of a font: for the exact character set extracted see the resulting Python file.
+Currently the `fontconvert` utility only extracts the printable 7-bit ASCII
+characters of a font: for the exact character set extracted see the resulting
+Python file.
 
 ## Tested Implementations
 

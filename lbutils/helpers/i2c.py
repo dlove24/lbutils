@@ -1,4 +1,5 @@
-# This module, and all included code, is made available under the terms of the MIT Licence
+# This module, and all included code, is made available under the terms of the
+# MIT Licence
 #
 # Copyright (c) 2023 David Love
 #
@@ -19,28 +20,31 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Functions and attributes for setting up, scanning and manipulating the I2C busses.
+"""Functions and attributes for setting up, scanning and manipulating the I2C
+busses.
 
-Classes for direct manipulation of the I2C bus can be found in the standard MicroPython
-library `machine.I2C`, and the classes for the I2C 'pmods' in `lbutils.pmods`. This
-library contains only helper functions, and attributes with the defaults for the Leeds
-Beckett micro-controller development board.
+Classes for direct manipulation of the I2C bus can be found in the standard
+MicroPython library `machine.I2C`, and the classes for the I2C 'pmods' in
+`lbutils.pmods`. This library contains only helper functions, and attributes
+with the defaults for the Leeds Beckett micro-controller development board.
 """
 
 from machine import Pin, I2C
 
 I2C_SDA_PIN_DEFAULT = 16
-"""Define the pin used for the I2C data line, SDA, when scanning for I2C devices.
+"""Define the pin used for the I2C data line, SDA, when scanning for I2C
+devices.
 
-This default reflects the pin layout of the Leeds Beckett micro-controller development
-board.
+This default reflects the pin layout of the Leeds Beckett micro-controller
+development board.
 """
 
 I2C_SCL_PIN_DEFAULT = 17
-"""Define the pin used for the I2C clock line, SCL, when scanning for I2C devices.
+"""Define the pin used for the I2C clock line, SCL, when scanning for I2C
+devices.
 
-This default reflects the pin layout of the Leeds Beckett micro-controller development
-board.
+This default reflects the pin layout of the Leeds Beckett micro-controller
+development board.
 """
 
 
@@ -49,8 +53,8 @@ def scan_i2c_bus(
     sda_pin: int = I2C_SDA_PIN_DEFAULT,
     scl_pin: int = I2C_SCL_PIN_DEFAULT,
 ):
-    """Scan for I2C devices on the listed bus, printing out the found device addresses
-    to the console.
+    """Scan for I2C devices on the listed bus, printing out the found device
+    addresses to the console.
 
     Example
     -------
