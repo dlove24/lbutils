@@ -190,7 +190,22 @@ def cast(typ, val):
 
 
 def _overload_dummy(*args, **kwds):
-    """Helper for @overload to raise when called."""
+    """Helper for @overload to raise when called.
+
+    Parameters
+    ----------
+
+    *args:
+        Function name to overload.
+    **kwds:
+        Function parameters
+
+    Raises
+    ------
+
+    NotImplementedError:
+        This is a stub and cannot be called directly,
+    """
     raise NotImplementedError(
         "You should not call an overloaded function. "
         "A series of @overload-decorated functions "

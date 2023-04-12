@@ -25,6 +25,8 @@ classifiers = [
 recursive = true
 wrap-summaries = 88
 wrap-descriptions = 88
+syntax = "numpy"
+black = true
 
 [tool.setuptools]
 packages = ["lbutils", "lbutils.drivers", "lbutils.graphics", "lbutils.helpers", "lbutils.pmods"]

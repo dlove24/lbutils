@@ -9,4 +9,5 @@ flake8
 
 # Check the documentation for sanity and conformance
 # to the house style
-docformatter --check --config ./pyproject.toml
+docformatter --in-place --config ./pyproject.toml .
+
