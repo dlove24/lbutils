@@ -39,11 +39,11 @@ from .colours import Colour, COLOUR_WHITE, COLOUR_BLACK
 
 
 class Pen:
-    """Implements a convienience class for the graphics library, which represents a 'pen'
-    with a specified forgrund and background colour, and thickness. The primary purpose
+    """Implements a convenience class for the graphics library, which represents a 'pen'
+    with a specified foreground and background colour, and thickness. The primary purpose
     of this class is to make it easy to swap between common colour and line values; for
     instance using two pens to allow a swap between 'highlight' and 'normal' text colours.
-    This can be acomplished by defining the forgounds and backgrond colour of the
+    This can be accomplished by defining the foreground and background colour of the
     [`Canvas`][lbutils.graphics.canvas] as needed: this class simply makes that switch
     easier.
 
@@ -57,8 +57,8 @@ class Pen:
     alter_text = Pen(COLOUR_RED)
     ````
 
-    This defines a `normal_text` pen with a white forground and default background and line
-    tickness (black and 1 pixel byt default). A second pen for `alter_text` has a red
+    This defines a `normal_text` pen with a white foreground and default background and line
+    thickness (black and 1 pixel byt default). A second pen for `alter_text` has a red
     foreground, and similarly a black background with 1 pixel thickness. Text can then be
     written on the canvas using these two pens on a `Canvas` as
 
@@ -100,10 +100,10 @@ class Pen:
 
 class Pixel:
     """
-    Represents a Caertesian co-ordinate. Used as a convinence class for instances such as
+    Represents a Cartesian co-ordinate. Used as a convenience class for instances such as
     cursors where a relationship between a X and a Y co-ordinate must be maintained. This is
-    also useful when two or more co-ordinates need to be tracked, or to be swicthed between.
-    For instance an 'orgin' co-ordinate for a drawing, and a 'current' co-ordinate around the
+    also useful when two or more co-ordinates need to be tracked, or to be switched between.
+    For instance an 'origin' co-ordinate for a drawing, and a 'current' co-ordinate around the
     origin where lines are being drawn to and from.
 
     !!! note "Implementation Defined Origin"
@@ -111,14 +111,14 @@ class Pixel:
             point '(0, 0)' is defined by the underlying graphics implementation. For instance
             the '(0, 0)' point may represent the top-left corner or the canvas, or the bottom-
             left hand corner. For details of how this point will be chosen (or changed), see
-            the implemtation of the specified sub-class of `Canvas` that is implemented by the
+            the implementation of the specified sub-class of `Canvas` that is implemented by the
             chosen display driver.
 
     Attributes
     ----------
 
     x: int
-            The X co-oridinate value.
+            The X co-ordinate value.
     y: int
             The Y co-ordinate value
 
@@ -133,9 +133,9 @@ class Pixel:
         ----------
 
         x: int
-                The inital X co-oridinate value.
+                The initial X co-ordinate value.
         y: int
-                The inital Y co-ordinate value
+                The initial Y co-ordinate value
         """
 
         self.y = int(x)
@@ -144,24 +144,24 @@ class Pixel:
 
 class BoundPixel(Pixel):
     """
-    Represents a Caertesian co-ordinate betwen limits. Used as a convinence class for
+    Represents a Cartesian co-ordinate between limits. Used as a convenience class for
     instances such as cursors where a relationship between a X and a Y co-ordinate must be
     maintained. This is also useful when two or more co-ordinates need to be tracked, or
-    to be swicthed between. For instance an 'orgin' co-ordinate for a drawing, and a
+    to be switched between. For instance an 'origin' co-ordinate for a drawing, and a
     'current' co-ordinate around the origin where lines are being drawn to and from.
 
     Unlike the [`Pixel`][lbutils.graphics.Pixel] class, the `BoundPxiel` will also ensure
-    that the X and Y co-ordinates are mainatained between minimum and maximum value for
+    that the X and Y co-ordinates are maintained between minimum and maximum value for
     the `width` or `height`. This is useful for instances where a cursor, for instance, must
     only take values within the limits of a display. It can also be used where a clipping
-    region is being defined to ensure that values cannot lie outside the clipped refion.
+    region is being defined to ensure that values cannot lie outside the clipped region.
 
     !!! note "Implementation Defined Origin"
             As for the [`Canvas`][lbutils.graphics.canvas] class, the interpretation of the
             point '(0, 0)' is defined by the underlying graphics implementation. For instance
             the '(0, 0)' point may represent the top-left corner or the canvas, or the bottom-
             left hand corner. For details of how this point will be chosen (or changed), see
-            the implemtation of the specified sub-class of `Canvas` that is implemented by the
+            the implementation of the specified sub-class of `Canvas` that is implemented by the
             chosen display driver.
 
     Attributes
@@ -187,40 +187,40 @@ class BoundPixel(Pixel):
         """
         Creates a `Pixel` instance holding the specified `x` and `y` co-ordinates, together
         representing the Cartesian point '(`x`, `y`)'. This `x` and `y` value is guaranteed
-        to be maintained between `min_x` and `max_x` for the `x` co-orindate, and `min_y`
+        to be maintained between `min_x` and `max_x` for the `x` co-ordinate, and `min_y`
         and `max_y` for the `y` co-ordinate.
 
         Parameters
         ----------
 
         x: int
-                The inital X co-oridinate value.
+                The initial X co-ordinate value.
         y: int
-                The inital Y co-ordinate value
+                The initial Y co-ordinate value
         max_x: int
                 The maximum value allowed for the `x` co-ordinate
         max_y: int
-                The maxumum value allowed for the `y` co-orinate
+                The maximum value allowed for the `y` co-ordinate
         min_x: int, optional
                 The minimum value allowed for the `x` co-ordinate. Defaults to `0`.
         min_y: int, optional
                 The minimum value allowed for the `y` co-ordinate. Defaults to `0`.`
         clip: bool, optional
-                If set to `True`, the default, sliently clip the `x` and `y` co-ordinates to
-                the specfied limits. If set to `False`, instead raise a `ValueError` if the
-                `x` or `y` co-ordinates do not fall into the allowd limits.
+                If set to `True`, the default, silently clip the `x` and `y` co-ordinates to
+                the specified limits. If set to `False`, instead raise a `ValueError` if the
+                `x` or `y` co-ordinates do not fall into the allowed limits.
 
         Implementation
         --------------
 
         As the `x` and `y` attributes of this class are compared on each write, this class is
-        by definition slower and potentially more resource intensive that the underlying `Pxiel`
+        by definition slower and potentially more resource intensive that the underlying `Pixel`
         class. If the costs of the bounds-check are not required, using the 'raw' `Pixel` class
         may be preferable.
 
         !!! note
                 The parameter order is specified to allow easier definition
-                in the common case where the lower limts for `x` and `y` are
+                in the common case where the lower limits for `x` and `y` are
                 `0`, and the positional parameter order is being used. If all
                 four limits are being used, consider the use of named
                 parameters to avoid ambiguity.
