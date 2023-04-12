@@ -40,7 +40,9 @@ HTML 4.01 specification is also provided. These provide common, named, colour
 representations suitable for most displays, for instance as
 
 ````python
-fg_colour = COLOUR_CYAN
+import lbutils.graphics as graphics
+
+fg_colour = graphics.COLOUR_CYAN
 ````
 
 A complete list of the 16 objects defined by the `lbutils.colours` module is
