@@ -8,4 +8,6 @@
 dist/
 lbutils_mp.egg-info/
 
+# Editor files
+*.kate-swp
 *.swp
