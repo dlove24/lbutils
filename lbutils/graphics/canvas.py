@@ -246,8 +246,11 @@ class Canvas(ABC):
         -------
 
         Type[Colour]:
-             The [`Colour`][lbutils.graphics.Colour] representation of the pixel located at (x, y).
+             The [`Colour`][lbutils.graphics.Colour] representation of the pixel
+             located at (x, y).
         """
+        pass
+
     @abstractmethod
     def write_pixel(self, x: int, y: int, colour: Type[graphics.Colour]) -> None:
         """Set the pixel at position (`x`, `y`) to the specified colour value.
@@ -263,6 +266,8 @@ class Canvas(ABC):
              The [`Colour`][lbutils.graphics.Colour] representation of the pixel
              located at (x, y).
         """
+        pass
+
     @abstractmethod
     def draw_line(
         self,
@@ -296,6 +301,7 @@ class Canvas(ABC):
              If not specified, use the preference order for the foreground colour
              of the `Canvas` to find a suitable colour.
         """
+        pass
 
     @abstractmethod
     def draw_rectangle(
@@ -388,6 +394,7 @@ class Canvas(ABC):
              in the specified font. This can be used to easily locate multiple
              characters at a given Y position: see also `write_text()`.
         """
+        pass
 
     ##
     ## Methods

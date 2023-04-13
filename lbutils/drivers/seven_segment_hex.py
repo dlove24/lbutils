@@ -107,8 +107,8 @@ class SegHexDisplay:
     """Simple hexadecimal driver for a seven-segment display, requiring seven
     GPIO pins.
 
-    !!! Warning     This driver will only display characters in the range '0' to
-    'F', and     will raise a `ValueError` exception if the requested character
+    **Note:** This driver will only display characters in the range '0' to
+    'F', and will raise a `ValueError` exception if the requested character
     is not in an appropriate range.
     """
 
