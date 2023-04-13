@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Reformat the code into the correct style
-#black .
+black .
 
 # Check the code for obvious errors/style
 # violations
