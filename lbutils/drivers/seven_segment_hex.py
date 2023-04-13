@@ -1,4 +1,5 @@
-# This module, and all included code, is made available under the terms of the MIT Licence
+# This module, and all included code, is made available under the terms of
+# the MIT Licence
 #
 # Copyright (c) 2023 Roz Wyatt-Millington, David Love
 #
@@ -146,8 +147,9 @@ class SegHexDisplay:
         parameter for the `display` method.
 
         !!! Note
-            This list of entries in the `gpio_request` _must_ be **exactly** seven
-            entries long, or the class will throw a `ValueError` in the constructor.
+            This list of entries in the `gpio_request` _must_ be **exactly**
+            seven entries long, or the class will throw a `ValueError` in the
+            constructor.
 
         Parameters
         ----------
@@ -190,22 +192,25 @@ class SegHexDisplay:
         ----------
 
         character: int or str
-            The value to be displayed on the seven segment display. The value must be
-            either a `str` or an `int`, and will be interpreted as follows:
+            The value to be displayed on the seven segment display. The value
+            must be either a `str` or an `int`, and will be interpreted as
+            follows:
 
-            `int`: The value must be between zero ('0') and sixteen decimal ('F'), and
-            will be interpreted as a single, hexadecimal digit.
+            `int`: The value must be between zero ('0') and sixteen decimal
+            ('F'), and will be interpreted as a single, hexadecimal digit.
 
-            `str`: The value will be interpreted directly as a hexadecimal digit, and
-            must be in the range `[0..F]`.
+            `str`: The value will be interpreted directly as a hexadecimal digit,
+            and must be in the range `[0..F]`.
 
-            If the type does not conform to the above, then a `TypeError` will be raised.
+            If the type does not conform to the above, then a `TypeError` will be
+            raised.
         inverted: bool, optional
-            By default the `display` method assumes that pulling a GPIO pin _low_ will
-            turn the relevant segment _on_; i.e. the typical behaviour for a common
-            anode display. If the attached display needs to raise a GPIO pin _high_ to
-            set the segment _on_ (i.e. the typical behaviour for a common cathode
-            display), call the `display` method with `inverted` set to `True`.
+            By default the `display` method assumes that pulling a GPIO pin _low_
+            will turn the relevant segment _on_; i.e. the typical behaviour for a
+            common anode display. If the attached display needs to raise a GPIO
+            pin _high_ to set the segment _on_ (i.e. the typical behaviour for a
+            common cathode display), call the `display` method with `inverted`
+            set to `True`.
 
         Raises
         ------

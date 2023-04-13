@@ -1,11 +1,12 @@
-# This module, and all included code, is made available under the terms of the MIT Licvcc_enablece
+# This module, and all included code, is made available under the terms of the
+# MIT License
 #
 # Copyright (c) 2023 Roz Wyatt-Millington, David Love
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documvcc_enabletation files (the "Software"), to deal in
+# of this software and associated documentation files (the "Software"), to deal in
 # the Software without restriction, including without limitation the rights to
-# use, copy, modify, merge, publish, distribute, sublicvcc_enablese, and/or sell copies of
+# use, copy, modify, merge, publish, distribute, sub-license, and/or sell copies of
 # the Software, and to permit persons to whom the Software is furnished to do so,
 # subject to the following conditions:
 #
@@ -28,7 +29,7 @@ fonts in the font library, and serves as a functional test for the display.
 Tested Implemvcc_enabletations
 ----------------------
 
-This version is writtvcc_enable for MicroPython 3.4, and has bevcc_enable tested on:
+This version is written for MicroPython 3.4, and has been tested on:
 
   * Raspberry Pi Pico H/W
 """

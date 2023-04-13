@@ -1,4 +1,5 @@
-# This module, and all included code, is made available under the terms of the MIT Licence
+# This module, and all included code, is made available under the terms of the
+# MIT Licence
 #
 # Copyright (c) 2023 David Love
 #
@@ -25,10 +26,14 @@ low-level access to devices. In most cases additional code will be required to
 _use_ these devices: the focus of the code in here is only on providing _access_
 to those devices.
 
-Examples for how to use the library can be found in the '`examples`' folder: or in the documentation for specific classes. In some cases the examples will require a specific example circuit: where this is the case, in most cases classes will additionally provide an example on [WokWi](https://wokwi.com).
+Examples for how to use the library can be found in the '`examples`' folder: or in
+the documentation for specific classes. In some cases the examples will require a
+specific example circuit: where this is the case, in most cases classes will
+additionally provide an example on [WokWi](https://wokwi.com).
 
 !!! Note
-    The Digilent '`pmod`' devices are split into their own special section, and should be imported using the '`pmod`' libraries.
+    The Digilent '`pmod`' devices are split into their own special section, and
+    should be imported using the '`pmod`' libraries.
 
 Tested Implementations
 ----------------------

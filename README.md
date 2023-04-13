@@ -55,14 +55,13 @@ here.
 
   **Note:** The ['future' style](https://black.readthedocs.io/en/stable/the_black_code_style/future_style.html) of `black` breaks the current (3.4) parser for MicroPython. Until this changes, only the ['current' style](https://black.readthedocs.io/en/stable/the_black_code_style/current_style.html) should be used.
 
-- Code should pass [flake8](https://flake8.pycqa.org/en/latest) cleanly, with
-exceptions documented in the `tox.ini` file. Modern (Python > 3.10) conventions
-should be respected where possible: except where these conflict with the [syntax
-accepted by
-MicroPython](https://docs.micropython.org/en/latest/genrst/index.html). In
-particular all libraries, functions and methods should have a type signature;
-dummy libraries should be used to support this where possible (see `typing.py`
-in the `lbutils` directory).
+- Code should pass [ruff](https://beta.ruff.rs/docs/) cleanly, with exceptions
+documented in the `pyproject.toml` file. Modern (Python > 3.10) conventions
+should be respected where possible: except where these conflict with the
+[syntax accepted by MicroPython](https://docs.micropython.org/en/latest/genrst/index.html).
+In particular all libraries, functions and methods should have a type signature;
+dummy libraries should be used to support this where possible (see `typing.py` in
+the `lbutils` directory).
 - Code is documented according to the
 [NumPy](https://numpydoc.readthedocs.io/en/latest/format.html) documentation
 standard, and should be provided as standard Python docstrings. The docstrings

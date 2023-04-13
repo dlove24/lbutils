@@ -33,7 +33,8 @@ alone.
 * **[`pmod`][lbutils.pmods]**: Drivers and support for the
   [Digilent peripheral modules](https://digilent.com/reference/pmod/start).
 
-Each module can be imported in its entirety to expose the individual drivers, for instance as
+Each module can be imported in its entirety to expose the individual drivers, for
+instance as
 
 ````python
 from lbutils.drivers import SegHexDisplay
@@ -47,7 +48,10 @@ In either case, see the individual module documentation for the specific classes
 which the module exposes.
 
 !!! Note
-    In some cases loading the entire module into memory may not be a good idea, as some of the modules can consume significant memory resources. For production code it is better to import specific drivers directly, referencing the file the driver is contained in as
+    In some cases loading the entire module into memory may not be a good idea, as
+    some of the modules can consume significant memory resources. For production
+    code it is better to import specific drivers directly, referencing the file
+    the driver is contained in as
 
     ````python
     from lbutils.drivers.seven_segment import SegDisplay

@@ -1,4 +1,5 @@
-# This module, and all included code, is made available under the terms of the MIT Licence
+# This module, and all included code, is made available under the terms of
+# the MIT Licence
 #
 # Copyright (c) 2023 Roz Wyatt-Millington, David Love
 #
@@ -171,9 +172,10 @@ class SegDisplay:
         inverted: bool, optional
             By default the `display` method assumes that pulling a GPIO pin *low*
             will turn the relevant segment *on*; i.e. the typical behaviour for a
-            common anode display. If the attached display needs to raise a GPIO pin
-            *high* to set the segment *on* (i.e. the typical behaviour for a common
-            cathode display), call the `display` method with `inverted` set to `True`.
+            common anode display. If the attached display needs to raise a GPIO
+            pin *high* to set the segment *on* (i.e. the typical behaviour for a
+            common cathode display), call the `display` method with `inverted`
+            set to `True`.
 
         Raises
         ------

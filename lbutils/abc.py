@@ -23,8 +23,8 @@
 
 """Do nothing 'implementation of the Python Abstract Base class.
 
-Used to avoid
-import errors, and taken from the [pcopy-lib](https://github.com/pfalcon/pycopy-lib/tree/master/abc) library.
+Used to avoid import errors, and taken from the
+[pcopy-lib](https://github.com/pfalcon/pycopy-lib/tree/master/abc) library.
 """
 
 

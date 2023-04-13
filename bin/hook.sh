@@ -1,12 +1,11 @@
 #!/bin/sh
 
 # Reformat the code into the correct style
-black .
+#black .
 
-# Check the code for obvious errors/style 
+# Check the code for obvious errors/style
 # violations
-flake8
-#ruff check .
+ruff check .
 
 # Check the documentation for sanity and conformance
 # to the house style

@@ -34,12 +34,15 @@ look like.
 Demonstrations
 --------------
 
-Many of the examples require a working board to reproduce, and so where possible examples have been provided on [WokWi](https://wokwi.com/).
+Many of the examples require a working board to reproduce, and so where possible
+examples have been provided on [WokWi](https://wokwi.com/).
 
 Current demonstrations are
 
-* `lbutils.drivers.seven_segment.SegDisplay`: [7-Segment Display](https://wokwi.com/projects/360451068863047681)
-* `lbutils.drivers.seven_segment_hex.SegHexDisplay`: [7-Segment Hex Digits Display](https://wokwi.com/projects/360462223276690433)
+* `lbutils.drivers.seven_segment.SegDisplay`: [7-Segment Display](https://
+wokwi.com/projects/360451068863047681)
+* `lbutils.drivers.seven_segment_hex.SegHexDisplay`: [7-Segment Hex Digits
+Display](https://wokwi.com/projects/360462223276690433)
 
 Tested Implementations
 ----------------------

@@ -30,7 +30,8 @@ drivers: but see the individual drivers for attributes and methods that may be
 specific to the device in question.
 
 Much of the functionality of the `Canvas` class is provided by related
-'helper' classes. Some of these helper classes such as [`Pen`][lbutils.graphics.Pen] or [`Colour`][lbutils.graphics.Colour] may be useful
+'helper' classes. Some of these helper classes such as [`Pen`]
+[lbutils.graphics.Pen] or [`Colour`][lbutils.graphics.Colour] may be useful
 more widely in graphics and drawing routines. Other helper classes such as
 the [`BaseFont`][lbutils.graphics.fonts.BaseFont] are likely to be useful
 only in the context of the `Canvas` class (and sub-classes).
@@ -59,14 +60,16 @@ routines.
 
 ## Implementation
 
-The only methods _required_ to be implemented in sub-classes of [`Canvas`][lbutils.graphics.Canvas]
-are [`read_pixel`][lbutils.graphics.Canvas.read_pixel] and [`write_pixel`][lbutils.graphics.Canvas.write_pixel]. All the drawing primitives, including font
-support, can be implemented by `Canvas` using only those two methods. However,
-in most cases the drawing speed is unacceptably slow, and so in _most_ cases
-sub-classes will also choose to override methods such as [`draw_line`][lbutils.graphics.Canvas.draw_line] where such facilities are available. The
-details of the accelerated methods, including any changes to the algorithms used
-by [`Canvas`][lbutils.graphics.Canvas] can be found in the documentation for
-the sub-class itself.
+The only methods _required_ to be implemented in sub-classes of [`Canvas`]
+[lbutils.graphics.Canvas] are [`read_pixel`][lbutils.graphics.Canvas.read_pixel]
+and [`write_pixel`][lbutils.graphics.Canvas.write_pixel]. All the drawing
+primitives, including font support, can be implemented by `Canvas` using only
+those two methods. However, in most cases the drawing speed is unacceptably slow,
+and so in _most_ cases sub-classes will also choose to override methods such as
+[`draw_line`][lbutils.graphics.Canvas.draw_line] where such facilities are
+available. The details of the accelerated methods, including any changes to the
+algorithms used by [`Canvas`][lbutils.graphics.Canvas] can be found in the
+documentation for the sub-class itself.
 
 ## Tested Implementations
 
@@ -74,6 +77,8 @@ the sub-class itself.
 """
 
 ### Expose the `graphics` module interface as a full package
+__all__ = ["colours", "canvas", "helpers"]
+
 from .colours import Colour
 from .canvas import Canvas, FrameBufferCanvas
 from .helpers import Pen, Pixel, BoundPixel

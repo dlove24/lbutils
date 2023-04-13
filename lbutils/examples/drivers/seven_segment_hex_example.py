@@ -24,7 +24,9 @@ display, requiring seven GPIO pins. A complete example is available at
 [WokWi](https://wokwi.com/projects/360451068863047681), which is based on the
 same driver code.
 
-In both cases a value is read from the Pico ADC on Pin 26 (i.e. `ADC0`), and converted in a value from `0` to `99`. The final output is the displayed using two seven-segment displays: each driven by the `lbutils.drivers.SegDisplay` class.
+In both cases a value is read from the Pico ADC on Pin 26 (i.e. `ADC0`), and
+converted in a value from `0` to `99`. The final output is the displayed using two
+seven-segment displays: each driven by the `lbutils.drivers.SegDisplay` class.
 
 Tested Implementations
 ----------------------

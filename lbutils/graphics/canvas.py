@@ -25,33 +25,36 @@ represent a drawing surface. The specific implemented of the drawing surface is
 left to the derived display drivers, which sub-class
 [`Canvas`][lbutils.graphics.Canvas]: see the _Examples_ section for details.
 
-In most cases the use of the [`Canvas`][lbutils.graphics.Canvas] class is similar
-to the [`framebuffer`](https://docs.micropython.org/en/latest/library/framebuf.html)
-provided by MicroPython. Unlike the [`framebuffer`](https://docs.micropython.org/en/latest/library/framebuf.html)
+In most cases the use of the [`Canvas`][lbutils.graphics.Canvas] class is
+similar to the
+[`framebuffer`](https://docs.micropython.org/en/latest/library/framebuf.html)
+provided by MicroPython. Unlike the
+[`framebuffer`](https://docs.micropython.org/en/latest/library/framebuf.html)
 class, however, the [`Canvas`][lbutils.graphics.Canvas] class _does not_
 maintain a in-memory copy of the graphics display buffer, This means that the
 [`Canvas`][lbutils.graphics.Canvas] class uses less memory by default (compared
-to the [`framebuffer`](https://docs.micropython.org/en/latest/library/framebuf.html)
-class): but at the cost of some flexibility. In particular it is **not** possible
-to directly manipulate the display buffer of the [`Canvas`][lbutils.graphics.Canvas] class. Instead _all_ drawing or changes to the
-associated display buffer must be done through the [`Canvas`][lbutils.graphics.Canvas] class itself.
+to the
+[`framebuffer`](https://docs.micropython.org/en/latest/library/framebuf.html)
+class): but at the cost of some flexibility. In particular it is **not**
+possible to directly manipulate the display buffer of the
+[`Canvas`][lbutils.graphics.Canvas] class. Instead _all_ drawing or changes to
+the associated display buffer must be done through the
+[`Canvas`][lbutils.graphics.Canvas] class itself.
 
 The [`Canvas`][lbutils.graphics.Canvas] class also attempts to make as few
 assumptions as possible about the underlying implementation: trading speed for
-flexibility where necessary. In particular the [`Canvas`][lbutils.graphics.Canvas] class
-makes no assumptions about the underlying byte order of the display, not any
-assumptions about a specific colour model. Instead these are abstracted into
-associated classes such as [`Colour`][lbutils.graphics.colours.Colour] class).
-Those 'helper' classes will typically provide support for specific
+flexibility where necessary. In particular the
+[`Canvas`][lbutils.graphics.Canvas] class makes no assumptions about the
+underlying byte order of the display, not any assumptions about a specific
+colour model. Instead these are abstracted into. Instead these are abstracted
+into associated classes such as [`Colour`][lbutils.graphics.colours.Colour]
+class). Those 'helper' classes will typically provide support for specific
 implementations, or allow conversion between the internal representation of the
 class and the underlying display protocols.
 
 ## Examples
 
-The simplest derived class of [`Canvas`][lbutils.graphics.Canvas] is [FrameBufferCanvas][lbutils.graphics.FrameBufferCanvas]. This backs the
-[`Canvas`][lbutils.graphics.Canvas] with a [`framebuffer`](https://docs.micropython.org/en/latest/library/framebuf.html), as a display
-abstraction. The [FrameBufferCanvas][lbutils.graphics.FrameBufferCanvas] can
-then be created as
+The simplest derived class
 
 ````python
 import lbutils.graphics as graphics
@@ -60,8 +63,12 @@ display = graphics.FrameBufferCanvas(width: int = 96,
         height: int = 64)
 ````
 
-Once created, the [Canvas][lbutils.graphics.Canvas] drawing methods can
-be used on the [`framebuffer`](https://docs.micropython.org/en/latest/library/framebuf.html). For insance the [`framebuffer`](https://docs.micropython.org/en/latest/library/framebuf.html) can be cleared to black by
+Once created, the [Canvas][lbutils.graphics.Canvas] drawing methods can be used
+on the
+[`framebuffer`](https://docs.micropython.org/en/latest/library/framebuf.html).
+For insance the
+[`framebuffer`](https://docs.micropython.org/en/latest/library/framebuf.html)
+can be cleared to black by
 
 ````python
 display.fill_screen(graphics.colours.COLOUR_BLACK)
@@ -101,30 +108,35 @@ class Canvas(ABC):
 
     This drawing support is provided through the following categories of tools
 
-    * **Drawing Primitives***: Provides basic support for drawing lines, rectangles,
-         circles and triangles. This serves as a basic collection of primitives that
-         can be relied upon by higher-level libraries.
+    * **Drawing Primitives**: Provides basic support for drawing lines,
+    rectangles, circles and triangles. This serves as a basic collection of
+    primitives that can be relied upon by higher-level libraries.
     * **Font Support**: The `Canvas` maintains a record of the current font to
-         use when writing text through the `font` attribute. This can be changed by
-         users of the library, and defaults to [`Org_01`][lbutils.graphics.fonts.Org_01].
-    * **Colour Support**: Colours can be selected in different ways, and the `Canvas`
-         maintains a foreground (`fg_color`) and background (`bg_color`) attribute: along
-         with a common method to override these default colours quickly for individual
-         drawing commands. Colours are selected by order of precence, which is defined as
+    use when writing text through the `font` attribute. This can be changed by
+    users of the library, and defaults to [`Org_01`]
+    [lbutils.graphics.fonts.Org_01].
+    * **Colour Support**: Colours can be selected in different ways, and the
+    `Canvas` maintains a foreground (`fg_color`) and background (`bg_color`)
+    attribute: along with a common method to override these default colours
+    quickly for individual drawing commands. Colours are selected by order of
+    precedence, which is defined as
 
-              1. The `Colour`s directly specified in the method call of the drawing primitive.
-              2. The colours specified by the `Pen` in the method call of the drawing primitive.
-              3. The colours specified by the `Pen` of the `Canvas` object.
-              4. The colours specified by as the default (forground or background) colour of the
-              `Canvas` object.
-              5. As a default of white (`COLOUR_WHITE`) for the foreground, and black
-              (`COLOUR_BLACK`) if all other selection methods fail.
+        1. The `Colour`s directly specified in the method call of the drawing
+        primitive.
+        2. The colours specified by the `Pen` in the method call of the drawing
+        primitive.
+        3. The colours specified by the `Pen` of the `Canvas` object.
+        4. The colours specified by as the default (forground or background)
+        colour of the `Canvas` object.
+        5. As a default of white (`COLOUR_WHITE`) for the foreground, and black
+        (`COLOUR_BLACK`) if all other selection methods fail.
 
     Attributes
     ----------
 
     bg_colour:
-         The background [`Colour`][lbutils.graphics.colours.Colour] to use when drawing.
+         The background [`Colour`][lbutils.graphics.colours.Colour] to use when
+         drawing.
     cursor:
          The location of the current write (or read) operation.
     font:
@@ -145,14 +157,17 @@ class Canvas(ABC):
 
     * `draw_line()`. Draw a line from two co-ordinates.
 
-    * `draw_rectangle()`. Draw a rectangle at the co-ordinate (x, y) of height and width, using the linecolour for the frame of the rectangle and fillcolour as the interior colour.
+    * `draw_rectangle()`. Draw a rectangle at the co-ordinate (x, y) of height
+    and width, using the linecolour for the frame of the rectangle and fillcolour
+    as the interior colour.
 
     * `fill_screen()`. Fill the entire `Canvas` with the background colour.
 
     * `read_pixel()`. Return the [`Colour`][lbutils.graphics.colours.Colour] of
     the specified pixel.
 
-    * `write_char()`. Write a character (using the current font) starting at the stated pixel position.
+    * `write_char()`. Write a character (using the current font) starting at the
+    stated pixel position.
 
     * `write_pixel()`. Set the pixel at the specified position to the foreground
     colour value.
@@ -245,7 +260,8 @@ class Canvas(ABC):
         y: int
              The Y co-ordinate of the pixel to set.
         colour: Type[Colour]
-             The [`Colour`][lbutils.graphics.Colour] representation of the pixel located at (x, y).
+             The [`Colour`][lbutils.graphics.Colour] representation of the pixel
+             located at (x, y).
         """
     @abstractmethod
     def draw_line(
@@ -272,13 +288,13 @@ class Canvas(ABC):
         y2: int
              The Y co-ordinate of the pixel for the end point of the line.
         fg_colour: Type[graphics.Colour], optional
-             The [`Colour`][lbutils.graphics.Colour] to be used when drawing the line. If not specified, use the
-             preference order for the foreground colour of the `Canvas` to find a
-             suitable colour.
+             The [`Colour`][lbutils.graphics.Colour] to be used when drawing the
+             line. If not specified, use the preference order for the foreground
+             colour of the `Canvas` to find a suitable colour.
         pen: Type[graphics.Pen], optional
-             The [`Pen`][lbutils.graphics.Pen] to be used when drawing the line. If not specified, use the
-             preference order for the foreground colour of the `Canvas` to find a
-             suitable colour.
+             The [`Pen`][lbutils.graphics.Pen] to be used when drawing the line.
+             If not specified, use the preference order for the foreground colour
+             of the `Canvas` to find a suitable colour.
         """
 
     @abstractmethod
@@ -309,18 +325,19 @@ class Canvas(ABC):
         height: int
              The hight of the rectangle in pixels.
         fg_colour: Type[graphics.Colour], optional
-             The [`Colour`][lbutils.graphics.Colour] to be used when drawing the rectangle. If not specified, use the
-             preference order for the foreground colour of the `Canvas` to find a
-             suitable colour.
+             The [`Colour`][lbutils.graphics.Colour] to be used when drawing the
+             rectangle. If not specified, use the preference order for the
+             foreground colour of the `Canvas` to find a suitable colour.
         bg_colour: Type[graphics.Colour], optional
-             The [`Colour`][lbutils.graphics.Colour] to be used when filling the rectangle. If not specified, use the
-             preference order for the background colour of the `Canvas` to find a
-             suitable colour.
+             The [`Colour`][lbutils.graphics.Colour] to be used when filling the
+             rectangle. If not specified, use the preference order for the
+             background colour of the `Canvas` to find a suitable colour.
         pen: Type[graphics.Pen], optional
-             The [`Pen`][lbutils.graphics.Pen] to be used when drawing the rectangle, using the forground colour for
-             the frame and the background colour for the fill. If not specified, use the
-             preference order for the foreground and background colours of the `Canvas`
-             to find suitable colours.
+             The [`Pen`][lbutils.graphics.Pen] to be used when drawing the
+             rectangle, using the forground colour for the frame and the
+             background colour for the fill. If not specified, use the preference
+             order for the foreground and background colours of the `Canvas` to
+             find suitable colours.
         filled: bool, optional
              If `True` (the default) the rectangle is filled with the background
              colour: otherwise the rectangle is not filled.
@@ -360,15 +377,16 @@ class Canvas(ABC):
              colour of the `Canvas` to find a suitable colour.
         pen: Type[graphics.Pen], optional
              The [`Pen`][lbutils.graphics.Pen] to be used when drawing the line.
-             If not specified, use the preference order for the foreground colour of the `Canvas` to find a suitable colour.
+             If not specified, use the preference order for the foreground colour
+             of the `Canvas` to find a suitable colour.
 
         Returns
         -------
 
         int:
              The X pixel co-ordinate immediately following the character written
-             in the specified font. This can be used to easily locate multiple characters at
-             a given Y position: see also `write_text()`.
+             in the specified font. This can be used to easily locate multiple
+             characters at a given Y position: see also `write_text()`.
         """
 
     ##
@@ -454,18 +472,21 @@ class Canvas(ABC):
         The returned [`Colour`][lbutils.graphics.Colour] object is selected
         according the defined precedence
 
-             1. The `Colour` directly specified in the method call.
-             2. The background colour specified by the `Pen` in the method call of the drawing primitive.
-             3. The background colour specified by the `Pen` of the `Canvas` object.
-             4. The colour specified by as the default background colour of the
-                  `Canvas` object.
-             5. As a default of black (`COLOUR_BLACK`) if all other selection methods fail.
+        1. The `Colour` directly specified in the method call.
+        2. The background colour specified by the `Pen` in the method call of the
+        drawing primitive.
+        3. The background colour specified by the `Pen` of the `Canvas` object.
+        4. The colour specified by as the default background colour of
+        the`Canvas` object.
+        5. As a default of black (`COLOUR_BLACK`) if all other selection methods
+        fail.
 
         Returns
         -------
 
         Type[Colour]:
-             A [`Colour`][lbutils.graphics.Colour] object representing the current background colour of the `Canvas`
+             A [`Colour`][lbutils.graphics.Colour] object representing the
+             current background colour of the `Canvas`.
         """
 
         if pen is not None:
@@ -516,11 +537,11 @@ class Canvas(ABC):
         pixel position (`x`, `y`) in the specified `colour` to the display.
 
         !!! note
-             Whilst the `txt_str` character _must_ be a valid UTF-8
-             string, most fonts only support the equivalent of the (7-bit) ASCII character
-             set. This method _will not_ display character values that cannot be supported by
-             the underlying font. See the font description for the exact values that are
-             valid for the specific font being used.
+             Whilst the `txt_str` character _must_ be a valid UTF-8 string, most
+             fonts only support the equivalent of the (7-bit) ASCII character
+             set. This method _will not_ display character values that cannot be
+             supported by the underlying font. See the font description for the
+             exact values that are valid for the specific font being used.
 
         Parameters
         ----------

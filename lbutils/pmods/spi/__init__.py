@@ -71,4 +71,6 @@ documentation](https://lbutils.readthedocs.io/en/latest/) for each class below.
 """
 
 ### Expose the `pmod` module interface as a full package
+__all__ = ["olergb"]
+
 from .oledrgb import OLEDrgb
