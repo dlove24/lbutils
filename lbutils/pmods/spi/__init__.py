@@ -65,12 +65,12 @@ micro-controller development board)
 | Pin 12 | VCC           |              | VCC (+3.3V)                         |
 
 Examples for specific pin interfaces for individual modules can be found in the
-'`examples`' folder: or [in the
-
-documentation](https://lbutils.readthedocs.io/en/latest/) for each class below.
+'`examples`' folder:
+or [in the documentation](https://lbutils.readthedocs.io/en/latest/) for each
+class below.
 """
 
-### Expose the `pmod` module interface as a full package
+### Expose the `pmod.spi` module interface as a full package
 __all__ = ["olergb"]
 
 from .oledrgb import OLEDrgb

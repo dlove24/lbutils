@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lbutils-mp"
-version = "0.2.0"
+version = "0.2.1"
 authors = [
   { name="David Love", email="david.love@leedsbeckett.ac.uk" },
 ]
@@ -29,7 +29,7 @@ syntax = "numpy"
 black = true
 
 [tool.setuptools]
-packages = ["lbutils", "lbutils.drivers", "lbutils.graphics", "lbutils.helpers", "lbutils.pmods"]
+packages = ["lbutils", "lbutils.drivers", "lbutils.graphics", "lbutils.graphics.fonts", "lbutils.helpers", "lbutils.pmods", "lbutils.pmods.spi", "lbutils.pmods.i2c"]
 
 [tool.ruff]
 # Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
