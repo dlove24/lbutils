@@ -23,7 +23,8 @@
 """Utilities and I2C Drivers for the Digilent Peripheral Modules. This library
 is designed to provide drivers and support for the [Digilent peripheral
 modules](https://digilent.com/reference/pmod/start). Not all boards are
-supported: this module also only supports those with a dedicated I2C interface, or at least a dual SPI and I2C interface.
+supported: this module also only supports those with a dedicated I2C interface,
+or at least a dual SPI and I2C interface.
 
 ## I2C Conventions
 

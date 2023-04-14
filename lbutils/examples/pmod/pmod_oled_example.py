@@ -50,12 +50,11 @@ except ImportError:
 
 # Import the LB Utils driver for the Pmod OLEDrgb
 try:
-    from lbutils.pmod.spi import OLEDrgb
+    from lbutils.pmods.spi import OLEDrgb
 except ImportError:
     raise RuntimeError("Error: Cannot find the Pmod OLEDrgb driver!")
 
 # Import the core libraries
-
 import utime
 
 ##
@@ -158,6 +157,6 @@ for i in range(8):
 print("Running the colour test...")
 while True:
     for color in colors:
-        oled_display.fill_screen(color.as_565)
+        oled_display.fill_screen(color)
 
         utime.sleep(1)

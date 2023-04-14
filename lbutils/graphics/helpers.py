@@ -31,7 +31,13 @@ separate library.
 *   CPython (3.10)
 """
 
-from typing import Type
+# Import the typing hints if available. Use our backup version
+# if the offical library is missing
+try:
+    from typing import Type
+except ImportError:
+    from lbutils.typing import Type
+
 from .colours import Colour, COLOUR_WHITE, COLOUR_BLACK
 
 ###
@@ -172,6 +178,16 @@ class BoundPixel(Pixel):
             The X co-oridinate value.
     y: int
             The Y co-ordinate value.
+    min_x: int
+            The minimum value allowed for the `x` co-ordinate. Defaults to
+            `0`.
+    min_y: int
+            The minimum value allowed for the `y` co-ordinate. Defaults to
+            `0`.`
+    max_x: int
+            The maximum value allowed for the `x` co-ordinate
+    max_y: int
+            The maximum value allowed for the `y` co-ordinate
     """
 
     def __init__(
@@ -179,7 +195,7 @@ class BoundPixel(Pixel):
         x: int,
         y: int,
         max_x: int,
-        max_y,
+        max_y: int,
         min_x: int = 0,
         min_y: int = 0,
         clip: bool = True,
@@ -229,15 +245,19 @@ class BoundPixel(Pixel):
                 parameters to avoid ambiguity.
         """
 
-        self.y = int(x)
-        self.x = int(y)
+        # Set-up the maximum and minimum parameters first
+        self.min_y = int(min_y)
+        self.max_y = int(max_y)
 
         self.min_x = int(min_x)
         self.max_x = int(max_x)
 
-        self.min_x = int(min_x)
-        self.max_x = int(max_x)
+        # Now attempt to set the actual `x` and `y` inside those
+        # parameters
+        self.y = int(y)
+        self.x = int(x)
 
+        # Set the clipping switch
         self.clip = clip
 
     ##

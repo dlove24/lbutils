@@ -497,9 +497,9 @@ class OLEDrgb(graphics.Canvas):
             y1,
             x2,
             y2,
-            fg_colour.r,
-            fg_colour.g,
-            fg_colour.b,
+            fg_colour.bR,
+            fg_colour.bG,
+            fg_colour.bB,
         )
         self._write(_DRAWLINE, data)
 

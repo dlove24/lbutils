@@ -2,6 +2,12 @@
 
 All releases should be on [PyPi](https://pypi.org/project/lbutils-mp/), and also published on [GitHub](https://github.com/dlove24/lbutils). A full log of the changes can be found in the source, or on GitHub: what follows is a summary of key features/changes.
 
+## 2023-04-14: lbutils 0.2.2
+
+### Changed
+
+* Use the new graphics API for the OLEDrgb pmod example
+
 ## 2023-04-14: lbutils 0.2.1
 
 ### Changed
