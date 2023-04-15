@@ -595,9 +595,7 @@ class Canvas(ABC):
 
         if self.font is not None:
             for character in txt_str:
-                self.cursor.x = self.write_char(
-                    self.cursor.x,
-                    self.cursor.y,
+                self.write_char(
                     character,
                     fg_colour=fg_colour,
                     pen=pen,
@@ -605,12 +603,10 @@ class Canvas(ABC):
 
     def write_char(
         self,
-        x: int,
-        y: int,
         utf8Char: str,
         fg_colour: Type[graphics.Colour] = None,
         pen: Type[graphics.Pen] = None,
-    ) -> int:
+    ) -> None:
         """Write a `utf8Char` character (using the current `font`) starting at
         the pixel position (`x`, `y`) in the specified `colour`.
 
@@ -624,10 +620,6 @@ class Canvas(ABC):
         Parameters
         ----------
 
-        x: int
-            The X co-ordinate of the pixel for the character start position.
-        y: int
-            The Y co-ordinate of the pixel for the character start position.
         utf8Char:
             The character to write to the display.
         fg_colour: Type[graphics.Colour], optional
@@ -638,35 +630,22 @@ class Canvas(ABC):
             The [`Pen`][lbutils.graphics.Pen] to be used when drawing the line.
             If not specified, use the preference order for the foreground colour
             of the `Canvas` to find a suitable colour.
-
-        Returns
-        -------
-
-        int:
-            The X pixel co-ordinate immediately following the character written
-            in the specified font. This can be used to easily locate multiple
-            characters at a given Y position: see also `write_text()`.
         """
 
         fg_colour = self.select_fg_color(fg_colour=fg_colour, pen=pen)
 
-        # print("write_char(x={},y={},c={},colour={})".format(x,y,utf8Char,colour))
-        if self.font is None:
-            return x
-        # {offset, width, height, advance cursor, x offset, y offset} */
         self.font.set_position(utf8Char)
         _offset, _width, _height, _cursor, x_off, y_off = self.font.current_glyph
-        # print("_offset",_offset)
-        # print("Width",_width)
-        # print("height",_height)
-        # print("cursor",_cursor)
-        # print("xoff",x_off)
-        # print("yoff",y_off)
+
         for y1 in range(_height):
             for x1 in range(_width):
                 if self.font.get_next():
-                    self.write_pixel(x + x1 + x_off, y + y1 + y_off, fg_colour)
-        return x + _cursor
+                    self.write_pixel(
+                        self.cursor.x + x1 + x_off,
+                        self.cursor.y + y1 + y_off,
+                        fg_colour,
+                    )
+        self.cursor.x += _cursor
 
 
 class FrameBufferCanvas(Canvas):
