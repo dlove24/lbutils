@@ -104,6 +104,6 @@ documentation for the sub-class itself.
 ### Expose the `graphics` module interface as a full package
 __all__ = ["colours", "canvas", "helpers"]
 
-from .colours import Colour
-from .canvas import Canvas, FrameBufferCanvas
+from .colours import DEVICE_BIT_ORDER, Colour
+from .canvas import RECTANGLE_STYLE, Canvas, FrameBufferCanvas
 from .helpers import Pen, Pixel, BoundPixel

@@ -74,6 +74,15 @@ shown below
 """
 
 ###
+### Enumerations. MicroPython doesn't have actual an actual `enum` (yet), so
+### these serve as common cases where a selection of values need to be defined
+###
+
+DEVICE_BIT_ORDER = {"ARM", "INTEL"}
+"""Set the bit order to be used (mostly in graphics code) for low-level
+manipulation of bits send to, and received from, devices."""
+
+###
 ### Classes
 ###
 
@@ -100,10 +109,10 @@ class Colour:
         Provides the colour value in the RGB888 format, using a
         double word for the colour value in the standard platform
         representation.
-    isARM: bool, read-write
-        Flag indicating if the colour value should use the ARM byte
-        packing order in colour conversions. Defaults to `True` as
-        set by the default constructor.
+    bit_order: DEVICE_BIT_ORDER, read-write
+        Argument indicating if the underlying bit order used for
+        the bit packing order in colour conversions. Defaults to
+        `ARM` as set by the default constructor.
 
     Implementation
     --------------
@@ -122,7 +131,9 @@ class Colour:
     ## Constructors
     ##
 
-    def __init__(self, r: int, g: int, b: int, isARM: bool = True) -> None:
+    def __init__(
+        self, r: int, g: int, b: int, bit_order: DEVICE_BIT_ORDER = "ARM"
+    ) -> None:
         """Creates a representation of a colour value, from the three integers
         `r` (red), `g` (green) and `b` (blue). The class will accept anything
         which can be coerced to an integer as arguments: the access through the
@@ -138,17 +149,16 @@ class Colour:
             The integer representing the green component of the colour.
         b: int
             The integer representing the blue component of the colour.
-        isARM: bool, optional
-            Determines if the current platform is an ARM processor or not. This
-            value is used to determine which order for the `word` representation
-            of the colour returned to the caller. Defaults to `True` as required
-            by the Pico H/W platform of the micro-controller development board.
+        bit_order: DEVICE_BIT_ORDER, read-write
+            Argument indicating if the underlying bit order used for
+            the bit packing order in colour conversions. Defaults to
+            `ARM` as set by the default constructor.
         """
         self._r = int(r)
         self._g = int(g)
         self._b = int(b)
 
-        self.isARM = isARM
+        self.bit_order = "ARM"
 
         # Cached values
         self._565 = None
@@ -218,7 +228,7 @@ class Colour:
         if self._565 is None:
             # ... if there isn't one, calculate what the byte representation
             #     should look like
-            if self.isARM:
+            if self.bit_order == "ARM":
                 self._565 = (
                     (self._g & 0x1C) << 1
                     | (self._b >> 3)
@@ -263,7 +273,7 @@ class Colour:
         if self._888 is None:
             # ... if there isn't one, calculate what the byte representation
             #     should look like
-            if self.isARM:
+            if self.bit_order == "ARM":
                 self._888 = (
                     (self._g & 0x1C) << 1
                     | (self._b >> 3)

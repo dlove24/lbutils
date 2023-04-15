@@ -76,11 +76,11 @@ try:
 except ImportError:
     from lbutils.typing import Type
 
-    # Import the lbutils graphics library
-    # try:
+# Import the lbutils graphics library
+try:
     import lbutils.graphics as graphics
-# except ImportError:
-#    raise RuntimeError("Error: Missing required LBUtils graphics library")
+except ImportError:
+    raise RuntimeError("Error: Missing required LBUtils graphics library")
 
 # Import the core libraries
 import ustruct
@@ -338,7 +338,7 @@ class OLEDrgb(graphics.Canvas):
         """
 
         # Set the ancestor values
-        super().__init__(width, height, True)
+        super().__init__(width, height, "ARM")
 
         # Set the local attributes
         self.spi_controller = spi_controller
@@ -512,7 +512,7 @@ class OLEDrgb(graphics.Canvas):
         fg_colour: Type[graphics.Colour] = None,
         bg_colour: Type[graphics.Colour] = None,
         pen: Type[graphics.Pen] = None,
-        filled: bool = True,
+        style: graphics.RECTANGLE_STYLE = "FILLED",
     ) -> None:
         """Draw a rectangle at the co-ordinate (`x`, `y`) of `height` and
         `width`, using the `linecolour` for the frame of the rectangle and
@@ -543,16 +543,17 @@ class OLEDrgb(graphics.Canvas):
             background colour for the fill. If not specified, use the
             preference order for the foreground and background colours of the
             `Canvas` to find suitable colours.
-        filled: bool, optional
-            If `True` (the default) the rectangle is filled with the background
-            colour: otherwise the rectangle is not filled.
+        style: RECTANGLE_STYLE, optional
+             Set the style for the rectangle to draw. The defined style,
+             `FILLED`, sets the interior of the rectangle to the the
+             current background colour.
         """
 
         fg_colour = self.select_fg_color(fg_colour=fg_colour, pen=pen)
         bg_colour = self.select_bg_color(bg_colour=bg_colour, pen=pen)
 
         # Send the commands to fill, or not fill, the rectangle
-        if filled:
+        if style == "FILLED":
             self._write(_FILL, b"\x01")
         else:
             self._write(_FILL, b"\x00")

@@ -98,6 +98,24 @@ try:
 except ImportError:
     raise RuntimeError("Error: Missing required LBUtils graphics library")
 
+###
+### Enumerations. MicroPython doesn't have actual an actual `enum` (yet), so
+### these serve as common cases where a selection of values need to be defined
+###
+
+RECTANGLE_STYLE = {"FRAMED", "FILLED"}
+"""Set the style of the rectangle.
+
+The `FRAMED` style will draw the rectangle using the current foreground colour
+(`fg_colour`), and leave the body of the rectangle unset. The `FILLED` style
+acts as `FRAMED`, but additionally sets the internal region of the rectangle to
+the current background colour (`bg_color`).
+"""
+
+###
+### Classes
+###
+
 
 class Canvas(ABC):
     """A Base Class which implements a drawing surface, and which provides
@@ -208,7 +226,9 @@ class Canvas(ABC):
     ## Constructors
     ##
 
-    def __init__(self, width: int, height: int, isARM: bool = True) -> None:
+    def __init__(
+        self, width: int, height: int, bit_order: graphics.DEVICE_BIT_ORDER = "ARM"
+    ) -> None:
         """Creates a (packed) representation of a colour value, from the three
         bytes `r` (red), `g` (green) and `b` (blue).
 
@@ -219,25 +239,20 @@ class Canvas(ABC):
              The width in pixels of the display.
         height: int
              The height in pixels of the display.
-        isARM: bool, optional
-             Determines if the current platform is an ARM processor or not. This
-             value is used to determine which order for the `word` representation
-             of the colour returned to the caller. Defaults to `True` as required
-             by the Pico H/W platform of the micro-controller development board.
+        bit_order: DEVICE_BIT_ORDER, read-write
+            Argument indicating if the underlying bit order used for
+            the bit packing order in colour conversions. Defaults to
+            `ARM` as set by the default constructor.
         """
         # Set the Attribute Values. Note use the properties to ensure
         # that the type being set is correct
-        if isARM:
-            self.fg_colour = graphics.colours.COLOUR_WHITE
-            self.bg_colour = graphics.colours.COLOUR_BLACK
-        else:
-            self.fg_color = graphics.color.Colour(255, 255, 255, isARM=False)
-            self.bg_color = graphics.color.Colour(0, 0, 0, isARM=False)
+        self.fg_color = graphics.colours.Colour(255, 255, 255, bit_order)
+        self.bg_color = graphics.colours.Colour(0, 0, 0, bit_order)
 
         self.pen = None
 
         self.cursor = graphics.helpers.BoundPixel(
-            0, 0, min_x=0, max_x=width, min_y=0, max_y=height, clip=True
+            0, 0, min_x=0, max_x=width, min_y=0, max_y=height
         )
 
     ##
@@ -379,7 +394,7 @@ class Canvas(ABC):
         fg_colour: Type[graphics.Colour] = None,
         bg_colour: Type[graphics.Colour] = None,
         pen: Type[graphics.Pen] = None,
-        filled: bool = True,
+        style: RECTANGLE_STYLE = "FILLED",
     ) -> None:
         """Draw a rectangle at the co-ordinate (`x`, `y`) of `height` and
         `width`, using the `linecolour` for the frame of the rectangle and
@@ -410,9 +425,10 @@ class Canvas(ABC):
              background colour for the fill. If not specified, use the preference
              order for the foreground and background colours of the `Canvas` to
              find suitable colours.
-        filled: bool, optional
-             If `True` (the default) the rectangle is filled with the background
-             colour: otherwise the rectangle is not filled.
+        style: RECTANGLE_STYLE, optional
+             Set the style for the rectangle to draw. The defined style,
+             `FILLED`, sets the interior of the rectangle to the the
+             current background colour.
         """
         pass
 
@@ -549,7 +565,7 @@ class Canvas(ABC):
             height=self.height,
             fg_colour=fill_colour,
             bg_colour=fill_colour,
-            filled=True,
+            style="FILLED",
         )
 
     def move_to(self, xy: tuple) -> None:

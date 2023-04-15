@@ -38,7 +38,7 @@ try:
 except ImportError:
     from lbutils.typing import Type
 
-from .colours import Colour, COLOUR_WHITE, COLOUR_BLACK
+from .colours import COLOUR_WHITE, COLOUR_BLACK, Colour
 
 ###
 ### Classes
@@ -223,10 +223,10 @@ class BoundPixel(Pixel):
 
     Unlike the [`Pixel`][lbutils.graphics.Pixel] class, the `BoundPxiel` will
     also ensure that the X and Y co-ordinates are maintained between minimum and
-    maximum value for the `width` or `height`. This is useful for instances where a
-    cursor, for instance, must only take values within the limits of a display. It
-    can also be used where a clipping region is being defined to ensure that values
-    cannot lie outside the clipped region.
+    maximum value for the `width` or `height`. This is useful for instances where
+    a cursor, for instance, must only take values within the limits of a display.
+    It can also be used where a clipping region is being defined to ensure that
+    values cannot lie outside the clipped region.
 
     !!! note "Implementation Defined Origin"
             As for the [`Canvas`][lbutils.graphics.canvas] class, the
@@ -268,7 +268,6 @@ class BoundPixel(Pixel):
         max_y: int,
         min_x: int = 0,
         min_y: int = 0,
-        clip: bool = True,
     ) -> None:
         """Creates a `Pixel` instance holding the specified `x` and `y` co-
         ordinates, together representing the Cartesian point '(`x`, `y`)'. This
@@ -293,11 +292,6 @@ class BoundPixel(Pixel):
         min_y: int, optional
                 The minimum value allowed for the `y` co-ordinate. Defaults to
                 `0`.`
-        clip: bool, optional
-                If set to `True`, the default, silently clip the `x` and `y` co-
-                ordinates to the specified limits. If set to `False`, instead
-                raise a `ValueError` if the `x` or `y` co-ordinates do not fall
-                into the allowed limits.
 
         Implementation
         --------------
@@ -327,9 +321,6 @@ class BoundPixel(Pixel):
         self.x = int(x)
         self.y = int(y)
 
-        # Set the clipping switch
-        self.clip = clip
-
     ##
     ## Properties
     ##
@@ -339,25 +330,18 @@ class BoundPixel(Pixel):
         """The `x` co-ordinate of the `BoundPxiel`, checking that it lies within
         the specified `min_x` and `max_x` limits.
 
-        Raises
-        ------
-
-        `ValueError`:
-                If `clip` is set to `False`
+        If the `x` co-ordinate does lie outside the specified region, set it to
+        the `min_x` or `max_x` limit as appropriate.
         """
         if self.min_x <= self._x <= self.max_x:
             return self._x
         else:
-            if self.clip:
-                if self._x > self.max_x:
-                    self._x = self.max_x
-                if self._x < self.min_x:
-                    self._x = self.min_x
+            if self._x > self.max_x:
+                self._x = self.max_x
+            if self._x < self.min_x:
+                self._x = self.min_x
 
-                return self._x
-
-            else:
-                raise (ValueError("Pixel limits exceeded"))
+            return self._x
 
     @x.setter
     def x(self, value: int) -> None:
@@ -378,25 +362,18 @@ class BoundPixel(Pixel):
         """The `y` co-ordinate of the `BoundPxiel`, checking that it lies within
         the specified `min_x` and `max_y` limits.
 
-        Raises
-        ------
-
-        `ValueError`:
-                If `clip` is set to `False`
+        If the `y` co-ordinate does lie outside the specified region, set it to
+        the `min_y` or `may_y` limit as appropriate.
         """
         if self.min_y <= self._y <= self.max_y:
             return self._y
         else:
-            if self.clip:
-                if self._y > self.max_y:
-                    self._y = self.max_y
-                if self._y < self.min_y:
-                    self._y = self.min_y
+            if self._y > self.max_y:
+                self._y = self.max_y
+            if self._y < self.min_y:
+                self._y = self.min_y
 
-                return self._y
-
-            else:
-                raise (ValueError("Pixel limits exceeded"))
+            return self._y
 
     @y.setter
     def y(self, value: int) -> None:
