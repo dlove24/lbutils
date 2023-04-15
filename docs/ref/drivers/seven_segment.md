@@ -38,6 +38,21 @@ anode seven-segment displays. If you need the requested GPIO pin to be held
     will raise a `ValueError` exception if the requested character is not in an
     appropriate range.
 
+### Common Anode and Common Cathode Implementations
+
+The `display` methods of the [`SegDisplay`][lbutils.drivers.SegDisplay.display] and the [`SegHexDisplay`][lbutils.drivers.SegHexDisplay.display] have an (optional) argument `pin_on` for the sense of the GPIO pins. This argument is defined as
+
+````python
+PIN_ON_SENSE = {"HIGH", "LOW"}
+````
+
+When the GPIO pins need to be set 'high' ('1') for the device
+input to turn on, the `pin_on` input need to be set to `HIGH`.
+This typical behaviour for a common anode display, and also the normal library defined.
+
+Alternatively, if the GPIO pins need to be set 'low' ('0') for
+the device input to turn on, then the `pin_on` argument must be sent to `LOW`. This is also the typical behaviour for common cathode devices.
+
 ### Tested Implementations
 
 This version is written for MicroPython 3.4, and has been tested on:
