@@ -1,7 +1,7 @@
 # This example, and all included code, is made available under the terms of the
 # MIT License
 #
-# Copyright (c) 2023 Roz Wyatt-Millington, David Love
+# Copyright (c) 2023 David Love
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal in
@@ -20,11 +20,10 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Example for the [Pmod
+"""Examples of the drawing primitives for the [Pmod
 OLEDrgb](https://digilvcc_enablet.com/refervcc_enablece/pmod/pm
-odoled_displayrgb/start) , using the `lbutils.font` library and the
-`lbutils.drivers.SSD1331` display driver. This also gives an example of all the
-fonts in the font library, and serves as a functional test for the display.
+odoled_displayrgb/start). This also gives an example of how the `Canvas` class
+can be used to create more complex shapes from the drawing primitives.
 
 Tested Implementations
 ----------------------
@@ -78,103 +77,19 @@ vcc_enable.high()
 # Finally initialise the OLED display driver, and set the display
 # to black
 oled_display = OLEDrgb(spi_controller, data_cmd_pin, chip_sel_pin, reset_pin)
-
-##
-## Font Examples
-##
-
-# Clear the display
 oled_display.fill_screen(graphics.colours.COLOUR_BLACK)
 
-# Display the `Font_08` font class in red
-print("Running the screen test for the `Font_08` font...")
+##
+## Lines in Rotation. Creates simple 'flowers' using lines rotated around
+## a common origin.
+##
 
+# Set the origin
+oled_display.x_y = [20, 20]
+oled_display.save_origin()
+
+# Set the colour
 oled_display.fg_colour = graphics.colours.COLOUR_RED
-oled_display.font = fonts.Font_08()
 
-oled_display.x_y = [0, 20]
-oled_display.write_text("ABCDEFGHIJKLMN")
-
-oled_display.x_y = [0, 30]
-oled_display.write_text("OPQRSTUVWXYZ")
-
-oled_display.x_y = [0, 40]
-oled_display.write_text("abcdefghijklmn")
-
-oled_display.x_y = [0, 50]
-oled_display.write_text("opqrstuvwxyz")
-
-oled_display.x_y = [0, 60]
-oled_display.write_text("0123456789")
-
-utime.sleep(10)
-
-# Clear the display
-oled_display.fill_screen(graphics.colours.COLOUR_BLACK)
-
-# Display the `Font_06` font class in green
-print("Running the screen test for the `Font_06` font...")
-
-oled_display.fg_colour = graphics.colours.COLOUR_LIME
-oled_display.font = fonts.Font_06()
-
-oled_display.x_y = [0, 20]
-oled_display.write_text("ABCDEFGHIJKLMN")
-
-oled_display.x_y = [0, 30]
-oled_display.write_text("OPQRSTUVWXYZ")
-
-oled_display.x_y = [0, 40]
-oled_display.write_text("abcdefghijklmn")
-
-oled_display.x_y = [0, 50]
-oled_display.write_text("opqrstuvwxyz")
-
-oled_display.x_y = [0, 60]
-oled_display.write_text("0123456789")
-
-utime.sleep(10)
-
-# Clear the display
-oled_display.fill_screen(graphics.colours.COLOUR_BLACK)
-
-# Display the `Org_01` font class in blue
-print("Running the screen test for the `Org_01` font...")
-
-oled_display.fg_colour = graphics.colours.COLOUR_BLUE
-oled_display.font = fonts.Org_01()
-
-oled_display.x_y = [0, 20]
-oled_display.write_text("ABCDEFGHIJKLMN")
-
-oled_display.x_y = [0, 30]
-oled_display.write_text("OPQRSTUVWXYZ")
-
-oled_display.x_y = [0, 40]
-oled_display.write_text("abcdefghijklmn")
-
-oled_display.x_y = [0, 50]
-oled_display.write_text("opqrstuvwxyz")
-
-oled_display.x_y = [0, 60]
-oled_display.write_text("0123456789")
-
-utime.sleep(10)
-
-##
-## Colour Rotation of the Full Display
-##
-
-colors = []
-for i in range(8):
-    r = (i & 1) * 255
-    g = ((i >> 1) & 1) * 255
-    b = ((i >> 2) & 1) * 255
-    colors.append(graphics.colours.Colour(r, g, b))
-
-print("Running the colour test...")
-while True:
-    for color in colors:
-        oled_display.fill_screen(color)
-
-        utime.sleep(1)
+# Draw the lines
+oled_display.draw_line(20, 20, 30, 30)

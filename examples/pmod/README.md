@@ -11,6 +11,10 @@ the `lbutils` library. The current list of examples is as follows
 , using the `lbutils.font` library and the `lbutils.drivers.SSD1331` display
 driver. This also gives an example of all the fonts in the font library, and
 serves as a functional test for the display.
+- `pmod_oled_flowers.py`. Examples of the drawing primitives for the [Pmod
+OLEDrgb](https://digilvcc_enablet.com/refervcc_enablece/pmod/pm
+odoled_displayrgb/start). This also gives an example of how the `Canvas`
+class can be used to create more complex shapes from the drawing primitives.
 
 ## Tested Implementations
 
