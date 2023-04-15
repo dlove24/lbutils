@@ -52,7 +52,7 @@ class Pen:
     colour and line values; for instance using two pens to allow a swap between
     'highlight' and 'normal' text colours. This can be accomplished by defining
     the foreground and background colour of the
-    [`Canvas`][lbutils.graphics.canvas] as needed: this class simply makes that
+    [`Canvas`][lbutils.graphics.Canvas] as needed: this class simply makes that
     switch easier.
 
     Example
@@ -114,7 +114,7 @@ class Pixel:
     origin where lines are being drawn to and from.
 
     !!! note "Implementation Defined Origin"
-            As for the [`Canvas`][lbutils.graphics.canvas] class, the
+            As for the [`Canvas`][lbutils.graphics.Canvas] class, the
             interpretation of the point '(0, 0)' is defined by the underlying
             graphics implementation. For instance the '(0, 0)' point may
             represent the top-left corner or the canvas, or the bottom- left hand
@@ -229,7 +229,7 @@ class BoundPixel(Pixel):
     values cannot lie outside the clipped region.
 
     !!! note "Implementation Defined Origin"
-            As for the [`Canvas`][lbutils.graphics.canvas] class, the
+            As for the [`Canvas`][lbutils.graphics.Canvas] class, the
             interpretation of the point '(0, 0)' is defined by the underlying
             graphics implementation. For instance the '(0, 0)' point may
             represent the top-left corner or the canvas, or the bottom- left hand

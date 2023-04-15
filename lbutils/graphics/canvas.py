@@ -156,9 +156,14 @@ class Canvas(ABC):
          The background [`Colour`][lbutils.graphics.colours.Colour] to use when
          drawing.
     cursor:
-         The [`x`][lbutils.graphics.helpers.BoundPixel] and [`y`]
-         [lbutils.graphics.helpers.BoundPixel] locations  of the current write
+         The [`x`][lbutils.graphics.BoundPixel] and [`y`]
+         [lbutils.graphics.BoundPixel] locations  of the current write
          (or read) operation.
+    origin:
+         The _user_ reference point for the next sequence of drawing primitives.
+         This `origin` will not be altered by changes to the [`x`]
+         [lbutils.graphics.BoundPixel] and [`y`]
+         [lbutils.graphics.BoundPixel] locations of any drawing command.
     font:
          The sub-class of [`BaseFont`][lbutils.graphics.fonts.base_font.BaseFont]
          to use when drawing characters.
@@ -181,7 +186,11 @@ class Canvas(ABC):
     Methods
     ----------
 
-    * `draw_line()`. Draw a line from two co-ordinates.
+    * `draw_line()`. Draw a line from the [`cursor`]
+    [lbutils.graphics.Canvas.cursor] to a co-ordinate.
+
+    * `draw_line_from_origin()`. Draw a line from the [`origin`]
+    [lbutils.graphics.Canvas.origin] to a co-ordinate.
 
     * `draw_rectangle()`. Draw a rectangle at the co-ordinate (x, y) of height
     and width, using the linecolour for the frame of the rectangle and fillcolour
@@ -190,27 +199,25 @@ class Canvas(ABC):
     * `fill_screen()`. Fill the entire `Canvas` with the background colour.
 
     * `move_to()`. Move the internal [`cursor`]
-    [lbutils.graphics.helpers.BoundPixel]  to the co-ordinate values (x, y).
+    [lbutils.graphics.Canvas.cursor]  to the co-ordinate values (x, y).
+
+    * `move_to_origin()`. Sets the internal drawing [`cursor`]
+    [lbutils.graphics.Canvas.cursor] of the `Canvas` back to the users drawing
+    [`origin`] [lbutils.graphics.Canvas.origin] for the next sequence of drawing
+    commands.
 
     * `read_pixel()`. Return the [`Colour`][lbutils.graphics.colours.Colour] of
     the specified pixel.
 
-    * `restore_origin()`. Restore the current value of the [`cursor`]
-    [lbutils.graphics.helpers.BoundPixel] to a previously saved value. This
-    save value is set with `save_origin()`.
-
-    * `save_origin()`. Save the current value of the [`cursor`]
-    [lbutils.graphics.helpers.BoundPixel]. Can be restored with
-    `restore_origin()`.
-
     * `write_char()`. Write a character (using the current font) starting at the
-    stated pixel position.
+    [`cursor`][lbutils.graphics.Canvas.cursor] co-ordinates.
 
     * `write_pixel()`. Set the pixel at the specified position to the foreground
     colour value.
 
     * `write_text()`. Write the a string (using the current font) starting at the
-    specified pixel position in the specified colour.
+    [`cursor`]
+    [lbutils.graphics.Canvas.cursor] position in the specified colour.
 
     Implementation
     --------------
@@ -251,7 +258,10 @@ class Canvas(ABC):
 
         self.pen = None
 
-        self.cursor = graphics.helpers.BoundPixel(
+        self.cursor = graphics.BoundPixel(
+            0, 0, min_x=0, max_x=width, min_y=0, max_y=height
+        )
+        self.origin = graphics.BoundPixel(
             0, 0, min_x=0, max_x=width, min_y=0, max_y=height
         )
 
@@ -306,6 +316,32 @@ class Canvas(ABC):
         self.cursor.x = int(xy[0])
         self.cursor.y = int(xy[1])
 
+    @property
+    def cursor(self) -> graphics.BoundPixel:
+        """The [`x`][lbutils.graphics.BoundPixel] and [`y`]
+        [lbutils.graphics.BoundPixel] locations  of the current write (or read)
+        operation."""
+        return self._cursor
+
+    @cursor.setter
+    def cursor(self, value) -> graphics.BoundPixel:
+        self._cursor = value
+
+    @property
+    def origin(self) -> graphics.BoundPixel:
+        """The _user_ reference point for the next sequence of drawing
+        primitives.
+
+        This `origin` will not be altered by changes to the [`x`]
+        [lbutils.graphics.BoundPixel] and [`y`] [lbutils.graphics.BoundPixel]
+        locations of any drawing command.
+        """
+        return self._origin
+
+    @origin.setter
+    def origin(self, value) -> graphics.BoundPixel:
+        self._origin = value
+
     ##
     ## Abstract Methods. These must be defined in sub-classes.
     ##
@@ -352,26 +388,23 @@ class Canvas(ABC):
     @abstractmethod
     def draw_line(
         self,
-        x1: int,
-        y1: int,
-        x2: int,
-        y2: int,
+        x: int,
+        y: int,
         fg_colour: Type[graphics.Colour] = None,
         pen: Type[graphics.Pen] = None,
     ) -> None:
-        """Draw a line from co-ordinates (`x2`, `y2`) to (`x2`, `y2`) using the
-        specified RGB colour.
+        """Draw a line from the current `cursor` co-ordinates the point (`x2`,
+        `y2`) using the specified RGB colour. If the drawing colour is not
+        specified in the arguments to this method, then it will use the
+        preference order for the foreground colour of the `Canvas` Class to find
+        a suitable colour.
 
         Parameters
         ----------
 
-        x1: int
-             The X co-ordinate of the pixel for the start point of the line.
-        y1: int
-             The Y co-ordinate of the pixel for the start point of the line.
-        x2: int
+        x: int
              The X co-ordinate of the pixel for the end point of the line.
-        y2: int
+        y: int
              The Y co-ordinate of the pixel for the end point of the line.
         fg_colour: Type[graphics.Colour], optional
              The [`Colour`][lbutils.graphics.Colour] to be used when drawing the
@@ -433,7 +466,7 @@ class Canvas(ABC):
         pass
 
     ##
-    ## Methods
+    ## Colour Selection Methods
     ##
 
     def select_fg_color(
@@ -445,7 +478,7 @@ class Canvas(ABC):
         of the `Canvas` class, and is guaranteed to return a valid
         `Colour`][lbutils.graphics.colors.Colour] object.
 
-        Paramaters
+        Parameters
         ----------
 
         fg_colour: Type[graphics.Colour], optional
@@ -461,15 +494,15 @@ class Canvas(ABC):
         The returned [`Colour`][lbutils.graphics.Colour] object is selected
         according the defined precedence
 
-             1. The `Colour` directly specified in the method call.
-             2. The foreground colour specified by the `Pen` in the method call
-             of the drawing primitive.
-             3. The foreground colour specified by the `Pen` of the `Canvas`
-             object.
-             4. The colour specified by as the default forground colour of the
-                  `Canvas` object.
-             5. As a default of white (`COLOUR_WHITE`) for the foreground if all
-             other selection methods fail.
+        1. The `Colour` directly specified in the method call.
+        2. The foreground colour specified by the `Pen` in the method call
+        of the drawing primitive.
+        3. The foreground colour specified by the `Pen` of the `Canvas`
+        object.
+        4. The colour specified by as the default forground colour of the
+            `Canvas` object.
+        5. As a default of white (`COLOUR_WHITE`) for the foreground if all
+        other selection methods fail.
 
         Returns
         -------
@@ -499,7 +532,7 @@ class Canvas(ABC):
         of the `Canvas` class, and is guaranteed to return a valid
         `Colour`][lbutils.graphics.colors.Colour] object.
 
-        Paramaters
+        Parameters
         ----------
 
         bg_colour: Type[graphics.Colour], optional
@@ -543,6 +576,10 @@ class Canvas(ABC):
         else:
             return graphics.colours.COLOUR_BLACK
 
+    ##
+    ## Drawing Primitives using the `cursor`
+    ##
+
     def fill_screen(self, bg_colour: Type[graphics.Colour] = None) -> None:
         """Fill the entire display with the specified colour. By default this
         will use the colour preference order to find a background colour if
@@ -567,43 +604,6 @@ class Canvas(ABC):
             bg_colour=fill_colour,
             style="FILLED",
         )
-
-    def move_to(self, xy: tuple) -> None:
-        """Sets the internal `x` and `y` co-ordinates of the `cursor` as a
-        tuple. An alias for the `x_y` property of `Canvas`.
-
-        Parameters
-        ----------
-
-        xy: tuple
-            The first value of the `xy` tuple represents the `x` co-ordinate, and
-            the second value of the `xy` tuple represents the `y` co-ordinate.
-            All other values in the `xy` tuple are ignored.
-
-        Raises
-        ------
-
-        ValueError:
-            If the `x` or `y` co-ordinate in the `xy` tuple cannot be converted
-            to an integer.
-        """
-        self.cursor.x_y = xy
-
-    def restore_origin(self) -> None:
-        """Restore the current value of the [`cursor`]
-        [lbutils.graphics.helpers.BoundPixel] to a previously saved value.
-
-        This saved value is set with [`save_origin`][lbutils.graphics.Canvas.save_origin].
-        """
-        self.cursor.x_y = self.origin
-
-    def save_origin(self) -> None:
-        """Save the current value of the [`cursor`]
-        [lbutils.graphics.helpers.BoundPixel].
-
-        Can be restored with [`restore_origin`][lbutils.graphics.Canvas.restore_origin].
-        """
-        self.origin = self.cursor.x_y
 
     def write_text(
         self,
@@ -690,6 +690,74 @@ class Canvas(ABC):
                         fg_colour,
                     )
         self.cursor.x += _cursor
+
+    ##
+    ## Drawing Primitives using the `origin`
+    ##
+
+    def draw_line_from_origin(
+        self,
+        x: int,
+        y: int,
+        fg_colour: Type[graphics.Colour] = None,
+        pen: Type[graphics.Pen] = None,
+    ) -> None:
+        """Draw a line from the users `origin` co-ordinates the point (`x2`,
+        `y2`) using the specified RGB colour. If the drawing colour is not
+        specified in the arguments to this method, then it will use the
+        preference order for the foreground colour of the `Canvas` Class to find
+        a suitable colour.
+
+        Parameters
+        ----------
+
+        x: int
+             The X co-ordinate of the pixel for the end point of the line.
+        y: int
+             The Y co-ordinate of the pixel for the end point of the line.
+        fg_colour: Type[graphics.Colour], optional
+             The [`Colour`][lbutils.graphics.Colour] to be used when drawing the
+             line. If not specified, use the preference order for the foreground
+             colour of the `Canvas` to find a suitable colour.
+        pen: Type[graphics.Pen], optional
+             The [`Pen`][lbutils.graphics.Pen] to be used when drawing the line.
+             If not specified, use the preference order for the foreground colour
+             of the `Canvas` to find a suitable colour.
+        """
+        self.cursor = self.origin
+        self.draw_line(x, y, fg_colour, pen)
+
+    ##
+    ## utility Methods
+    ##
+
+    def move_to(self, xy: tuple) -> None:
+        """Sets the internal `x` and `y` co-ordinates of the `cursor` as a
+        tuple. An alias for the `x_y` property of `Canvas`.
+
+        Parameters
+        ----------
+
+        xy: tuple
+            The first value of the `xy` tuple represents the `x` co-ordinate, and
+            the second value of the `xy` tuple represents the `y` co-ordinate.
+            All other values in the `xy` tuple are ignored.
+
+        Raises
+        ------
+
+        ValueError:
+            If the `x` or `y` co-ordinate in the `xy` tuple cannot be converted
+            to an integer.
+        """
+        self.cursor.x_y = xy
+
+    def move_to_origin(self) -> None:
+        """Sets the internal drawing [`cursor`] [lbutils.graphics.Canvas.cursor]
+        of the `Canvas` back to the users drawing [`origin`]
+        [lbutils.graphics.Canvas.origin] for the next sequence of drawing
+        commands."""
+        self.cursor = self.origin
 
 
 class FrameBufferCanvas(Canvas):
