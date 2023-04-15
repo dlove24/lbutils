@@ -2,6 +2,16 @@
 
 All releases should be on [PyPi](https://pypi.org/project/lbutils-mp/), and also published on [GitHub](https://github.com/dlove24/lbutils). A full log of the changes can be found in the source, or on GitHub: what follows is a summary of key features/changes.
 
+## 2023-04-14: lbutils 0.2.3
+
+### Changed
+
+* Re-organise the `Canvas` library to use the internal `cursor` for the text routines. This makes the
+management of the writing routines the responsibility of the `Canvas` itself, and not the user
+of the `Canvas` (preserving encapsulation).
+* Directly expose the `cursor` attributes as a helper for `Canvas` to make the movement of the
+`cursor` a little easier.
+
 ## 2023-04-14: lbutils 0.2.2
 
 ### Changed
