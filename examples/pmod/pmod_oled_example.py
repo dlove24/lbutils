@@ -1,4 +1,4 @@
-# This module, and all included code, is made available under the terms of the
+# This example, and all included code, is made available under the terms of the
 # MIT License
 #
 # Copyright (c) 2023 Roz Wyatt-Millington, David Love
@@ -101,11 +101,20 @@ print("Running the screen test for the `Font_08` font...")
 oled_display.fg_colour = graphics.colours.COLOUR_RED
 oled_display.font = fonts.Font_08()
 
-oled_display.write_text(0, 20, "ABCDEFGHIJKLMN")
-oled_display.write_text(0, 30, "OPQRSTUVWXYZ")
-oled_display.write_text(0, 40, "abcdefghijklmn")
-oled_display.write_text(0, 50, "opqrstuvwxyz")
-oled_display.write_text(0, 60, "0123456789")
+oled_display.x_y = [0, 20]
+oled_display.write_text("ABCDEFGHIJKLMN")
+
+oled_display.x_y = [0, 30]
+oled_display.write_text("OPQRSTUVWXYZ")
+
+oled_display.x_y = [0, 40]
+oled_display.write_text("abcdefghijklmn")
+
+oled_display.x_y = [0, 50]
+oled_display.write_text("opqrstuvwxyz")
+
+oled_display.x_y = [0, 60]
+oled_display.write_text("0123456789")
 
 utime.sleep(10)
 
@@ -118,11 +127,20 @@ print("Running the screen test for the `Font_06` font...")
 oled_display.fg_colour = graphics.colours.COLOUR_LIME
 oled_display.font = fonts.Font_06()
 
-oled_display.write_text(0, 20, "ABCDEFGHIJKLMN")
-oled_display.write_text(0, 30, "OPQRSTUVWXYZ")
-oled_display.write_text(0, 40, "abcdefghijklmn")
-oled_display.write_text(0, 50, "opqrstuvwxyz")
-oled_display.write_text(0, 60, "0123456789")
+oled_display.x_y = [0, 20]
+oled_display.write_text("ABCDEFGHIJKLMN")
+
+oled_display.x_y = [0, 30]
+oled_display.write_text("OPQRSTUVWXYZ")
+
+oled_display.x_y = [0, 40]
+oled_display.write_text("abcdefghijklmn")
+
+oled_display.x_y = [0, 50]
+oled_display.write_text("opqrstuvwxyz")
+
+oled_display.x_y = [0, 60]
+oled_display.write_text("0123456789")
 
 utime.sleep(10)
 
@@ -135,11 +153,20 @@ print("Running the screen test for the `Org_01` font...")
 oled_display.fg_colour = graphics.colours.COLOUR_BLUE
 oled_display.font = fonts.Org_01()
 
-oled_display.write_text(0, 20, "ABCDEFGHIJKLMN")
-oled_display.write_text(0, 30, "OPQRSTUVWXYZ")
-oled_display.write_text(0, 40, "abcdefghijklmn")
-oled_display.write_text(0, 50, "opqrstuvwxyz")
-oled_display.write_text(0, 60, "0123456789")
+oled_display.x_y = [0, 20]
+oled_display.write_text("ABCDEFGHIJKLMN")
+
+oled_display.x_y = [0, 30]
+oled_display.write_text("OPQRSTUVWXYZ")
+
+oled_display.x_y = [0, 40]
+oled_display.write_text("abcdefghijklmn")
+
+oled_display.x_y = [0, 50]
+oled_display.write_text("opqrstuvwxyz")
+
+oled_display.x_y = [0, 60]
+oled_display.write_text("0123456789")
 
 utime.sleep(10)
 
@@ -160,3 +187,4 @@ while True:
         oled_display.fill_screen(color)
 
         utime.sleep(1)
+

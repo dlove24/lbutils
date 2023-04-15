@@ -1,5 +1,4 @@
-# This module, and all included code, is made available under the terms of
-# the MIT Licence
+# This example, and all included code, is made available under the terms of the MIT Licence
 #
 # Copyright (c) 2023 Roz Wyatt-Millington, David Love
 #
@@ -52,7 +51,7 @@ except ImportError:
 
 # Import required libraries from LBUtils
 try:
-    from lbutils.drivers import SegDisplay
+    from lbutils.drivers import SegHexDisplay
 except ImportError:
     print("Missing LBUtils seven segment driver")
 
@@ -62,9 +61,9 @@ seg_list1 = [2, 3, 4, 5, 6, 7, 8]
 seg_list2 = [10, 11, 12, 13, 14, 15, 16]
 
 # Create the seven-segment display objects, each attached to the relevant
-# segment using the `SegDisplay` driver class
-segDisp1 = SegDisplay(seg_list1)
-segDisp2 = SegDisplay(seg_list2)
+# segment using the `SegHexDisplay` driver class
+segDisp1 = SegHexDisplay(seg_list1)
+segDisp2 = SegHexDisplay(seg_list2)
 
 # Read the input value from ADC0 on GPIO Pin 26
 adc = ADC(26)
@@ -73,7 +72,7 @@ adc = ADC(26)
 while True:
     adcval = adc.read_u16()
     temp = hidden.measureval(adcval)
-    segDisp2.display(int(temp % 10))
-    segDisp1.display(int((temp / 10) % 10))
+    segDisp2.display(int(temp % 16))
+    segDisp1.display(int((temp / 16) % 16))
 
     utime.sleep(1)
