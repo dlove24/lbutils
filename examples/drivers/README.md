@@ -12,9 +12,9 @@ is available at [WokWi](https://wokwi.com/projects/360451068863047681), which is
 based on the same driver code.
 - `seven_segment_hex_example.py`. Example of using the
 `lbutils.drivers.SegHexDisplay` driver for a seven-segment display, requiring
-seven GPIO pins. A complete example is available at [WokWi]
-(https://wokwi.com/projects/360462223276690433), which is based on the same driver
-code.
+seven GPIO pins. A complete example is available at
+[WokWi](https://wokwi.com/projects/360462223276690433), which is based on the
+same driver code.
 
 ## Tested Implementations
 
