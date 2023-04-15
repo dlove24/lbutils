@@ -138,7 +138,9 @@ class Canvas(ABC):
          The background [`Colour`][lbutils.graphics.colours.Colour] to use when
          drawing.
     cursor:
-         The location of the current write (or read) operation.
+         The [`x`][lbutils.graphics.helpers.BoundPixel] and [`y`]
+         [lbutils.graphics.helpers.BoundPixel] locations  of the current write
+         (or read) operation.
     font:
          The sub-class of [`BaseFont`][lbutils.graphics.fonts.base_font.BaseFont]
          to use when drawing characters.
@@ -169,7 +171,8 @@ class Canvas(ABC):
 
     * `fill_screen()`. Fill the entire `Canvas` with the background colour.
 
-    * `move_to()`. Move the internal `cursor` to the co-ordinate values (x, y).
+    * `move_to()`. Move the internal [`cursor`]
+    [lbutils.graphics.helpers.BoundPixel]  to the co-ordinate values (x, y).
 
     * `read_pixel()`. Return the [`Colour`][lbutils.graphics.colours.Colour] of
     the specified pixel.
