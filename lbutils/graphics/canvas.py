@@ -569,7 +569,8 @@ class Canvas(ABC):
         pen: Type[graphics.Pen] = None,
     ) -> None:
         """Write the string `txt_str` (using the current `font`) starting at the
-        pixel position (`x`, `y`) in the specified `colour` to the display.
+        the pixel position (`x`, `y`) of the `cursor` in the specified `colour`
+        to the display.
 
         !!! note
              Whilst the `txt_str` character _must_ be a valid UTF-8 string, most
@@ -608,7 +609,7 @@ class Canvas(ABC):
         pen: Type[graphics.Pen] = None,
     ) -> None:
         """Write a `utf8Char` character (using the current `font`) starting at
-        the pixel position (`x`, `y`) in the specified `colour`.
+        the pixel position (`x`, `y`) of the `cursor` in the specified `colour`.
 
         !!! note
             Whilst the `utf8Char` character _must_ be a valid UTF-8 character,
