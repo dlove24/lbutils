@@ -19,9 +19,9 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Example of using the `lbutils.drivers.SegDisplay` driver for a seven-segment
-display, requiring seven GPIO pins. A complete example is available at
-[WokWi](https://wokwi.com/projects/360451068863047681), which is based on the
+"""Example of using the `lbutils.drivers.SegHexDisplay` driver for a seven-
+segment display, requiring seven GPIO pins. A complete example is available at
+[WokWi](https://wokwi.com/projects/360462223276690433), which is based on the
 same driver code.
 
 In both cases a value is read from the Pico ADC on Pin 26 (i.e. `ADC0`), and
