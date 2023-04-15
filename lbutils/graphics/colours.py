@@ -94,8 +94,12 @@ class Colour:
     bB: int, read-only
         The byte (`0..255`) of the blue component of the colour
     as_565: int, read-only
-        Provides the colour value in the RGB565 format, using the
-        standard representation.
+        Provides the colour value in the RGB565 format, using a single
+        byte in the the standard platform representation.
+    as_888: int, read-only
+        Provides the colour value in the RGB888 format, using a
+        double word for the colour value in the standard platform
+        representation.
     isARM: bool, read-write
         Flag indicating if the colour value should use the ARM byte
         packing order in colour conversions. Defaults to `True` as
@@ -148,6 +152,8 @@ class Colour:
 
         # Cached values
         self._565 = None
+        self._888 = None
+
         self._bR = None
         self._bG = None
         self._bB = None
@@ -224,6 +230,51 @@ class Colour:
 
         # Return the calculated value to the client
         return self._565
+
+    @property
+    def as_888(self) -> int:
+        """
+        Construct a packed double word from the internal colour representation,
+        with 8 bits of red data, 8 bits of green, and 8 of blue. For non-ARM
+        platforms this results in a byte order for the two colour words as
+        follows
+
+        ````
+        F  E  D  C  B  A  9  8  7  6  5  4  3  2  1  0
+        R4 R3 R2 R1 R0 G5 G4 G3 G2 G1 G0 B4 B3 B2 B1 B0
+        ````
+
+        On ARM platforms the packed word representation has the high and low
+        bytes swapped in each word, and so looks like
+
+        ````
+        F  E  D  C  B  A  9  8  7  6  5  4  3  2  1  0
+        G2 G1 G0 B4 B3 B2 B1 B0 R4 R3 R2 R1 R0 G5 G4 G3
+        ````
+
+        Returns
+        -------
+
+        int:
+            A packed double word value of the colour representation.
+
+        """
+        # Check for a cached value ...
+        if self._888 is None:
+            # ... if there isn't one, calculate what the byte representation
+            #     should look like
+            if self.isARM:
+                self._888 = (
+                    (self._g & 0x1C) << 1
+                    | (self._b >> 3)
+                    | (self._r & 0xF8)
+                    | self._g >> 5
+                )
+            else:
+                self._888(self._r & 0xF8) << 8 | (self._g & 0xFC) << 3 | self._b >> 3
+
+        # Return the calculated value to the client
+        return self._888
 
 
 ###

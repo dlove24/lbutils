@@ -129,9 +129,20 @@ class Pixel:
             The X co-ordinate value.
     y: int
             The Y co-ordinate value
+    x_y: int
+            A tuple representing the co-ordinate (x ,y)
+
+    Methods
+    ----------
+
+    * `move_to()`. Move the internal co-ordinate to the value (x, y)
     """
 
-    def __init__(self, x: int, y: int):
+    ##
+    ## Constructors
+    ##
+
+    def __init__(self, x: int, y: int) -> None:
         """Creates a `Pixel` instance holding the specified `x` and `y` co-
         ordinates, together representing the Cartesian point '(`x`, `y`)'.
 
@@ -143,8 +154,63 @@ class Pixel:
         y: int
                 The initial Y co-ordinate value
         """
-        self.y = int(x)
-        self.x = int(y)
+        self.x = int(x)
+        self.y = int(y)
+
+    ##
+    ## Properties
+    ##
+
+    @property
+    def x_y(self) -> tuple:
+        """Sets, or returns, the internal `x` and `y` co-ordinates as a tuple.
+
+        When _reading_ from this property, a tuple is returned with the first
+        value of the tuple representing the `x` co-ordinate and the second
+        value of the tuple representing the `y` co-ordinate.
+
+        When _writing_ to this property the first value of the tuple represents
+        the `x` co-ordinate, and the second value of the tuple represents the `y`
+        co-ordinate. All other values in the tuple are ignored.
+
+        Raises
+        ------
+
+        ValueError:
+            If the `x` or `y` co-ordinate in the `xy` tuple cannot be converted
+            to an integer.
+        """
+        return [self._x, self._y]
+
+    @x_y.setter
+    def x_y(self, xy: tuple) -> None:
+        self.x = int(xy[0])
+        self.y = int(xy[1])
+
+    ##
+    ## Methods
+    ##
+
+    def move_to(self, xy: tuple) -> None:
+        """Sets, or returns, the internal `x` and `y` co-ordinates as a tuple.
+        An alias for the `x_y` property.
+
+        Parameters
+        ----------
+
+        xy: tuple
+            The first value of the `xy` tuple represents the `x` co-ordinate, and
+            the second value of the `xy` tuple represents the `y` co-ordinate.
+            All other values in the `xy` tuple are ignored.
+
+        Raises
+        ------
+
+        ValueError:
+            If the `x` or `y` co-ordinate in the `xy` tuple cannot be converted
+            to an integer.
+        """
+        self.x_y = xy
 
 
 class BoundPixel(Pixel):
@@ -190,6 +256,10 @@ class BoundPixel(Pixel):
             The maximum value allowed for the `y` co-ordinate
     """
 
+    ##
+    ## Constructors
+    ##
+
     def __init__(
         self,
         x: int,
@@ -199,7 +269,7 @@ class BoundPixel(Pixel):
         min_x: int = 0,
         min_y: int = 0,
         clip: bool = True,
-    ):
+    ) -> None:
         """Creates a `Pixel` instance holding the specified `x` and `y` co-
         ordinates, together representing the Cartesian point '(`x`, `y`)'. This
         `x` and `y` value is guaranteed to be maintained between `min_x` and
@@ -246,16 +316,16 @@ class BoundPixel(Pixel):
         """
 
         # Set-up the maximum and minimum parameters first
-        self.min_y = int(min_y)
-        self.max_y = int(max_y)
-
         self.min_x = int(min_x)
         self.max_x = int(max_x)
 
+        self.min_y = int(min_y)
+        self.max_y = int(max_y)
+
         # Now attempt to set the actual `x` and `y` inside those
         # parameters
-        self.y = int(y)
         self.x = int(x)
+        self.y = int(y)
 
         # Set the clipping switch
         self.clip = clip
@@ -265,7 +335,7 @@ class BoundPixel(Pixel):
     ##
 
     @property
-    def x(self):
+    def x(self) -> int:
         """The `x` co-ordinate of the `BoundPxiel`, checking that it lies within
         the specified `min_x` and `max_x` limits.
 
@@ -290,7 +360,7 @@ class BoundPixel(Pixel):
                 raise (ValueError("Pixel limits exceeded"))
 
     @x.setter
-    def x(self, value):
+    def x(self, value: int) -> None:
         if self.min_x <= value <= self.max_x:
             self._x = value
         else:
@@ -304,7 +374,7 @@ class BoundPixel(Pixel):
                 raise (ValueError("Pixel limits exceeded"))
 
     @property
-    def y(self):
+    def y(self) -> int:
         """The `y` co-ordinate of the `BoundPxiel`, checking that it lies within
         the specified `min_x` and `max_y` limits.
 
@@ -329,7 +399,7 @@ class BoundPixel(Pixel):
                 raise (ValueError("Pixel limits exceeded"))
 
     @y.setter
-    def y(self, value):
+    def y(self, value: int) -> None:
         if self.min_y <= value <= self.max_y:
             self._y = value
         else:

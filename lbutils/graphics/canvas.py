@@ -348,52 +348,6 @@ class Canvas(ABC):
              If `True` (the default) the rectangle is filled with the background
              colour: otherwise the rectangle is not filled.
         """
-
-    @abstractmethod
-    def write_char(
-        self,
-        x: int,
-        y: int,
-        utf8Char: str,
-        fg_colour: Type[graphics.Colour] = None,
-        pen: Type[graphics.Pen] = None,
-    ) -> int:
-        """Write a `utf8Char` character (using the current `font`) starting at
-        the pixel position (`x`, `y`) in the specified `colour`.
-
-        !!! note
-             Whilst the `utf8Char` character _must_ be a valid UTF-8
-             character, most fonts only support the equivalent of the (7-bit) ASCII character
-             set. This method _will not_ display character values that cannot be supported by
-             the underlying font. See the font description for the exact values that are
-             valid for the specific font being used.
-
-        Parameters
-        ----------
-
-        x: int
-             The X co-ordinate of the pixel for the character start position.
-        y: int
-             The Y co-ordinate of the pixel for the character start position.
-        utf8Char:
-             The character to write to the display.
-        fg_colour: Type[graphics.Colour], optional
-             The [`Colour`][lbutils.graphics.Colour] to be used when drawing the
-             line. If not specified, use the preference order for the foreground
-             colour of the `Canvas` to find a suitable colour.
-        pen: Type[graphics.Pen], optional
-             The [`Pen`][lbutils.graphics.Pen] to be used when drawing the line.
-             If not specified, use the preference order for the foreground colour
-             of the `Canvas` to find a suitable colour.
-
-        Returns
-        -------
-
-        int:
-             The X pixel co-ordinate immediately following the character written
-             in the specified font. This can be used to easily locate multiple
-             characters at a given Y position: see also `write_text()`.
-        """
         pass
 
     ##
@@ -534,8 +488,6 @@ class Canvas(ABC):
 
     def write_text(
         self,
-        x: int,
-        y: int,
         txt_str: str,
         fg_colour: Type[graphics.Colour] = None,
         pen: Type[graphics.Pen] = None,
@@ -553,10 +505,6 @@ class Canvas(ABC):
         Parameters
         ----------
 
-        x: int
-             The X co-ordinate of the pixel for the text start position.
-        y: int
-             The Y co-ordinate of the pixel for the text start position.
         txt_str:
              The string of characters to write to the display.
         fg_colour: Type[graphics.Colour], optional
@@ -571,7 +519,74 @@ class Canvas(ABC):
 
         if self.font is not None:
             for c in txt_str:
-                x = self.write_char(x, y, c, fg_colour=fg_colour, pen=pen)
+                self.cursor.x = self.write_char(
+                    self.cursor.x, self.cursor.y, c, fg_colour=fg_colour, pen=pen
+                )
+
+    def write_char(
+        self,
+        x: int,
+        y: int,
+        utf8Char: str,
+        fg_colour: Type[graphics.Colour] = None,
+        pen: Type[graphics.Pen] = None,
+    ) -> int:
+        """Write a `utf8Char` character (using the current `font`) starting at
+        the pixel position (`x`, `y`) in the specified `colour`.
+
+        !!! note
+            Whilst the `utf8Char` character _must_ be a valid UTF-8 character,
+            most fonts only support the equivalent of the (7-bit) ASCII character
+            set. This method _will not_ display character values that cannot be
+            supported by the underlying font. See the font description for the
+            exact values that are valid for the specific font being used.
+
+        Parameters
+        ----------
+
+        x: int
+            The X co-ordinate of the pixel for the character start position.
+        y: int
+            The Y co-ordinate of the pixel for the character start position.
+        utf8Char:
+            The character to write to the display.
+        fg_colour: Type[graphics.Colour], optional
+            The [`Colour`][lbutils.graphics.Colour] to be used when drawing the
+            character. If not specified, use the preference order for the
+            foreground colour of the `Canvas` to find a suitable colour.
+        pen: Type[graphics.Pen], optional
+            The [`Pen`][lbutils.graphics.Pen] to be used when drawing the line.
+            If not specified, use the preference order for the foreground colour
+            of the `Canvas` to find a suitable colour.
+
+        Returns
+        -------
+
+        int:
+            The X pixel co-ordinate immediately following the character written
+            in the specified font. This can be used to easily locate multiple
+            characters at a given Y position: see also `write_text()`.
+        """
+
+        fg_colour = self.select_fg_color(fg_colour=fg_colour, pen=pen)
+
+        # print("write_char(x={},y={},c={},colour={})".format(x,y,utf8Char,colour))
+        if self.font is None:
+            return x
+        # {offset, width, height, advance cursor, x offset, y offset} */
+        self.font.set_position(utf8Char)
+        _offset, _width, _height, _cursor, x_off, y_off = self.font.current_glyph
+        # print("_offset",_offset)
+        # print("Width",_width)
+        # print("height",_height)
+        # print("cursor",_cursor)
+        # print("xoff",x_off)
+        # print("yoff",y_off)
+        for y1 in range(_height):
+            for x1 in range(_width):
+                if self.font.get_next():
+                    self.write_pixel(x + x1 + x_off, y + y1 + y_off, fg_colour)
+        return x + _cursor
 
 
 class FrameBufferCanvas(Canvas):
