@@ -177,6 +177,14 @@ class Canvas(ABC):
     * `read_pixel()`. Return the [`Colour`][lbutils.graphics.colours.Colour] of
     the specified pixel.
 
+    * `restore_origin()`. Restore the current value of the [`cursor`]
+    [lbutils.graphics.helpers.BoundPixel] to a previously saved value. This
+    save value is set with `save_origin()`.
+
+    * `save_origin()`. Save the current value of the [`cursor`]
+    [lbutils.graphics.helpers.BoundPixel]. Can be restored with
+    `restore_origin()`.
+
     * `write_char()`. Write a character (using the current font) starting at the
     stated pixel position.
 
@@ -564,6 +572,22 @@ class Canvas(ABC):
             to an integer.
         """
         self.cursor.x_y = xy
+
+    def restore_origin(self) -> None:
+        """Restore the current value of the [`cursor`]
+        [lbutils.graphics.helpers.BoundPixel] to a previously saved value.
+
+        This saved value is set with [`save_origin`][lbutils.graphics.Canvas.save_origin].
+        """
+        self.cursor.x_y = self.origin
+
+    def save_origin(self) -> None:
+        """Save the current value of the [`cursor`]
+        [lbutils.graphics.helpers.BoundPixel].
+
+        Can be restored with [`restore_origin`][lbutils.graphics.Canvas.restore_origin].
+        """
+        self.origin = self.cursor.x_y
 
     def write_text(
         self,

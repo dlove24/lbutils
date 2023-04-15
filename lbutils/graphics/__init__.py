@@ -58,6 +58,31 @@ functions which ease the abstraction of the main graphics Canvas library, e.g.
 class as being the most suitable classes for re-use in other drawing and graphics
 routines.
 
+!!! Note "Drawing Side-Effects"
+    The `Canvas` will also maintain an internal [`cursor`]
+    [lbutils.graphics.helpers.BoundPixel], representing the current
+    [`x`][lbutils.graphics.Canvas.x] and [`y`][lbutils.graphics.Canvas.y]
+    drawing co-ordinates. For many of the above methods, this internal state
+    will be modified to point to the _next_ location which
+    is commonly used in sequence. For example the
+    [`write_text`][lbutils.graphics.Canvas.write_text] updates the
+    [`cursor`][lbutils.graphics.helpers.BoundPixel] to point to position at the
+    end of the text string. Or the [`draw_line`]
+    [lbutils.graphics.Canvas.draw_line] method will change the [`cursor`]
+    [lbutils.graphics.helpers.BoundPixel] to the end of the line just drawn.
+    This behaviour makes it easier to sequence multiple drawing methods:
+    especially in the common case where a single origin is used to draw
+    multiple lines or other primitives in succession to create more complex
+    shapes.
+
+    If a single origin is to be maintained, an application can take a 'snapshot'
+    of the cursor position using the [`save_origin`]
+    [lbutils.graphics.Canvas.save_origin] method before calling subsequent
+    drawing primitives . This snapshot of the drawing state can then be restored
+    to move the [`cursor`] [lbutils.graphics.helpers.BoundPixel] back to the
+    desired origin using the [`restore_origin`]
+    [lbutils.graphics.Canvas.restore_origin] method.
+
 ## Implementation
 
 The only methods _required_ to be implemented in sub-classes of [`Canvas`]
