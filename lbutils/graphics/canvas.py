@@ -151,6 +151,12 @@ class Canvas(ABC):
          A read-only value for the height of the canvas in pixels.
     width:
          A read-only value for the width of the canvas in pixels.
+    x: int
+            The X co-ordinate value of the `cursor`
+    y: int
+            The Y co-ordinate value of the `cursor`
+    x_y: int
+            A tuple representing the co-ordinate (x ,y) of the `cursor`
 
     Methods
     ----------
@@ -162,6 +168,8 @@ class Canvas(ABC):
     as the interior colour.
 
     * `fill_screen()`. Fill the entire `Canvas` with the background colour.
+
+    * `move_to()`. Move the internal `cursor` to the co-ordinate values (x, y).
 
     * `read_pixel()`. Return the [`Colour`][lbutils.graphics.colours.Colour] of
     the specified pixel.
@@ -218,12 +226,59 @@ class Canvas(ABC):
         self.pen = None
 
         self.cursor = graphics.helpers.BoundPixel(
-            0, 0, min_x=0, max_x=width, min_y=0, max_y=height
+            0, 0, min_x=0, max_x=width, min_y=0, max_y=height, clip=True
         )
 
     ##
     ## Properties
     ##
+
+    @property
+    def x(self) -> int:
+        """The `x` co-ordinate of the `cursor`; checking that it lies within the
+        specified `width` of the `Canvas` when setting."""
+        return self.cursor.x
+
+    @x.setter
+    def x(self, value: int) -> None:
+        self.cursor.x = value
+
+    @property
+    def y(self) -> int:
+        """The `y` co-ordinate of the `cursor`; checking that it lies within the
+        specified `height` of the `Canvas` when setting."""
+        return self.cursor.y
+
+    @y.setter
+    def y(self, value: int) -> None:
+        self.cursor.y = value
+
+    @property
+    def x_y(self) -> tuple:
+        """Sets, or returns, the internal `x` and `y` co-ordinates of the
+        `cursor` as tuple.
+
+        When _reading_ from this property, a tuple is returned with the first
+        value of the tuple representing the `x` co-ordinate and the second
+        value of the tuple representing the `y` co-ordinate.
+
+        When _writing_ to this property the first value of the tuple represents
+        the `x` co-ordinate, and the second value of the tuple represents the `y`
+        co-ordinate. All other values in the tuple are ignored.
+
+        Raises
+        ------
+
+        ValueError:
+            If the `x` or `y` co-ordinate in the `xy` tuple cannot be converted
+            to an integer.
+        """
+        return self.cursor.x_y
+
+    @x_y.setter
+    def x_y(self, xy: tuple) -> None:
+        self.cursor.x = int(xy[0])
+        self.cursor.y = int(xy[1])
 
     ##
     ## Abstract Methods. These must be defined in sub-classes.
@@ -486,6 +541,27 @@ class Canvas(ABC):
             filled=True,
         )
 
+    def move_to(self, xy: tuple) -> None:
+        """Sets the internal `x` and `y` co-ordinates of the `cursor` as a
+        tuple. An alias for the `x_y` property of `Canvas`.
+
+        Parameters
+        ----------
+
+        xy: tuple
+            The first value of the `xy` tuple represents the `x` co-ordinate, and
+            the second value of the `xy` tuple represents the `y` co-ordinate.
+            All other values in the `xy` tuple are ignored.
+
+        Raises
+        ------
+
+        ValueError:
+            If the `x` or `y` co-ordinate in the `xy` tuple cannot be converted
+            to an integer.
+        """
+        self.cursor.x_y = xy
+
     def write_text(
         self,
         txt_str: str,
@@ -518,9 +594,13 @@ class Canvas(ABC):
         """
 
         if self.font is not None:
-            for c in txt_str:
+            for character in txt_str:
                 self.cursor.x = self.write_char(
-                    self.cursor.x, self.cursor.y, c, fg_colour=fg_colour, pen=pen
+                    self.cursor.x,
+                    self.cursor.y,
+                    character,
+                    fg_colour=fg_colour,
+                    pen=pen,
                 )
 
     def write_char(

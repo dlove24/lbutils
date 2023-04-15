@@ -128,14 +128,14 @@ class Pixel:
     x: int
             The X co-ordinate value.
     y: int
-            The Y co-ordinate value
+            The Y co-ordinate value.
     x_y: int
-            A tuple representing the co-ordinate (x ,y)
+            A tuple representing the co-ordinate (x ,y).
 
     Methods
     ----------
 
-    * `move_to()`. Move the internal co-ordinate to the value (x, y)
+    * `move_to()`. Move the internal co-ordinate to the value (x, y).
     """
 
     ##
@@ -192,8 +192,8 @@ class Pixel:
     ##
 
     def move_to(self, xy: tuple) -> None:
-        """Sets, or returns, the internal `x` and `y` co-ordinates as a tuple.
-        An alias for the `x_y` property.
+        """Sets the internal `x` and `y` co-ordinates as a tuple. An alias for
+        the `x_y` property.
 
         Parameters
         ----------
@@ -251,9 +251,9 @@ class BoundPixel(Pixel):
             The minimum value allowed for the `y` co-ordinate. Defaults to
             `0`.`
     max_x: int
-            The maximum value allowed for the `x` co-ordinate
+            The maximum value allowed for the `x` co-ordinate.
     max_y: int
-            The maximum value allowed for the `y` co-ordinate
+            The maximum value allowed for the `y` co-ordinate.
     """
 
     ##
@@ -282,11 +282,11 @@ class BoundPixel(Pixel):
         x: int
                 The initial X co-ordinate value.
         y: int
-                The initial Y co-ordinate value
+                The initial Y co-ordinate value.
         max_x: int
-                The maximum value allowed for the `x` co-ordinate
+                The maximum value allowed for the `x` co-ordinate.
         max_y: int
-                The maximum value allowed for the `y` co-ordinate
+                The maximum value allowed for the `y` co-ordinate.
         min_x: int, optional
                 The minimum value allowed for the `x` co-ordinate. Defaults to
                 `0`.
