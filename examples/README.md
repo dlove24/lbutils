@@ -8,8 +8,8 @@ examples will require extension, or further development in real applications.
 However they should give some idea of what those more complete applications may
 look like.
 
-- 'drivers'. Collection of driver modules. e.g. for seven segment displays
-- 'pmods'. Examples and sample applications for the drivers of the
+- `drivers`. Collection of driver modules. e.g. for seven segment displays
+- `pmod`. Examples and sample applications for the drivers of the
 [Digilent peripheral modules](https://digilent.com/reference/pmod/start)
 provided by the library.
 
