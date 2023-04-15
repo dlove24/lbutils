@@ -187,4 +187,3 @@ while True:
         oled_display.fill_screen(color)
 
         utime.sleep(1)
-
