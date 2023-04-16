@@ -561,8 +561,7 @@ class OLEDrgb(graphics.Canvas):
 
         to draw a line from the current [`cursor`]
         [lbutils.graphics.Canvas.cursor] to the co-ordinate '(0, 20)'. This will
-        also use the current [`fg_colour`][lbutils.graphics.Canvas.fg_colour] of
-        the canvas when drawing the line.
+        also use the current `fg_colour` of the canvas when drawing the line.
 
         To change the line colour, either set the [`Pen`][lbutils.graphics.Pen],
         or call the method with the colour set directly as
@@ -654,44 +653,58 @@ class OLEDrgb(graphics.Canvas):
 
     def draw_rectangle(
         self,
-        x: int,
-        y: int,
         width: int,
         height: int,
+        start: tuple = None,
         fg_colour: Type[graphics.Colour] = None,
         bg_colour: Type[graphics.Colour] = None,
         pen: Type[graphics.Pen] = None,
         style: graphics.RECTANGLE_STYLE = "FILLED",
     ) -> None:
-        """Draw a rectangle at the co-ordinate (`x`, `y`) of `height` and
-        `width`, using the `linecolour` for the frame of the rectangle and
-        `fillcolour` as the interior colour.
+        """Draw a rectangle at the `start` co-ordinate, or the current cursor
+        postion if `start` is `None`. In either case the rectangle will be drawn
+        to the specified `height` and `width`, using the either the specified or
+        `Canvas` `fg_colour` for the frame of the rectangle. If the `style` is
+        `"FILLED"` then  either the specified `bg_colour` or `Canvas` `bg_color`
+        as the interior colour. If the `style` is `"FRAMED"` then the interior
+        of the rectangle is not drawn.
+
+        See either [`select_fg_color`]
+        [lbutils.graphics.Canvas.select_fg_color] for more details of the
+        foreground colour selection algorithm; or [`select_bg_color`]
+        [lbutils.graphics.Canvas.select_bg_color] for more details of the
+        background colour selection algorithm. By default the rectangle is
+        `"FILLED"` and so both the background and foreground colours are used.
 
         Parameters
         ----------
 
-        x: int
-            The X co-ordinate of the pixel for the start point of the rectangle.
-        y: int
-            The Y co-ordinate of the pixel for the start point of the rectangle.
+        start: tuple
+             The (x, y) co-ordinate of the _start_ point of the rectangle, with
+             the first value of the `tuple` representing the `x` co-ordinate and
+             the second value of the `tuple` representing the `y` co-ordinate. If
+             the `start` is `None`, the default, then the current value of the
+             [`cursor`][lbutils.graphics.Canvas.cursor] is used as the start
+             point of the rectangle. Values beyond the first and second entries
+             of the `tuple` are ignored.
         width: int
-            The width of the rectangle in pixels.
+             The width of the rectangle in pixels.
         height: int
-            The hight of the rectangle in pixels.
+             The hight of the rectangle in pixels.
         fg_colour: Type[graphics.Colour], optional
-            The [`Colour`][lbutils.graphics.Colour] to be used when drawing the
-            rectangle. If not specified, use the preference order for the
-            foreground colour of the `Canvas` to find a suitable colour.
+             The [`Colour`][lbutils.graphics.Colour] to be used when drawing the
+             rectangle. If not specified, use the preference order for the
+             foreground colour of the `Canvas` to find a suitable colour.
         bg_colour: Type[graphics.Colour], optional
-            The [`Colour`][lbutils.graphics.Colour] to be used when filling the
-            rectangle. If not specified, use the preference order for the
-            background colour of the `Canvas` to find a suitable colour.
+             The [`Colour`][lbutils.graphics.Colour] to be used when filling the
+             rectangle. If not specified, use the preference order for the
+             background colour of the `Canvas` to find a suitable colour.
         pen: Type[graphics.Pen], optional
-            The [`Pen`][lbutils.graphics.Pen] to be used when drawing the
-            rectangle, using the foreground colour for the frame and the
-            background colour for the fill. If not specified, use the
-            preference order for the foreground and background colours of the
-            `Canvas` to find suitable colours.
+             The [`Pen`][lbutils.graphics.Pen] to be used when drawing the
+             rectangle, using the forground colour for the frame and the
+             background colour for the fill. If not specified, use the preference
+             order for the foreground and background colours of the `Canvas` to
+             find suitable colours.
         style: RECTANGLE_STYLE, optional
              Set the style for the rectangle to draw. The defined style,
              `FILLED`, sets the interior of the rectangle to the the
@@ -707,21 +720,38 @@ class OLEDrgb(graphics.Canvas):
         else:
             self._write(_FILL, b"\x00")
 
-        # Send the drawing command (the colour data is ignored if the
-        # rectangle is not filled)
-        data = ustruct.pack(
-            self._ENCODE_RECT,
-            x,
-            y,
-            x + width - 1,
-            y + height - 1,
-            fg_colour.bR,
-            fg_colour.bG,
-            fg_colour.bB,
-            bg_colour.bR,
-            bg_colour.bG,
-            bg_colour.bB,
-        )
+        if start is None:
+            # Send the drawing command (the colour data is ignored if the
+            # rectangle is not filled)
+            data = ustruct.pack(
+                self._ENCODE_RECT,
+                self.cursor.x,
+                self.cursor.y,
+                self.cursor.x + width - 1,
+                self.cursor.y + height - 1,
+                fg_colour.bR,
+                fg_colour.bG,
+                fg_colour.bB,
+                bg_colour.bR,
+                bg_colour.bG,
+                bg_colour.bB,
+            )
+        else:
+            # Send the drawing command (the colour data is ignored if the
+            # rectangle is not filled)
+            data = ustruct.pack(
+                self._ENCODE_RECT,
+                start[0],
+                start[1],
+                start[0] + width - 1,
+                start[1] + height - 1,
+                fg_colour.bR,
+                fg_colour.bG,
+                fg_colour.bB,
+                bg_colour.bR,
+                bg_colour.bG,
+                bg_colour.bB,
+            )
 
         self._write(_DRAWRECT, data)
 

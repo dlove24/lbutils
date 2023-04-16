@@ -105,17 +105,6 @@ available. The details of the accelerated methods, including any changes to the
 algorithms used by [`Canvas`][lbutils.graphics.Canvas] can be found in the
 documentation for the sub-class itself.
 
-!!! Note "Sub-Classes Should Ignore `from_origin` Methods"
-    Even for sub-classes which choose to `override` (i.e. re-implement) methods
-    from the `Canvas`, it is recommended _not_ to override the equivalent method
-    with the `from_origin` tag. For instance, sub-classes that re-implement the
-    [`draw_line`][lbutils.graphics.Canvas.draw_line] method _should not_ also
-    re-implement the [`draw_line_from_origin`]
-    [lbutils.graphics.Canvas.draw_line_from_origin] method. Internally the
-    `from_origin` methods will also call the 'normal' methods when drawing, so
-    any accelerated implementation for the 'normal' methods should automatically
-    apply to both.
-
 ## Tested Implementations
 
 *   Raspberry Pi Pico W (MicroPython 3.4)

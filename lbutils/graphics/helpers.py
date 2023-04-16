@@ -38,6 +38,9 @@ try:
 except ImportError:
     from lbutils.typing import Type
 
+# Import the math library (needed for polar co-ordinates)
+from math import cos, sin
+
 from .colours import COLOUR_WHITE, COLOUR_BLACK, Colour
 
 ###
@@ -135,7 +138,12 @@ class Pixel:
     Methods
     ----------
 
-    * `move_to()`. Move the internal co-ordinate to the value (x, y).
+    * `move_to()`. Move the internal co-ordinate to the value (x, y). An alias
+    for the [`x_y`][lbutils.graphics.Pixel.x_y] property.
+    * `offset()`. Returns a `tuple` representing the (x, y) co-ordinate of the
+    current `Pixel` with the specified Cartesian off-set applied.
+    * `offset_polar()`. Returns a `tuple` representing the (x, y) co-ordinate of
+    the current `Pixel` with the specified Polar off-set applied.
     """
 
     ##
@@ -152,7 +160,7 @@ class Pixel:
         x: int
                 The initial X co-ordinate value.
         y: int
-                The initial Y co-ordinate value
+                The initial Y co-ordinate value.
         """
         self.x = int(x)
         self.y = int(y)
@@ -211,6 +219,107 @@ class Pixel:
             to an integer.
         """
         self.x_y = xy
+
+    def offset(self, x: int = 0, y: int = 0) -> tuple:
+        """Returns a `tuple` representing the (x, y) co-ordinate of the current
+        `Pixel` with the specified Cartesian off-set applied.
+
+        Example
+        -------
+
+        Given a `Pixel` object called `origin` with representing the co-ordinates
+        '(0, 10)'
+
+        ````python
+        origin = Pixel(0, 10)
+        ````
+
+        then calling
+
+        ````python
+        new_origin = origin.offset(10, 10)
+        ````
+
+        or better
+
+        ````python
+        new_origin = origin.offset(x = 10, y = 10)
+        ````
+
+        will return the tuple `[10, 20]` as `new_origin`.
+
+        Parameters
+        ----------
+
+        x: int, optional
+            The offset to apply to the x co-ordinate value of the `Pixel`.
+        y: int, optional
+            The offset to apply to the x co-ordinate value of the `Pixel`.
+
+        Returns
+        -------
+
+        tuple:
+            The (x, y) co-ordinate as a two value `tuple`  with the
+            first value of the `tuple` representing the `x` co-ordinate and the
+            second value of the `tuple` representing the `y` co-ordinate.
+        """
+        return [self.x + x, self.y + y]
+
+    def offset_polar(self, r: int = 0, theta: int = 0) -> tuple:
+        """Returns a `tuple` representing the (x, y) co-ordinate of the current
+        `Pixel` with the specified Polar off-set applied as the radius `r` and
+        angle `theta`.
+
+        !!! Note "Floating Point Calculations"
+            Although the _return_ values of the `offset_polar` function will be
+            integers, floating point routines are used internally to calculate
+            the sine and cosine of the angle `theta`. This may result in this
+            routine being slower than expected on some platforms.
+
+        Example
+        -------
+
+        Given a `Pixel` object called `origin` with representing the co-ordinates
+        '(0, 10)'
+
+        ````python
+        origin = Pixel(0, 10)
+        ````
+
+        then calling
+
+        ````python
+        new_origin = origin.offset_polar(13, 22)
+        ````
+
+        or better
+
+        ````python
+        new_origin = origin.offset(r = 13, theta = 22)
+        ````
+
+        will return the tuple `[12, 5]` as `new_origin`.
+
+        Parameters
+        ----------
+
+        r: int, optional
+            The offset to apply to the x co-ordinate value of the `Pixel`,
+            specified as the _radius_ of the Polar co-ordinate.
+        theta: int, optional
+            The offset to apply to the x co-ordinate value of the `Pixel`,
+            specified as the _angle_ of the Polar co-ordinate.
+
+        Returns
+        -------
+
+        tuple:
+            The (x, y) co-ordinate as a two value `tuple`  with the
+            first value of the `tuple` representing the `x` co-ordinate and the
+            second value of the `tuple` representing the `y` co-ordinate.
+        """
+        return [int(self.x + (r * cos(theta))), int(self.y + (r * sin(theta)))]
 
 
 class BoundPixel(Pixel):
@@ -297,9 +406,9 @@ class BoundPixel(Pixel):
         --------------
 
         As the `x` and `y` attributes of this class are compared on each write,
-        this class is by definition slower and potentially more resource intensive that
-        the underlying `Pixel` class. If the costs of the bounds-check are not required,
-        using the 'raw' `Pixel` class may be preferable.
+        this class is by definition slower and potentially more resource
+        intensive that the underlying `Pixel` class. If the costs of the bounds-
+        check are not required, using the 'raw' `Pixel` class may be preferable.
 
         !!! note
                 The parameter order is specified to allow easier definition
@@ -348,14 +457,10 @@ class BoundPixel(Pixel):
         if self.min_x <= value <= self.max_x:
             self._x = value
         else:
-            if self.clip:
-                if value > self.max_x:
-                    self._x = self.max_x
-                if value < self.min_x:
-                    self._x = self.min_x
-
-            else:
-                raise (ValueError("Pixel limits exceeded"))
+            if value > self.max_x:
+                self._x = self.max_x
+            if value < self.min_x:
+                self._x = self.min_x
 
     @property
     def y(self) -> int:
@@ -380,11 +485,7 @@ class BoundPixel(Pixel):
         if self.min_y <= value <= self.max_y:
             self._y = value
         else:
-            if self.clip:
-                if value > self.max_y:
-                    self._y = self.max_y
-                if value < self.min_y:
-                    self._y = self.min_y
-
-            else:
-                raise (ValueError("Pixel limits exceeded"))
+            if value > self.max_y:
+                self._y = self.max_y
+            if value < self.min_y:
+                self._y = self.min_y

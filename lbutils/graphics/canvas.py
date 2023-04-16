@@ -450,8 +450,7 @@ class Canvas(ABC):
 
         to draw a line from the current [`cursor`]
         [lbutils.graphics.Canvas.cursor] to the co-ordinate '(0, 20)'. This will
-        also use the current [`fg_colour`][lbutils.graphics.Canvas.fg_colour] of
-        the canvas when drawing the line.
+        also use the current `fg_colour` of the canvas when drawing the line.
 
         To change the line colour, either set the [`Pen`][lbutils.graphics.Pen],
         or call the method with the colour set directly as
@@ -503,21 +502,21 @@ class Canvas(ABC):
     @abstractmethod
     def draw_rectangle(
         self,
-        x: int,
-        y: int,
         width: int,
         height: int,
+        start: tuple = None,
         fg_colour: Type[graphics.Colour] = None,
         bg_colour: Type[graphics.Colour] = None,
         pen: Type[graphics.Pen] = None,
         style: RECTANGLE_STYLE = "FILLED",
     ) -> None:
-        """Draw a rectangle at the co-ordinate (`x`, `y`) of `height` and
-        `width`, using the either the specified or `Canvas` `fg_colour` for the
-        frame of the rectangle. If the `style` is `"FILLED"` then  either the
-        specified `bg_colour` or `Canvas` `bg_color` as the interior colour. If
-        the `style` is `"FRAMED"` then the interior of the rectangle is not
-        drawn.
+        """Draw a rectangle at the `start` co-ordinate, or the current cursor
+        postion if `start` is `None`. In either case the rectangle will be drawn
+        to the specified `height` and `width`, using the either the specified or
+        `Canvas` `fg_colour` for the frame of the rectangle. If the `style` is
+        `"FILLED"` then  either the specified `bg_colour` or `Canvas` `bg_color`
+        as the interior colour. If the `style` is `"FRAMED"` then the interior
+        of the rectangle is not drawn.
 
         See either [`select_fg_color`]
         [lbutils.graphics.Canvas.select_fg_color] for more details of the
@@ -529,10 +528,14 @@ class Canvas(ABC):
         Parameters
         ----------
 
-        x: int
-             The X co-ordinate of the pixel for the start point of the rectangle.
-        y: int
-             The Y co-ordinate of the pixel for the start point of the rectangle.
+        start: tuple
+             The (x, y) co-ordinate of the _start_ point of the rectangle, with
+             the first value of the `tuple` representing the `x` co-ordinate and
+             the second value of the `tuple` representing the `y` co-ordinate. If
+             the `start` is `None`, the default, then the current value of the
+             [`cursor`][lbutils.graphics.Canvas.cursor] is used as the start
+             point of the rectangle. Values beyond the first and second entries
+             of the `tuple` are ignored.
         width: int
              The width of the rectangle in pixels.
         height: int
@@ -691,8 +694,7 @@ class Canvas(ABC):
         fill_colour = self.select_bg_color(bg_colour=bg_colour)
 
         self.draw_rectangle(
-            0,
-            0,
+            start=[0, 0],
             width=self.width,
             height=self.height,
             fg_colour=fill_colour,
@@ -745,28 +747,39 @@ class Canvas(ABC):
              of the `Canvas` to find a suitable colour.
         """
 
+        # Check to see if we have a valid font: if not things
+        # end here
         if self.font is not None:
+            # If the `start` has been given, move the cursor
+            # to that co-ordinate
+            if start is not None:
+                self.cursor.x_y = start
+
+            # Now write the string. Note that we set the `start`
+            # of the `write_char()` method to `None` to hand control
+            # of the cursor to that method.
             for character in txt_str:
                 self.write_char(
-                    character,
+                    start=None,
+                    utf8_char=character,
                     fg_colour=fg_colour,
                     pen=pen,
                 )
 
     def write_char(
         self,
-        utf8Char: str,
+        utf8_char: str,
         start: tuple = None,
         fg_colour: Type[graphics.Colour] = None,
         pen: Type[graphics.Pen] = None,
     ) -> None:
-        """Write a `utf8Char` character (using the current `font`) starting at
+        """Write a `utf8_char` character (using the current `font`) starting at
         the pixel position (`x`, `y`) of the `cursor` in the specified `colour`.
         See [`select_fg_color`][lbutils.graphics.Canvas.select_fg_color] for
         more details of the colour selection algorithm.
 
         !!! note
-            Whilst the `utf8Char` character _must_ be a valid UTF-8 character,
+            Whilst the `utf8_char` character _must_ be a valid UTF-8 character,
             most fonts only support the equivalent of the (7-bit) ASCII character
             set. This method _will not_ display character values that cannot be
             supported by the underlying font. See the font description for the
@@ -775,7 +788,7 @@ class Canvas(ABC):
         Parameters
         ----------
 
-        utf8Char:
+        utf8_char:
             The character to write to the display.
         start: tuple, optional
              The (x, y) co-ordinate of the _start_ point of the character, with
@@ -795,11 +808,21 @@ class Canvas(ABC):
             of the `Canvas` to find a suitable colour.
         """
 
+        # Work out what the forground colour should be
         fg_colour = self.select_fg_color(fg_colour=fg_colour, pen=pen)
 
-        self.font.set_position(utf8Char)
+        # If a `start` has been specified, then move the cursor to
+        # that co-ordinate. Otherwise we assume the cursor is in the
+        # right place
+        if start is not None:
+            self.cursor.x_y = start
+
+        # Get the parameters we need to draw the specified glyph in the
+        # current font
+        self.font.set_position(utf8_char)
         _offset, _width, _height, _cursor, x_off, y_off = self.font.current_glyph
 
+        # Draw the glyph at the current cursor position
         for y1 in range(_height):
             for x1 in range(_width):
                 if self.font.get_next():
@@ -808,6 +831,9 @@ class Canvas(ABC):
                         self.cursor.y + y1 + y_off,
                         fg_colour,
                     )
+
+        # Move the cursor to the `x` position at the end of the glyph.
+        # This is also where the next character should be drawn
         self.cursor.x += _cursor
 
     ##
