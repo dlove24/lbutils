@@ -4,7 +4,7 @@ All releases should be on [PyPi](https://pypi.org/project/lbutils-mp/), and also
 
 ## 2023-04-16: lbutils 0.2.4
 
-* New
+### New
 
 * Add a user `origin` to the `Canvas` library, which is assumed to be under the users control. This
 makes it easier for the user to specify a 'drawing origin' for the drawing primitives
@@ -12,7 +12,7 @@ makes it easier for the user to specify a 'drawing origin' for the drawing primi
 co-ordinate offsets. With the changes to the drawing primitives, this should make it easier to make
 small changes between calls to drawing primitives.
 
-* Changed
+### Changed
 
 * Changed the API of the drawing primitives to allow the user to either use the internal `cursor` by default: or to use an ad-hoc `start` co-ordinate.
 * Removed the use of Boolean flags in the API, to make the intent of the API clearer to readers of the code. 
