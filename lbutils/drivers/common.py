@@ -20,20 +20,10 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Drivers for low-level components, including those using the SPI or I2C
-busses. This is mostly a collection of drivers, some third-party, which provide
-low-level access to devices. In most cases additional code will be required to
-_use_ these devices: the focus of the code in here is only on providing _access_
-to those devices.
-
-Examples for how to use the library can be found in the '`examples`' folder: or in
-the documentation for specific classes. In some cases the examples will require a
-specific example circuit: where this is the case, in most cases classes will
-additionally provide an example on [WokWi](https://wokwi.com).
-
-!!! Note
-    The Digilent '`pmod`' devices are split into their own special section, and
-    should be imported using the '`pmod`' libraries.
+"""Common libraries and definitions for the for low-level devices. This module
+contains mostly helper and other utility definitions that are used by more than
+one driver. In most cases the services provided by this module are not meant to
+be used directly by end-user code.
 
 Tested Implementations
 ----------------------
@@ -43,8 +33,15 @@ This version is written for MicroPython 3.4, and has been tested on:
   * Raspberry Pi Pico H/W
 """
 
-### Expose the `drivers` module interface as a full package
-from .common import PIN_ON_SENSE
+###
+### Enumerations. MicroPython doesn't have actual an actual `enum` (yet), so
+### these serve as common cases where a selection of values need to be defined
+###
 
-from .seven_segment import SegDisplay
-from .seven_segment_hex import SegHexDisplay
+PIN_ON_SENSE = {"HIGH", "LOW"}
+"""Sets the device sense for 'ON'.
+
+When set to `HIGH` the GPIO pins need to be set 'high' ('1') for the device
+input to turn on. When set to `LOW` the GPIO pins need to be set 'low' ('0') for
+the device input to turn on.
+"""

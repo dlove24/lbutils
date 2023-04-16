@@ -38,7 +38,10 @@ try:
 except ImportError:
     from lbutils.typing import Type
 
-from .colours import Colour, COLOUR_WHITE, COLOUR_BLACK
+# Import the math library (needed for polar co-ordinates)
+from math import cos, sin
+
+from .colours import COLOUR_WHITE, COLOUR_BLACK, Colour
 
 ###
 ### Classes
@@ -52,7 +55,7 @@ class Pen:
     colour and line values; for instance using two pens to allow a swap between
     'highlight' and 'normal' text colours. This can be accomplished by defining
     the foreground and background colour of the
-    [`Canvas`][lbutils.graphics.canvas] as needed: this class simply makes that
+    [`Canvas`][lbutils.graphics.Canvas] as needed: this class simply makes that
     switch easier.
 
     Example
@@ -114,7 +117,7 @@ class Pixel:
     origin where lines are being drawn to and from.
 
     !!! note "Implementation Defined Origin"
-            As for the [`Canvas`][lbutils.graphics.canvas] class, the
+            As for the [`Canvas`][lbutils.graphics.Canvas] class, the
             interpretation of the point '(0, 0)' is defined by the underlying
             graphics implementation. For instance the '(0, 0)' point may
             represent the top-left corner or the canvas, or the bottom- left hand
@@ -135,7 +138,12 @@ class Pixel:
     Methods
     ----------
 
-    * `move_to()`. Move the internal co-ordinate to the value (x, y).
+    * `move_to()`. Move the internal co-ordinate to the value (x, y). An alias
+    for the [`x_y`][lbutils.graphics.Pixel.x_y] property.
+    * `offset()`. Returns a `tuple` representing the (x, y) co-ordinate of the
+    current `Pixel` with the specified Cartesian off-set applied.
+    * `offset_polar()`. Returns a `tuple` representing the (x, y) co-ordinate of
+    the current `Pixel` with the specified Polar off-set applied.
     """
 
     ##
@@ -152,7 +160,7 @@ class Pixel:
         x: int
                 The initial X co-ordinate value.
         y: int
-                The initial Y co-ordinate value
+                The initial Y co-ordinate value.
         """
         self.x = int(x)
         self.y = int(y)
@@ -212,6 +220,107 @@ class Pixel:
         """
         self.x_y = xy
 
+    def offset(self, x: int = 0, y: int = 0) -> tuple:
+        """Returns a `tuple` representing the (x, y) co-ordinate of the current
+        `Pixel` with the specified Cartesian off-set applied.
+
+        Example
+        -------
+
+        Given a `Pixel` object called `origin` with representing the co-ordinates
+        '(0, 10)'
+
+        ````python
+        origin = Pixel(0, 10)
+        ````
+
+        then calling
+
+        ````python
+        new_origin = origin.offset(10, 10)
+        ````
+
+        or better
+
+        ````python
+        new_origin = origin.offset(x = 10, y = 10)
+        ````
+
+        will return the tuple `[10, 20]` as `new_origin`.
+
+        Parameters
+        ----------
+
+        x: int, optional
+            The offset to apply to the x co-ordinate value of the `Pixel`.
+        y: int, optional
+            The offset to apply to the x co-ordinate value of the `Pixel`.
+
+        Returns
+        -------
+
+        tuple:
+            The (x, y) co-ordinate as a two value `tuple`  with the
+            first value of the `tuple` representing the `x` co-ordinate and the
+            second value of the `tuple` representing the `y` co-ordinate.
+        """
+        return [self.x + x, self.y + y]
+
+    def offset_polar(self, r: int = 0, theta: int = 0) -> tuple:
+        """Returns a `tuple` representing the (x, y) co-ordinate of the current
+        `Pixel` with the specified Polar off-set applied as the radius `r` and
+        angle `theta`.
+
+        !!! Note "Floating Point Calculations"
+            Although the _return_ values of the `offset_polar` function will be
+            integers, floating point routines are used internally to calculate
+            the sine and cosine of the angle `theta`. This may result in this
+            routine being slower than expected on some platforms.
+
+        Example
+        -------
+
+        Given a `Pixel` object called `origin` with representing the co-ordinates
+        '(0, 10)'
+
+        ````python
+        origin = Pixel(0, 10)
+        ````
+
+        then calling
+
+        ````python
+        new_origin = origin.offset_polar(13, 22)
+        ````
+
+        or better
+
+        ````python
+        new_origin = origin.offset(r = 13, theta = 22)
+        ````
+
+        will return the tuple `[12, 5]` as `new_origin`.
+
+        Parameters
+        ----------
+
+        r: int, optional
+            The offset to apply to the x co-ordinate value of the `Pixel`,
+            specified as the _radius_ of the Polar co-ordinate.
+        theta: int, optional
+            The offset to apply to the x co-ordinate value of the `Pixel`,
+            specified as the _angle_ of the Polar co-ordinate.
+
+        Returns
+        -------
+
+        tuple:
+            The (x, y) co-ordinate as a two value `tuple`  with the
+            first value of the `tuple` representing the `x` co-ordinate and the
+            second value of the `tuple` representing the `y` co-ordinate.
+        """
+        return [int(self.x + (r * cos(theta))), int(self.y + (r * sin(theta)))]
+
 
 class BoundPixel(Pixel):
     """Represents a Cartesian co-ordinate between limits. Used as a convenience
@@ -223,13 +332,13 @@ class BoundPixel(Pixel):
 
     Unlike the [`Pixel`][lbutils.graphics.Pixel] class, the `BoundPxiel` will
     also ensure that the X and Y co-ordinates are maintained between minimum and
-    maximum value for the `width` or `height`. This is useful for instances where a
-    cursor, for instance, must only take values within the limits of a display. It
-    can also be used where a clipping region is being defined to ensure that values
-    cannot lie outside the clipped region.
+    maximum value for the `width` or `height`. This is useful for instances where
+    a cursor, for instance, must only take values within the limits of a display.
+    It can also be used where a clipping region is being defined to ensure that
+    values cannot lie outside the clipped region.
 
     !!! note "Implementation Defined Origin"
-            As for the [`Canvas`][lbutils.graphics.canvas] class, the
+            As for the [`Canvas`][lbutils.graphics.Canvas] class, the
             interpretation of the point '(0, 0)' is defined by the underlying
             graphics implementation. For instance the '(0, 0)' point may
             represent the top-left corner or the canvas, or the bottom- left hand
@@ -268,7 +377,6 @@ class BoundPixel(Pixel):
         max_y: int,
         min_x: int = 0,
         min_y: int = 0,
-        clip: bool = True,
     ) -> None:
         """Creates a `Pixel` instance holding the specified `x` and `y` co-
         ordinates, together representing the Cartesian point '(`x`, `y`)'. This
@@ -293,19 +401,14 @@ class BoundPixel(Pixel):
         min_y: int, optional
                 The minimum value allowed for the `y` co-ordinate. Defaults to
                 `0`.`
-        clip: bool, optional
-                If set to `True`, the default, silently clip the `x` and `y` co-
-                ordinates to the specified limits. If set to `False`, instead
-                raise a `ValueError` if the `x` or `y` co-ordinates do not fall
-                into the allowed limits.
 
         Implementation
         --------------
 
         As the `x` and `y` attributes of this class are compared on each write,
-        this class is by definition slower and potentially more resource intensive that
-        the underlying `Pixel` class. If the costs of the bounds-check are not required,
-        using the 'raw' `Pixel` class may be preferable.
+        this class is by definition slower and potentially more resource
+        intensive that the underlying `Pixel` class. If the costs of the bounds-
+        check are not required, using the 'raw' `Pixel` class may be preferable.
 
         !!! note
                 The parameter order is specified to allow easier definition
@@ -327,9 +430,6 @@ class BoundPixel(Pixel):
         self.x = int(x)
         self.y = int(y)
 
-        # Set the clipping switch
-        self.clip = clip
-
     ##
     ## Properties
     ##
@@ -339,75 +439,53 @@ class BoundPixel(Pixel):
         """The `x` co-ordinate of the `BoundPxiel`, checking that it lies within
         the specified `min_x` and `max_x` limits.
 
-        Raises
-        ------
-
-        `ValueError`:
-                If `clip` is set to `False`
+        If the `x` co-ordinate does lie outside the specified region, set it to
+        the `min_x` or `max_x` limit as appropriate.
         """
         if self.min_x <= self._x <= self.max_x:
             return self._x
         else:
-            if self.clip:
-                if self._x > self.max_x:
-                    self._x = self.max_x
-                if self._x < self.min_x:
-                    self._x = self.min_x
+            if self._x > self.max_x:
+                self._x = self.max_x
+            if self._x < self.min_x:
+                self._x = self.min_x
 
-                return self._x
-
-            else:
-                raise (ValueError("Pixel limits exceeded"))
+            return self._x
 
     @x.setter
     def x(self, value: int) -> None:
         if self.min_x <= value <= self.max_x:
             self._x = value
         else:
-            if self.clip:
-                if value > self.max_x:
-                    self._x = self.max_x
-                if value < self.min_x:
-                    self._x = self.min_x
-
-            else:
-                raise (ValueError("Pixel limits exceeded"))
+            if value > self.max_x:
+                self._x = self.max_x
+            if value < self.min_x:
+                self._x = self.min_x
 
     @property
     def y(self) -> int:
         """The `y` co-ordinate of the `BoundPxiel`, checking that it lies within
         the specified `min_x` and `max_y` limits.
 
-        Raises
-        ------
-
-        `ValueError`:
-                If `clip` is set to `False`
+        If the `y` co-ordinate does lie outside the specified region, set it to
+        the `min_y` or `may_y` limit as appropriate.
         """
         if self.min_y <= self._y <= self.max_y:
             return self._y
         else:
-            if self.clip:
-                if self._y > self.max_y:
-                    self._y = self.max_y
-                if self._y < self.min_y:
-                    self._y = self.min_y
+            if self._y > self.max_y:
+                self._y = self.max_y
+            if self._y < self.min_y:
+                self._y = self.min_y
 
-                return self._y
-
-            else:
-                raise (ValueError("Pixel limits exceeded"))
+            return self._y
 
     @y.setter
     def y(self, value: int) -> None:
         if self.min_y <= value <= self.max_y:
             self._y = value
         else:
-            if self.clip:
-                if value > self.max_y:
-                    self._y = self.max_y
-                if value < self.min_y:
-                    self._y = self.min_y
-
-            else:
-                raise (ValueError("Pixel limits exceeded"))
+            if value > self.max_y:
+                self._y = self.max_y
+            if value < self.min_y:
+                self._y = self.min_y

@@ -26,7 +26,7 @@ odoled_displayrgb/start) , using the `lbutils.font` library and the
 `lbutils.drivers.SSD1331` display driver. This also gives an example of all the
 fonts in the font library, and serves as a functional test for the display.
 
-Tested Implemvcc_enabletations
+Tested Implementations
 ----------------------
 
 This version is written for MicroPython 3.4, and has been tested on:
@@ -78,24 +78,19 @@ vcc_enable.high()
 # Finally initialise the OLED display driver, and set the display
 # to black
 oled_display = OLEDrgb(spi_controller, data_cmd_pin, chip_sel_pin, reset_pin)
-
-##
-## Setup the frame buffer
-##
-
-buffer = bytearray(oled_display.width * oled_display.height * 2)
-fb = framebuf.FrameBuffer(
-    buffer, oled_display.width, oled_display.height, framebuf.RGB565
-)
-
-##
-## Font Examples
-##
-
-# Clear the display
 oled_display.fill_screen(graphics.colours.COLOUR_BLACK)
 
-# Display the `Font_08` font class in red
+# Set the origin for the tests
+oled_display.origin.x_y = [0, 0]
+
+##
+## Font Examples. Also showing different methods for setting the
+## start point of the `write_text` routine used to draw the
+## text in the specified font
+##
+
+# Display the `Font_08` font class in red, and set the cursor
+# of the `oled_display` manually each time.
 print("Running the screen test for the `Font_08` font...")
 
 oled_display.fg_colour = graphics.colours.COLOUR_RED
@@ -121,52 +116,46 @@ utime.sleep(10)
 # Clear the display
 oled_display.fill_screen(graphics.colours.COLOUR_BLACK)
 
-# Display the `Font_06` font class in green
+# Display the `Font_06` font class in green, and set the cursor
+# at the start of each call to `write_text`
 print("Running the screen test for the `Font_06` font...")
 
 oled_display.fg_colour = graphics.colours.COLOUR_LIME
 oled_display.font = fonts.Font_06()
 
-oled_display.x_y = [0, 20]
-oled_display.write_text("ABCDEFGHIJKLMN")
-
-oled_display.x_y = [0, 30]
-oled_display.write_text("OPQRSTUVWXYZ")
-
-oled_display.x_y = [0, 40]
-oled_display.write_text("abcdefghijklmn")
-
-oled_display.x_y = [0, 50]
-oled_display.write_text("opqrstuvwxyz")
-
-oled_display.x_y = [0, 60]
-oled_display.write_text("0123456789")
+oled_display.write_text(start=[0, 20], txt_str="ABCDEFGHIJKLMN")
+oled_display.write_text(start=[0, 30], txt_str="OPQRSTUVWXYZ")
+oled_display.write_text(start=[0, 40], txt_str="abcdefghijklmn")
+oled_display.write_text(start=[0, 50], txt_str="opqrstuvwxyz")
+oled_display.write_text(start=[0, 60], txt_str="0123456789")
 
 utime.sleep(10)
 
 # Clear the display
 oled_display.fill_screen(graphics.colours.COLOUR_BLACK)
 
-# Display the `Org_01` font class in blue
+# Display the `Org_01` font class in blue, and use the origin
+# with an offset to display the text using `write_text`
 print("Running the screen test for the `Org_01` font...")
 
 oled_display.fg_colour = graphics.colours.COLOUR_BLUE
 oled_display.font = fonts.Org_01()
 
-oled_display.x_y = [0, 20]
-oled_display.write_text("ABCDEFGHIJKLMN")
-
-oled_display.x_y = [0, 30]
-oled_display.write_text("OPQRSTUVWXYZ")
-
-oled_display.x_y = [0, 40]
-oled_display.write_text("abcdefghijklmn")
-
-oled_display.x_y = [0, 50]
-oled_display.write_text("opqrstuvwxyz")
-
-oled_display.x_y = [0, 60]
-oled_display.write_text("0123456789")
+oled_display.write_text(
+    start=oled_display.origin.offset(y=20), txt_str="ABCDEFGHIJKLMN"
+)
+oled_display.write_text(
+    start=oled_display.origin.offset(y=30), txt_str="OPQRSTUVWXYZ   "
+)
+oled_display.write_text(
+    start=oled_display.origin.offset(y=40), txt_str="abcdefghijklmn "
+)
+oled_display.write_text(
+    start=oled_display.origin.offset(y=50), txt_str="opqrstuvwxyz   "
+)
+oled_display.write_text(
+    start=oled_display.origin.offset(y=60), txt_str="0123456789     "
+)
 
 utime.sleep(10)
 

@@ -83,6 +83,8 @@ try:
 except ImportError:
     print("The Python type library isn't present. Ignoring.")
 
+from .common import PIN_ON_SENSE
+
 ##
 ## Constants
 ##
@@ -181,7 +183,7 @@ class SegHexDisplay:
             for segment in range(7):
                 self.pin_list.append(Pin(gpio_request[segment], Pin.OUT))
 
-    def display(self, character: Union[int, str], inverted: bool = False) -> None:
+    def display(self, character: Union[int, str], pin_on: PIN_ON_SENSE = "LOW") -> None:
         """Display the given `character` on the seven-segment display, using the
         `_char_list` as a guide for which pins to turn on or off. By default the
         `display` method will use the entries in the `_char_list` directly: if
@@ -204,13 +206,12 @@ class SegHexDisplay:
 
             If the type does not conform to the above, then a `TypeError` will be
             raised.
-        inverted: bool, optional
-            By default the `display` method assumes that pulling a GPIO pin _low_
-            will turn the relevant segment _on_; i.e. the typical behaviour for a
-            common anode display. If the attached display needs to raise a GPIO
-            pin _high_ to set the segment _on_ (i.e. the typical behaviour for a
-            common cathode display), call the `display` method with `inverted`
-            set to `True`.
+        pin_on: PIN_ON_SENSE, optional
+            When set to `"HIGH"` the GPIO pins need to be set 'high' ('1') for
+            the device segment to turn on (the typical behaviour for a common
+            anode display). When set to `"LOW"` the GPIO pins need to be set
+            'low' ('0') for the device segment to turn on (the typical behaviour
+            for a common cathode display.
 
         Raises
         ------
@@ -224,7 +225,7 @@ class SegHexDisplay:
         if isinstance(character, int):
             # For a character in the valid range...
             if 0 <= character <= 15:
-                if not inverted:
+                if pin_on == "LOW":
                     # ... if the request is to display in the non-inverted form, then
                     # select the row in `_char_list` corresponding to the character to
                     # be displayed and then set in turn each of the GPIO pins corresponding
@@ -256,7 +257,7 @@ class SegHexDisplay:
                 # this as the index for the character lookup
                 _char_list_index = int(normalised_character, 16)
 
-                if not inverted:
+                if pin_on == "LOW":
                     # If the request is to display in the non-inverted form, then
                     # select the row in `_char_list` corresponding to the `_char_list_index` to
                     # be displayed and then set in turn each of the GPIO pins corresponding

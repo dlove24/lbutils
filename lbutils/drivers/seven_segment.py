@@ -79,6 +79,8 @@ try:
 except ImportError:
     print("Ignoring MicroPython includes")
 
+from .common import PIN_ON_SENSE
+
 ##
 ## Classes
 ##
@@ -156,7 +158,7 @@ class SegDisplay:
             for segment in range(7):
                 self.pin_list.append(Pin(gpio_request[segment], Pin.OUT))
 
-    def display(self, character: int, inverted: bool = False) -> None:
+    def display(self, character: int, pin_on: PIN_ON_SENSE = "LOW") -> None:
         """Display the given `character` on the seven-segment display, using the
         `_char_list` as a guide for which pins to turn on or off. By default the
         `display` method will use the entries in the `_char_list` directly: if
@@ -169,13 +171,12 @@ class SegDisplay:
         character: int
             The value to be displayed on the seven segment display, which must be
             between zero ('0') and nine ('9')
-        inverted: bool, optional
-            By default the `display` method assumes that pulling a GPIO pin *low*
-            will turn the relevant segment *on*; i.e. the typical behaviour for a
-            common anode display. If the attached display needs to raise a GPIO
-            pin *high* to set the segment *on* (i.e. the typical behaviour for a
-            common cathode display), call the `display` method with `inverted`
-            set to `True`.
+        pin_on: PIN_ON_SENSE, optional
+            When set to `"HIGH"` the GPIO pins need to be set 'high' ('1') for
+            the device segment to turn on (the typical behaviour for a common
+            anode display). When set to `"LOW"` the GPIO pins need to be set
+            'low' ('0') for the device segment to turn on (the typical behaviour
+            for a common cathode display.
 
         Raises
         ------
@@ -185,7 +186,7 @@ class SegDisplay:
         """
         # For a character in the valid range...
         if 0 <= character <= 9:
-            if not inverted:
+            if pin_on == "LOW":
                 # ... if the request is to display in the non-inverted form, then
                 # select the row in `_char_list` corresponding to the character to
                 # be displayed and then set in turn each of the GPIO pins corresponding

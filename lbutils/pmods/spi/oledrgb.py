@@ -76,11 +76,11 @@ try:
 except ImportError:
     from lbutils.typing import Type
 
-    # Import the lbutils graphics library
-    # try:
+# Import the lbutils graphics library
+try:
     import lbutils.graphics as graphics
-# except ImportError:
-#    raise RuntimeError("Error: Missing required LBUtils graphics library")
+except ImportError:
+    raise RuntimeError("Error: Missing required LBUtils graphics library")
 
 # Import the core libraries
 import ustruct
@@ -136,49 +136,125 @@ _LOCK = const(0xFD)
 
 class OLEDrgb(graphics.Canvas):
     """An implemention of a [`Canvas`][lbutils.graphics.Canvas] for the
-    'OLEDrgb' PMod.
+    'OLEDrgb' PMod. This drawing support is provided through the following
+    categories of tools.
+
+    * **Drawing Primitives**: Provides basic support for drawing lines,
+    rectangles, circles and triangles. This serves as a basic collection of
+    primitives that can be relied upon by higher-level libraries.
+    * **Font Support**: The `Canvas` maintains a record of the current font to
+    use when writing text through the `font` attribute. This can be changed by
+    users of the library, and defaults to [`Org_01`]
+    [lbutils.graphics.fonts.Org_01].
+    * **Colour Support**: Colours can be selected in different ways, and the
+    `Canvas` maintains a foreground (`fg_color`) and background (`bg_color`)
+    attribute: along with a common method to override these default colours
+    quickly for individual drawing commands. Colours are selected by order of
+    precedence, which is defined as
+
+        1. The `Colour`s directly specified in the method call of the drawing
+        primitive.
+        2. The colours specified by the `Pen` in the method call of the drawing
+        primitive.
+        3. The colours specified by the `Pen` of the `Canvas` object.
+        4. The colours specified by as the default (forground or background)
+        colour of the `Canvas` object.
+        5. As a default of white (`COLOUR_WHITE`) for the foreground, and black
+        (`COLOUR_BLACK`) if all other selection methods fail.
 
     Attributes
     ----------
 
     bg_colour:
-        The background [`Colour`][lbutils.graphics.colours.Colour] to use when
-        drawing.
+         The background [`Colour`][lbutils.graphics.colours.Colour] to use when
+         drawing.
+    cursor:
+         The [`x`][lbutils.graphics.BoundPixel] and [`y`]
+         [lbutils.graphics.BoundPixel] locations  of the current write
+         (or read) operation.
+    origin:
+         The _user_ reference point for the next sequence of drawing primitives.
+         This `origin` will not be altered by changes to the [`x`]
+         [lbutils.graphics.BoundPixel] and [`y`]
+         [lbutils.graphics.BoundPixel] locations of any drawing command.
     font:
-        The sub-class of [`BaseFont`][lbutils.graphics.fonts.base_font.BaseFont]
-        to use when drawing characters.
+         The sub-class of [`BaseFont`][lbutils.graphics.fonts.base_font.BaseFont]
+         to use when drawing characters.
     fg_colour:
-        The foreground [`Colour`][lbutils.graphics.colours.Colour] to use when
-        drawing.
+         The foreground [`Colour`][lbutils.graphics.colours.Colour] to use when
+         drawing.
+    pen:
+         The [`Pen`][lbutils.graphics.Pen] to use when drawing on the canvas.
     height:
-        A read-only value for the height of the canvas in pixels.
+         A read-only value for the height of the canvas in pixels.
     width:
-        A read-only value for the width of the canvas in pixels.
+         A read-only value for the width of the canvas in pixels.
+    x: int
+            The X co-ordinate value of the `cursor`
+    y: int
+            The Y co-ordinate value of the `cursor`
+    x_y: int
+            A tuple representing the co-ordinate (x ,y) of the `cursor`
 
     Methods
     ----------
 
-    * `draw_line()`. Draw a line from two co-ordinates.
+    **Cursor and Origin Movements**
+
+    * `move_to()`. Move the internal [`cursor`]
+    [lbutils.graphics.Canvas.cursor]  to the co-ordinate values (x, y) for
+    the next sequence of drawing commands.
+
+    * `move_origin_to()`. Sets the user drawing [`origin`]
+    [lbutils.graphics.Canvas.origin] of the `Canvas` to the specified
+    co-ordinates for the next sequence of drawing commands.
+
+    **Colour Management**
+
+    * `select_bg_color()`. Return the colour to be used for drawing in the
+    background, taking into account the (optional) overrides specified in
+    `bg_color` and `pen`. The selected colour will obey the standard colour
+    selection precedence of the `Canvas` class, and is guaranteed to return a
+    valid [`Colour`][lbutils.graphics.colours.Colour] object.
+
+    * `select_fg_color()`. Return the colour to be used for drawing in the
+    foreground, taking into account the (optional) overrides specified in `color`
+    and `pen`. The selected colour will obey the standard colour selection
+    precedence of the `Canvas` class, and is guaranteed to return a valid
+    [`Colour`][lbutils.graphics.colours.Colour] object.
+
+    **Shape and Line Drawing Primitives**
+
+    * `draw_line()`. Draw a line from a specified point (by default the
+    [`cursor`][lbutils.graphics.Canvas.cursor]) to a co-ordinate.
+
+    * `draw_to()`. Draw a line from a specified point (by default the
+    [`cursor`][lbutils.graphics.Canvas.cursor]) to a co-ordinate. Alias for
+    [`draw_line()`][lbutils.graphics.Canvas.draw_line].
 
     * `draw_rectangle()`. Draw a rectangle at the co-ordinate (x, y) of height
-    and width, using the linecolour for the frame of the rectangle and fillcolour
-    as the interior colour.
+    and width, using the specified colours for the frame of the rectangle and
+    the interior fill colour (if any).
 
     * `fill_screen()`. Fill the entire `Canvas` with the background colour.
+
+    **Font and Text Handling**
+
+    * `write_char()`. Write a character (using the current font) starting at the
+    specified co-ordinates (by default the current [`cursor`]
+    [lbutils.graphics.Canvas.cursor] co-ordinates.), in the specified colour.
+
+    * `write_text()`. Write the a string (using the current font) starting at the
+    specified co-ordinates (by default the current [`cursor`]
+    [lbutils.graphics.Canvas.cursor] co-ordinates.), in the specified colour.
+
+    **Pixel Manipulation**
 
     * `read_pixel()`. Return the [`Colour`][lbutils.graphics.colours.Colour] of
     the specified pixel.
 
-    * `reset()`. Resets the display, clearing the current contents.
-
-    * `write_char()`. Write a character (using the current font) starting at the
-    stated pixel position.
-
     * `write_pixel()`. Set the pixel at the specified position to the foreground
     colour value.
-
-    * `write_text()`. Write the a string (using the current font) starting at the
-    specified pixel position in the specified colour.
     """
 
     _INIT = (
@@ -338,7 +414,7 @@ class OLEDrgb(graphics.Canvas):
         """
 
         # Set the ancestor values
-        super().__init__(width, height, True)
+        super().__init__(width, height, "ARM")
 
         # Set the local attributes
         self.spi_controller = spi_controller
@@ -453,125 +529,229 @@ class OLEDrgb(graphics.Canvas):
         self._write(_SETROW, bytearray([y, y]))
 
         #          self._write(None,bytearray([colour >> 8, colour &0xff]))
-        self.draw_line(x, y, x, y)
+        self.draw_line(start=[x, y], end=[x, y])
 
     def draw_line(
         self,
-        x1: int,
-        y1: int,
-        x2: int,
-        y2: int,
+        end: tuple,
+        start: tuple = None,
         fg_colour: Type[graphics.Colour] = None,
         pen: Type[graphics.Pen] = None,
     ) -> None:
-        """Draw a line from co-ordinates (`x2`, `y2`) to (`x2`, `y2`) using the
-        specified RGB colour. If the `fg_colour` is `Nonw`, then the default
-        search order is used to locate a suitable colour.
+        """Draw a line from the current `cursor` co-ordinates or the co-ordinate
+        specified in `start`, to the point given in the `end` co-ordinates and
+        using the specified RGB colour. If the drawing colour is not specified
+        in the arguments to this method, then it will use the preference order
+        for the foreground colour of the `Canvas` Class to find a suitable
+        colour. See [`select_fg_color`]
+        [lbutils.graphics.Canvas.select_fg_color] for more details of the
+        foreground colour selection algorithm.
+
+        Example
+        -------
+
+        If the method is called with the `start` co-ordinate as `None` then the
+        current value of the [`cursor`][lbutils.graphics.Canvas.cursor] will be
+        used. However the `end` co-ordinate _must_ be specified. This means that
+        in normal use the method can be called as
+
+        ````python
+        canvas.draw_line([0, 20])
+        ````
+
+        to draw a line from the current [`cursor`]
+        [lbutils.graphics.Canvas.cursor] to the co-ordinate '(0, 20)'. This will
+        also use the current `fg_colour` of the canvas when drawing the line.
+
+        To change the line colour, either set the [`Pen`][lbutils.graphics.Pen],
+        or call the method with the colour set directly as
+
+        ````python
+        canvas.draw_line([0, 20], fg_colour = lbutils.graphics.COLOUR_NAVY)
+        ````
+
+        The start of the line to be drawn can be changed using the `start`
+        parameter: however in this case it is recommended to set _both_ the
+        `start` and the `end` as named parameters, e.g.
+
+        ````python
+        canvas.draw_line(start = [0, 0], end = [0, 20])
+        ````
+
+        Using named parameter makes it much more obvious to readers of the
+        library code which co-ordinates are being used to draw the line. Don't
+        rely on the readers of the code remembering the positional arguments.
 
         Parameters
         ----------
 
-        x1: int
-            The X co-ordinate of the pixel for the start point of the line.
-        y1: int
-            The Y co-ordinate of the pixel for the start point of the line.
-        x2: int
-            The X co-ordinate of the pixel for the end point of the line.
-        y2: int
-            The Y co-ordinate of the pixel for the end point of the line.
+        start: tuple
+             The (x, y) co-ordinate of the _start_ point of the line, with
+             the first value of the `tuple` representing the `x` co-ordinate and
+             the second value of the `tuple` representing the `y` co-ordinate. If
+             the `start` is `None`, the default, then the current value of the
+             [`cursor`][lbutils.graphics.Canvas.cursor] is used as the start
+             point of the line. Values beyond the first and second entries of
+             the `tuple` are ignored.
+        end: tuple
+             The (x, y) co-ordinate of the pixel for the _end_ point of the line,
+             with the first value of the tuple representing the `x` co-ordinate
+             and the second value of the tuple representing the `y` co-ordinate.
+             Values beyond the first and second entries of the `tuple` are
+             ignored.
         fg_colour: Type[graphics.Colour], optional
-            The [`Colour`][lbutils.graphics.Colour] to be used when drawing the
-            line. If not specified, use the preference order for the foreground
-            colour of the `Canvas` to find a suitable colour.
+             The [`Colour`][lbutils.graphics.Colour] to be used when drawing the
+             line. If not specified, use the preference order for the foreground
+             colour of the `Canvas` to find a suitable colour.
         pen: Type[graphics.Pen], optional
-            The [`Pen`][lbutils.graphics.Pen] to be used when drawing the line.
-            If not specified, use the preference order for the foreground colour
-            of the `Canvas` to find a suitable colour.
+             The [`Pen`][lbutils.graphics.Pen] to be used when drawing the line.
+             If not specified, use the preference order for the foreground colour
+             of the `Canvas` to find a suitable colour.
+
+        Raises
+        ------
+
+        ValueError:
+            If the `start` or `end` tuples cannot be correctly interpreted as
+            byte values; with the `x` co-ordinate as the first entry of the
+            `tuple` and the `y` co-ordinate as the second entry of the tuple.
         """
 
         fg_colour = self.select_fg_color(fg_colour=fg_colour, pen=pen)
 
-        data = ustruct.pack(
-            self._ENCODE_LINE,
-            x1,
-            y1,
-            x2,
-            y2,
-            fg_colour.bR,
-            fg_colour.bG,
-            fg_colour.bB,
-        )
+        try:
+            if start is None:
+                data = ustruct.pack(
+                    self._ENCODE_LINE,
+                    self.cursor.x,
+                    self.cursor.y,
+                    end[0],
+                    end[1],
+                    fg_colour.bR,
+                    fg_colour.bG,
+                    fg_colour.bB,
+                )
+            else:
+                data = ustruct.pack(
+                    self._ENCODE_LINE,
+                    start[0],
+                    start[1],
+                    end[0],
+                    end[1],
+                    fg_colour.bR,
+                    fg_colour.bG,
+                    fg_colour.bB,
+                )
+        except Exception:
+            raise ValueError(
+                "Invalid parameters has been passed to 'draw_line'. I cannot"
+                "interpret the co-ordinates passed as arguments: check the"
+                "'start' and 'end' tuples are correct"
+            )
+
         self._write(_DRAWLINE, data)
 
     def draw_rectangle(
         self,
-        x: int,
-        y: int,
         width: int,
         height: int,
+        start: tuple = None,
         fg_colour: Type[graphics.Colour] = None,
         bg_colour: Type[graphics.Colour] = None,
         pen: Type[graphics.Pen] = None,
-        filled: bool = True,
+        style: graphics.RECTANGLE_STYLE = "FILLED",
     ) -> None:
-        """Draw a rectangle at the co-ordinate (`x`, `y`) of `height` and
-        `width`, using the `linecolour` for the frame of the rectangle and
-        `fillcolour` as the interior colour.
+        """Draw a rectangle at the `start` co-ordinate, or the current cursor
+        postion if `start` is `None`. In either case the rectangle will be drawn
+        to the specified `height` and `width`, using the either the specified or
+        `Canvas` `fg_colour` for the frame of the rectangle. If the `style` is
+        `"FILLED"` then  either the specified `bg_colour` or `Canvas` `bg_color`
+        as the interior colour. If the `style` is `"FRAMED"` then the interior
+        of the rectangle is not drawn.
+
+        See either [`select_fg_color`]
+        [lbutils.graphics.Canvas.select_fg_color] for more details of the
+        foreground colour selection algorithm; or [`select_bg_color`]
+        [lbutils.graphics.Canvas.select_bg_color] for more details of the
+        background colour selection algorithm. By default the rectangle is
+        `"FILLED"` and so both the background and foreground colours are used.
 
         Parameters
         ----------
 
-        x: int
-            The X co-ordinate of the pixel for the start point of the rectangle.
-        y: int
-            The Y co-ordinate of the pixel for the start point of the rectangle.
+        start: tuple
+             The (x, y) co-ordinate of the _start_ point of the rectangle, with
+             the first value of the `tuple` representing the `x` co-ordinate and
+             the second value of the `tuple` representing the `y` co-ordinate. If
+             the `start` is `None`, the default, then the current value of the
+             [`cursor`][lbutils.graphics.Canvas.cursor] is used as the start
+             point of the rectangle. Values beyond the first and second entries
+             of the `tuple` are ignored.
         width: int
-            The width of the rectangle in pixels.
+             The width of the rectangle in pixels.
         height: int
-            The hight of the rectangle in pixels.
+             The hight of the rectangle in pixels.
         fg_colour: Type[graphics.Colour], optional
-            The [`Colour`][lbutils.graphics.Colour] to be used when drawing the
-            rectangle. If not specified, use the preference order for the
-            foreground colour of the `Canvas` to find a suitable colour.
+             The [`Colour`][lbutils.graphics.Colour] to be used when drawing the
+             rectangle. If not specified, use the preference order for the
+             foreground colour of the `Canvas` to find a suitable colour.
         bg_colour: Type[graphics.Colour], optional
-            The [`Colour`][lbutils.graphics.Colour] to be used when filling the
-            rectangle. If not specified, use the preference order for the
-            background colour of the `Canvas` to find a suitable colour.
+             The [`Colour`][lbutils.graphics.Colour] to be used when filling the
+             rectangle. If not specified, use the preference order for the
+             background colour of the `Canvas` to find a suitable colour.
         pen: Type[graphics.Pen], optional
-            The [`Pen`][lbutils.graphics.Pen] to be used when drawing the
-            rectangle, using the foreground colour for the frame and the
-            background colour for the fill. If not specified, use the
-            preference order for the foreground and background colours of the
-            `Canvas` to find suitable colours.
-        filled: bool, optional
-            If `True` (the default) the rectangle is filled with the background
-            colour: otherwise the rectangle is not filled.
+             The [`Pen`][lbutils.graphics.Pen] to be used when drawing the
+             rectangle, using the forground colour for the frame and the
+             background colour for the fill. If not specified, use the preference
+             order for the foreground and background colours of the `Canvas` to
+             find suitable colours.
+        style: RECTANGLE_STYLE, optional
+             Set the style for the rectangle to draw. The defined style,
+             `FILLED`, sets the interior of the rectangle to the the
+             current background colour.
         """
 
         fg_colour = self.select_fg_color(fg_colour=fg_colour, pen=pen)
         bg_colour = self.select_bg_color(bg_colour=bg_colour, pen=pen)
 
         # Send the commands to fill, or not fill, the rectangle
-        if filled:
+        if style == "FILLED":
             self._write(_FILL, b"\x01")
         else:
             self._write(_FILL, b"\x00")
 
-        # Send the drawing command (the colour data is ignored if the
-        # rectangle is not filled)
-        data = ustruct.pack(
-            self._ENCODE_RECT,
-            x,
-            y,
-            x + width - 1,
-            y + height - 1,
-            fg_colour.bR,
-            fg_colour.bG,
-            fg_colour.bB,
-            bg_colour.bR,
-            bg_colour.bG,
-            bg_colour.bB,
-        )
+        if start is None:
+            # Send the drawing command (the colour data is ignored if the
+            # rectangle is not filled)
+            data = ustruct.pack(
+                self._ENCODE_RECT,
+                self.cursor.x,
+                self.cursor.y,
+                self.cursor.x + width - 1,
+                self.cursor.y + height - 1,
+                fg_colour.bR,
+                fg_colour.bG,
+                fg_colour.bB,
+                bg_colour.bR,
+                bg_colour.bG,
+                bg_colour.bB,
+            )
+        else:
+            # Send the drawing command (the colour data is ignored if the
+            # rectangle is not filled)
+            data = ustruct.pack(
+                self._ENCODE_RECT,
+                start[0],
+                start[1],
+                start[0] + width - 1,
+                start[1] + height - 1,
+                fg_colour.bR,
+                fg_colour.bG,
+                fg_colour.bB,
+                bg_colour.bR,
+                bg_colour.bG,
+                bg_colour.bB,
+            )
 
         self._write(_DRAWRECT, data)
 
