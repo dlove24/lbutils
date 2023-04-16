@@ -186,38 +186,62 @@ class Canvas(ABC):
     Methods
     ----------
 
-    * `draw_line()`. Draw a line from the [`cursor`]
-    [lbutils.graphics.Canvas.cursor] to a co-ordinate.
+    **Cursor and Origin Movements**
 
-    * `draw_line_from_origin()`. Draw a line from the [`origin`]
-    [lbutils.graphics.Canvas.origin] to a co-ordinate.
+    * `move_to()`. Move the internal [`cursor`]
+    [lbutils.graphics.Canvas.cursor]  to the co-ordinate values (x, y) for
+    the next sequence of drawing commands.
+
+    * `move_origin_to()`. Sets the user drawing [`origin`]
+    [lbutils.graphics.Canvas.origin] of the `Canvas` to the specified
+    co-ordinates for the next sequence of drawing commands.
+
+    **Colour Management**
+
+    * `select_bg_color()`. Return the colour to be used for drawing in the
+    background, taking into account the (optional) overrides specified in
+    `bg_color` and `pen`. The selected colour will obey the standard colour
+    selection precedence of the `Canvas` class, and is guaranteed to return a
+    valid [`Colour`][lbutils.graphics.colours.Colour] object.
+
+    * `select_fg_color()`. Return the colour to be used for drawing in the
+    foreground, taking into account the (optional) overrides specified in `color`
+    and `pen`. The selected colour will obey the standard colour selection
+    precedence of the `Canvas` class, and is guaranteed to return a valid
+    [`Colour`][lbutils.graphics.colours.Colour] object.
+
+    **Shape and Line Drawing Primitives**
+
+    * `draw_line()`. Draw a line from a specified point (by default the
+    [`cursor`][lbutils.graphics.Canvas.cursor]) to a co-ordinate.
+
+    * `draw_to()`. Draw a line from a specified point (by default the
+    [`cursor`][lbutils.graphics.Canvas.cursor]) to a co-ordinate. Alias for
+    [`draw_line()`][lbutils.graphics.Canvas.draw_line].
 
     * `draw_rectangle()`. Draw a rectangle at the co-ordinate (x, y) of height
-    and width, using the linecolour for the frame of the rectangle and fillcolour
-    as the interior colour.
+    and width, using the specified colours for the frame of the rectangle and
+    the interior fill colour (if any).
 
     * `fill_screen()`. Fill the entire `Canvas` with the background colour.
 
-    * `move_to()`. Move the internal [`cursor`]
-    [lbutils.graphics.Canvas.cursor]  to the co-ordinate values (x, y).
+    **Font and Text Handling**
 
-    * `move_to_origin()`. Sets the internal drawing [`cursor`]
-    [lbutils.graphics.Canvas.cursor] of the `Canvas` back to the users drawing
-    [`origin`] [lbutils.graphics.Canvas.origin] for the next sequence of drawing
-    commands.
+    * `write_char()`. Write a character (using the current font) starting at the
+    specified co-ordinates (by default the current [`cursor`]
+    [lbutils.graphics.Canvas.cursor] co-ordinates.), in the specified colour.
+
+    * `write_text()`. Write the a string (using the current font) starting at the
+    specified co-ordinates (by default the current [`cursor`]
+    [lbutils.graphics.Canvas.cursor] co-ordinates.), in the specified colour.
+
+    **Pixel Manipulation**
 
     * `read_pixel()`. Return the [`Colour`][lbutils.graphics.colours.Colour] of
     the specified pixel.
 
-    * `write_char()`. Write a character (using the current font) starting at the
-    [`cursor`][lbutils.graphics.Canvas.cursor] co-ordinates.
-
     * `write_pixel()`. Set the pixel at the specified position to the foreground
     colour value.
-
-    * `write_text()`. Write the a string (using the current font) starting at the
-    [`cursor`]
-    [lbutils.graphics.Canvas.cursor] position in the specified colour.
 
     Implementation
     --------------
@@ -227,6 +251,16 @@ class Canvas(ABC):
     for speed. In most cases the sub-classes can (and should) use the
     accelerated drawing primitives available on specific hardware to
     improve the routines provided here.
+
+    Methods that **must** be implemented by sub-classes of `Canvas` are
+
+    * [`write_pixel`][lbutils.graphics.Canvas.write_pixel]
+    * [`read_pixel`][lbutils.graphics.Canvas.read_pixel]
+
+    Methods that **could** be implemented by sub-classes of `Canvas` are
+
+    * [`draw_line`][lbutils.graphics.Canvas.draw_line]
+    * [`draw_rectangle`][lbutils.graphics.Canvas.draw_rectangle]
     """
 
     ##
@@ -388,8 +422,8 @@ class Canvas(ABC):
     @abstractmethod
     def draw_line(
         self,
-        x: int,
-        y: int,
+        end: tuple,
+        start: tuple = None,
         fg_colour: Type[graphics.Colour] = None,
         pen: Type[graphics.Pen] = None,
     ) -> None:
@@ -399,13 +433,59 @@ class Canvas(ABC):
         preference order for the foreground colour of the `Canvas` Class to find
         a suitable colour.
 
+        Example
+        -------
+
+        If the method is called with the `start` co-ordinate as `None` then the
+        current value of the [`cursor`][lbutils.graphics.Canvas.cursor] will be
+        used. However the `end` co-ordinate _must_ be specified. This means that
+        in normal use the method can be called as
+
+        ````python
+        canvas.draw_line([0, 20])
+        ````
+
+        to draw a line from the current [`cursor`]
+        [lbutils.graphics.Canvas.cursor] to the co-ordinate '(0, 20)'. This will
+        also use the current [`fg_colour`][lbutils.graphics.Canvas.fg_colour] of
+        the canvas when drawing the line.
+
+        To change the line colour, either set the [`Pen`][lbutils.graphics.Pen],
+        or call the method with the colour set directly as
+
+        ````python
+        canvas.draw_line([0, 20], fg_colour = lbutils.graphics.COLOUR_NAVY)
+        ````
+
+        The start of the line to be drawn can be changed using the `start`
+        parameter: however in this case it is recommended to set _both_ the
+        `start` and the `end` as named parameters, e.g.
+
+        ````python
+        canvas.draw_line(start = [0, 0], end = [0, 20])
+        ````
+
+        Using named parameter makes it much more obvious to readers of the
+        library code which co-ordinates are being used to draw the line. Don't
+        rely on the readers of the code remembering the positional arguments.
+
         Parameters
         ----------
 
-        x: int
-             The X co-ordinate of the pixel for the end point of the line.
-        y: int
-             The Y co-ordinate of the pixel for the end point of the line.
+        start: tuple
+             The (x, y) co-ordinate of the _start_ point of the line, with
+             the first value of the `tuple` representing the `x` co-ordinate and
+             the second value of the `tuple` representing the `y` co-ordinate. If
+             the `start` is `None`, the default, then the current value of the
+             [`cursor`][lbutils.graphics.Canvas.cursor] is used as the start
+             point of the line. Values beyond the first and second entries of
+             the `tuple` are ignored.
+        end: tuple
+             The (x, y) co-ordinate of the pixel for the _end_ point of the line,
+             with the first value of the tuple representing the `x` co-ordinate
+             and the second value of the tuple representing the `y` co-ordinate.
+             Values beyond the first and second entries of the `tuple` are
+             ignored.
         fg_colour: Type[graphics.Colour], optional
              The [`Colour`][lbutils.graphics.Colour] to be used when drawing the
              line. If not specified, use the preference order for the foreground
@@ -476,7 +556,7 @@ class Canvas(ABC):
         into account the (optional) overrides specified in `color` and `pen`.
         The selected colour will obey the standard colour selection precedence
         of the `Canvas` class, and is guaranteed to return a valid
-        `Colour`][lbutils.graphics.colors.Colour] object.
+        [`Colour`][lbutils.graphics.colours.Colour] object.
 
         Parameters
         ----------
@@ -530,7 +610,7 @@ class Canvas(ABC):
         into account the (optional) overrides specified in `bg_color` and `pen`.
         The selected colour will obey the standard colour selection precedence
         of the `Canvas` class, and is guaranteed to return a valid
-        `Colour`][lbutils.graphics.colors.Colour] object.
+        [`Colour`][lbutils.graphics.colours.Colour] object.
 
         Parameters
         ----------
@@ -752,11 +832,26 @@ class Canvas(ABC):
         """
         self.cursor.x_y = xy
 
-    def move_to_origin(self) -> None:
-        """Sets the internal drawing [`cursor`] [lbutils.graphics.Canvas.cursor]
-        of the `Canvas` back to the users drawing [`origin`]
-        [lbutils.graphics.Canvas.origin] for the next sequence of drawing
-        commands."""
+    def move_origin_to(self) -> None:
+        """Sets the user drawing [`origin`] [lbutils.graphics.Canvas.origin] of
+        the `Canvas` to the specified co-ordinate the next sequence of drawing
+        commands.
+
+                Parameters
+        ----------
+
+        xy: tuple
+            The first value of the `xy` tuple represents the `x` co-ordinate, and
+            the second value of the `xy` tuple represents the `y` co-ordinate.
+            All other values in the `xy` tuple are ignored.
+
+        Raises
+        ------
+
+        ValueError:
+            If the `x` or `y` co-ordinate in the `xy` tuple cannot be converted
+            to an integer.
+        """
         self.cursor = self.origin
 
 
