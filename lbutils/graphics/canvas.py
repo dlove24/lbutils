@@ -427,11 +427,14 @@ class Canvas(ABC):
         fg_colour: Type[graphics.Colour] = None,
         pen: Type[graphics.Pen] = None,
     ) -> None:
-        """Draw a line from the current `cursor` co-ordinates the point (`x2`,
-        `y2`) using the specified RGB colour. If the drawing colour is not
-        specified in the arguments to this method, then it will use the
-        preference order for the foreground colour of the `Canvas` Class to find
-        a suitable colour.
+        """Draw a line from the current `cursor` co-ordinates or the co-ordinate
+        specified in `start`, to the point given in the `end` co-ordinates and
+        using the specified RGB colour. If the drawing colour is not specified
+        in the arguments to this method, then it will use the preference order
+        for the foreground colour of the `Canvas` Class to find a suitable
+        colour. See [`select_fg_color`]
+        [lbutils.graphics.Canvas.select_fg_color] for more details of the
+        foreground colour selection algorithm.
 
         Example
         -------
@@ -510,8 +513,18 @@ class Canvas(ABC):
         style: RECTANGLE_STYLE = "FILLED",
     ) -> None:
         """Draw a rectangle at the co-ordinate (`x`, `y`) of `height` and
-        `width`, using the `linecolour` for the frame of the rectangle and
-        `fillcolour` as the interior colour.
+        `width`, using the either the specified or `Canvas` `fg_colour` for the
+        frame of the rectangle. If the `style` is `"FILLED"` then  either the
+        specified `bg_colour` or `Canvas` `bg_color` as the interior colour. If
+        the `style` is `"FRAMED"` then the interior of the rectangle is not
+        drawn.
+
+        See either [`select_fg_color`]
+        [lbutils.graphics.Canvas.select_fg_color] for more details of the
+        foreground colour selection algorithm; or [`select_bg_color`]
+        [lbutils.graphics.Canvas.select_bg_color] for more details of the
+        background colour selection algorithm. By default the rectangle is
+        `"FILLED"` and so both the background and foreground colours are used.
 
         Parameters
         ----------
@@ -663,7 +676,9 @@ class Canvas(ABC):
     def fill_screen(self, bg_colour: Type[graphics.Colour] = None) -> None:
         """Fill the entire display with the specified colour. By default this
         will use the colour preference order to find a background colour if
-        `bg_colour` is `None`.
+        `bg_colour` is `None`. See [`select_bg_color`]
+        [lbutils.graphics.Canvas.select_bg_color] for more details of the
+        background colour selection algorithm.
 
         Parameters
         ----------
@@ -688,12 +703,17 @@ class Canvas(ABC):
     def write_text(
         self,
         txt_str: str,
+        start: tuple = None,
         fg_colour: Type[graphics.Colour] = None,
         pen: Type[graphics.Pen] = None,
     ) -> None:
         """Write the string `txt_str` (using the current `font`) starting at the
-        the pixel position (`x`, `y`) of the `cursor` in the specified `colour`
-        to the display.
+        the pixel position (`x`, `y`) specified either by the `cursor` (the
+        default) or the `start` tuple. The text string is then written in the
+        specified `fg_colour`, or selected from the `Canvas` `fg_colour`, to the
+        display. See
+        [`select_fg_color`][lbutils.graphics.Canvas.select_fg_color] for more
+        details of the colour selection algorithm.
 
         !!! note
              Whilst the `txt_str` character _must_ be a valid UTF-8 string, most
@@ -707,6 +727,14 @@ class Canvas(ABC):
 
         txt_str:
              The string of characters to write to the display.
+        start: tuple, optional
+             The (x, y) co-ordinate of the _start_ point of the character, with
+             the first value of the `tuple` representing the `x` co-ordinate and
+             the second value of the `tuple` representing the `y` co-ordinate. If
+             the `start` is `None`, the default, then the current value of the
+             [`cursor`][lbutils.graphics.Canvas.cursor] is used as the start
+             point of the character. Values beyond the first and second entries
+             of the `tuple` are ignored.
         fg_colour: Type[graphics.Colour], optional
              The [`Colour`][lbutils.graphics.Colour] to be used when drawing the
              line. If not specified, use the preference order for the foreground
@@ -728,11 +756,14 @@ class Canvas(ABC):
     def write_char(
         self,
         utf8Char: str,
+        start: tuple = None,
         fg_colour: Type[graphics.Colour] = None,
         pen: Type[graphics.Pen] = None,
     ) -> None:
         """Write a `utf8Char` character (using the current `font`) starting at
         the pixel position (`x`, `y`) of the `cursor` in the specified `colour`.
+        See [`select_fg_color`][lbutils.graphics.Canvas.select_fg_color] for
+        more details of the colour selection algorithm.
 
         !!! note
             Whilst the `utf8Char` character _must_ be a valid UTF-8 character,
@@ -746,6 +777,14 @@ class Canvas(ABC):
 
         utf8Char:
             The character to write to the display.
+        start: tuple, optional
+             The (x, y) co-ordinate of the _start_ point of the character, with
+             the first value of the `tuple` representing the `x` co-ordinate and
+             the second value of the `tuple` representing the `y` co-ordinate. If
+             the `start` is `None`, the default, then the current value of the
+             [`cursor`][lbutils.graphics.Canvas.cursor] is used as the start
+             point of the character. Values beyond the first and second entries
+             of the `tuple` are ignored.
         fg_colour: Type[graphics.Colour], optional
             The [`Colour`][lbutils.graphics.Colour] to be used when drawing the
             character. If not specified, use the preference order for the
@@ -770,42 +809,6 @@ class Canvas(ABC):
                         fg_colour,
                     )
         self.cursor.x += _cursor
-
-    ##
-    ## Drawing Primitives using the `origin`
-    ##
-
-    def draw_line_from_origin(
-        self,
-        x: int,
-        y: int,
-        fg_colour: Type[graphics.Colour] = None,
-        pen: Type[graphics.Pen] = None,
-    ) -> None:
-        """Draw a line from the users `origin` co-ordinates the point (`x2`,
-        `y2`) using the specified RGB colour. If the drawing colour is not
-        specified in the arguments to this method, then it will use the
-        preference order for the foreground colour of the `Canvas` Class to find
-        a suitable colour.
-
-        Parameters
-        ----------
-
-        x: int
-             The X co-ordinate of the pixel for the end point of the line.
-        y: int
-             The Y co-ordinate of the pixel for the end point of the line.
-        fg_colour: Type[graphics.Colour], optional
-             The [`Colour`][lbutils.graphics.Colour] to be used when drawing the
-             line. If not specified, use the preference order for the foreground
-             colour of the `Canvas` to find a suitable colour.
-        pen: Type[graphics.Pen], optional
-             The [`Pen`][lbutils.graphics.Pen] to be used when drawing the line.
-             If not specified, use the preference order for the foreground colour
-             of the `Canvas` to find a suitable colour.
-        """
-        self.cursor = self.origin
-        self.draw_line(x, y, fg_colour, pen)
 
     ##
     ## utility Methods

@@ -538,11 +538,14 @@ class OLEDrgb(graphics.Canvas):
         fg_colour: Type[graphics.Colour] = None,
         pen: Type[graphics.Pen] = None,
     ) -> None:
-        """Draw a line from the current `cursor` co-ordinates the point (`x2`,
-        `y2`) using the specified RGB colour. If the drawing colour is not
-        specified in the arguments to this method, then it will use the
-        preference order for the foreground colour of the `Canvas` Class to find
-        a suitable colour.
+        """Draw a line from the current `cursor` co-ordinates or the co-ordinate
+        specified in `start`, to the point given in the `end` co-ordinates and
+        using the specified RGB colour. If the drawing colour is not specified
+        in the arguments to this method, then it will use the preference order
+        for the foreground colour of the `Canvas` Class to find a suitable
+        colour. See [`select_fg_color`]
+        [lbutils.graphics.Canvas.select_fg_color] for more details of the
+        foreground colour selection algorithm.
 
         Example
         -------
