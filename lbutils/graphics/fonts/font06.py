@@ -27,7 +27,7 @@ class Font_06(BaseFont):
     """6x6 pixel sans-serif font, created by
     [`fontconvert`](https://github.com/danjperron/ssd1331_micropython.git)."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(self.bitmap, self.index, self.glyph)
 
     bitmap = bytes(

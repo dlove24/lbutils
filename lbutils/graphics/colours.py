@@ -74,7 +74,7 @@ shown below
 """
 
 # Import the typing hints if available. Use our backup version
-# if the offical library is missing
+# if the official library is missing
 try:
     from typing import Optional, Literal
 except ImportError:

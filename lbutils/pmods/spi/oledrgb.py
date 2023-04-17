@@ -72,9 +72,9 @@ header below.
 # Import the typing hints if available. Use our backup version
 # if the offical library is missing
 try:
-    from typing import Literal, Optional, Type, Union
+    from typing import Literal, Optional, Union
 except ImportError:
-    from lbutils.typing import Literal, Optional, Type, Union  # type: ignore
+    from lbutils.typing import Literal, Optional, Union  # type: ignore
 
 # Import the lbutils graphics library
 try:
@@ -522,8 +522,8 @@ class OLEDrgb(graphics.Canvas):
         self,
         end: tuple[int, int],
         start: Optional[tuple[int, int]] = None,
-        fg_colour: Optional[Type[graphics.Colour]] = None,
-        pen: Optional[Type[graphics.Pen]] = None,
+        fg_colour: Optional[graphics.Colour] = None,
+        pen: Optional[graphics.Pen] = None,
     ) -> None:
         """Draw a line from the current `cursor` co-ordinates or the co-ordinate
         specified in `start`, to the point given in the `end` co-ordinates and
@@ -643,9 +643,9 @@ class OLEDrgb(graphics.Canvas):
         width: int,
         height: int,
         start: Optional[tuple[int, int]] = None,
-        fg_colour: Optional[Type[graphics.Colour]] = None,
-        bg_colour: Optional[Type[graphics.Colour]] = None,
-        pen: Optional[Type[graphics.Pen]] = None,
+        fg_colour: Optional[graphics.Colour] = None,
+        bg_colour: Optional[graphics.Colour] = None,
+        pen: Optional[graphics.Pen] = None,
         style: Literal["FILLED", "FRAMED"] = "FILLED",
     ) -> None:
         """Draw a rectangle at the `start` co-ordinate, or the current cursor
@@ -748,3 +748,4 @@ class OLEDrgb(graphics.Canvas):
             self.reset_pin.value(0)
             utime.sleep(0.1)
             self.reset_pin.value(1)
+

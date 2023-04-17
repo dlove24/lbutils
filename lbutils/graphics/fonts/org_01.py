@@ -31,7 +31,7 @@ class Org_01(BaseFont):
     https://www.orgdot.com/aliasfonts).
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(self.bitmap, self.index, self.glyph)
 
     bitmap = bytes(

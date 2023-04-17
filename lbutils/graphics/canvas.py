@@ -88,9 +88,9 @@ except ImportError:
 
 # Import the typing support
 try:
-    from typing import Literal, Optional, Type, Union
+    from typing import Literal, Optional, Union
 except ImportError:
-    from lbutils.typing import Literal, Optional, Type, Union  # type: ignore
+    from lbutils.typing import Literal, Optional, Union  # type: ignore
 
 # Import the lbutils graphics library
 try:
@@ -448,8 +448,8 @@ class Canvas(ABC):
         self,
         end: tuple[int, int],
         start: Optional[tuple[int, int]] = None,
-        fg_colour: Optional[Type[graphics.Colour]] = None,
-        pen: Optional[Type[graphics.Pen]] = None,
+        fg_colour: Optional[graphics.Colour] = None,
+        pen: Optional[graphics.Pen] = None,
     ) -> None:
         """Draw a line from the current `cursor` co-ordinates or the co-ordinate
         specified in `start`, to the point given in the `end` co-ordinates and
@@ -529,9 +529,9 @@ class Canvas(ABC):
         width: int,
         height: int,
         start: Optional[tuple[int, int]] = None,
-        fg_colour: Optional[Type[graphics.Colour]] = None,
-        bg_colour: Optional[Type[graphics.Colour]] = None,
-        pen: Optional[Type[graphics.Pen]] = None,
+        fg_colour: Optional[graphics.Colour] = None,
+        bg_colour: Optional[graphics.Colour] = None,
+        pen: Optional[graphics.Pen] = None,
         style: Literal["FILLED", "FRAMED"] = "FILLED",
     ) -> None:
         """Draw a rectangle at the `start` co-ordinate, or the current cursor
@@ -591,8 +591,8 @@ class Canvas(ABC):
 
     def select_fg_colour(
         self,
-        fg_colour: Optional[Type[graphics.Colour]] = None,
-        pen: Optional[Type[graphics.Pen]] = None,
+        fg_colour: Optional[graphics.Colour] = None,
+        pen: Optional[graphics.Pen] = None,
     ):
         """Return the colour to be used for drawing in the foreground, taking
         into account the (optional) overrides specified in `color` and `pen`.
@@ -647,8 +647,8 @@ class Canvas(ABC):
 
     def select_bg_colour(
         self,
-        bg_colour: Optional[Type[graphics.Colour]] = None,
-        pen: Optional[Type[graphics.Pen]] = None,
+        bg_colour: Optional[graphics.Colour] = None,
+        pen: Optional[graphics.Pen] = None,
     ):
         """Return the colour to be used for drawing in the background, taking
         into account the (optional) overrides specified in `bg_colour` and
@@ -704,7 +704,7 @@ class Canvas(ABC):
     ## Drawing Primitives using the `cursor`
     ##
 
-    def fill_screen(self, bg_colour: Type[graphics.Colour] = None) -> None:
+    def fill_screen(self, bg_colour: Optional[graphics.Colour] = None) -> None:
         """Fill the entire display with the specified colour. By default this
         will use the colour preference order to find a background colour if
         `bg_colour` is `None`. See [`select_bg_colour`]
@@ -733,9 +733,9 @@ class Canvas(ABC):
     def write_text(
         self,
         txt_str: str,
-        start: tuple[int, int] = None,
-        fg_colour: Type[graphics.Colour] = None,
-        pen: Type[graphics.Pen] = None,
+        start: Optional[tuple[int, int]] = None,
+        fg_colour: Optional[graphics.Colour] = None,
+        pen: Optional[graphics.Pen] = None,
     ) -> None:
         """Write the string `txt_str` (using the current `font`) starting at the
         the pixel position (`x`, `y`) specified either by the `cursor` (the
@@ -797,9 +797,9 @@ class Canvas(ABC):
     def write_char(
         self,
         utf8_char: str,
-        start: tuple[int, int] = None,
-        fg_colour: Type[graphics.Colour] = None,
-        pen: Type[graphics.Pen] = None,
+        start: Optional[tuple[int, int]] = None,
+        fg_colour: Optional[graphics.Colour] = None,
+        pen: Optional[graphics.Pen] = None,
     ) -> None:
         """Write a `utf8_char` character (using the current `font`) starting at
         the pixel position (`x`, `y`) of the `cursor` in the specified `colour`.
@@ -917,3 +917,4 @@ class FrameBufferCanvas(Canvas):
     ocs.micropython.org/en/latest/library/framebuf.html)."""
 
     pass
+
