@@ -52,7 +52,7 @@ def scan_i2c_bus(
     i2c_controller: int = 0,
     sda_pin: int = I2C_SDA_PIN_DEFAULT,
     scl_pin: int = I2C_SCL_PIN_DEFAULT,
-):
+) -> None:
     """Scan for I2C devices on the listed bus, printing out the found device
     addresses to the console.
 

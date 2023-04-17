@@ -27,6 +27,13 @@ Used to avoid import errors, and taken from the
 [pcopy-lib](https://github.com/pfalcon/pycopy-lib/tree/master/abc) library.
 """
 
+# Import the typing hints if available. Use our backup version
+# if the official library is missing
+try:
+    from typing import Any
+except ImportError:
+    from lbutils.typing import Any
+
 
 class ABCMeta:
     pass
@@ -36,5 +43,5 @@ class ABC:
     pass
 
 
-def abstractmethod(f):
+def abstractmethod(f: Any) -> Any:
     return f

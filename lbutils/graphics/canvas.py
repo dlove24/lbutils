@@ -84,17 +84,18 @@ display.fill_screen(graphics.colours.COLOUR_BLACK)
 try:
     from abc import ABC, abstractmethod
 except ImportError:
-    from lbutils.abc import ABC, abstractmethod
+    from lbutils.abc import ABC, abstractmethod  # type: ignore
 
 # Import the typing support
 try:
-    from typing import Type
+    from typing import Literal, Optional, Union
 except ImportError:
-    from lbutils.typing import Type
+    from lbutils.typing import Literal, Optional, Union  # type: ignore
 
 # Import the lbutils graphics library
 try:
     import lbutils.graphics as graphics
+    import lbutils.graphics.fonts as fonts
 except ImportError:
     raise RuntimeError("Error: Missing required LBUtils graphics library")
 
@@ -109,7 +110,7 @@ RECTANGLE_STYLE = {"FRAMED", "FILLED"}
 The `FRAMED` style will draw the rectangle using the current foreground colour
 (`fg_colour`), and leave the body of the rectangle unset. The `FILLED` style
 acts as `FRAMED`, but additionally sets the internal region of the rectangle to
-the current background colour (`bg_color`).
+the current background colour (`bg_colour`).
 """
 
 ###
@@ -134,7 +135,7 @@ class Canvas(ABC):
     users of the library, and defaults to [`Org_01`]
     [lbutils.graphics.fonts.Org_01].
     * **Colour Support**: Colours can be selected in different ways, and the
-    `Canvas` maintains a foreground (`fg_color`) and background (`bg_color`)
+    `Canvas` maintains a foreground (`fg_colour`) and background (`bg_colour`)
     attribute: along with a common method to override these default colours
     quickly for individual drawing commands. Colours are selected by order of
     precedence, which is defined as
@@ -198,13 +199,13 @@ class Canvas(ABC):
 
     **Colour Management**
 
-    * `select_bg_color()`. Return the colour to be used for drawing in the
+    * `select_bg_colour()`. Return the colour to be used for drawing in the
     background, taking into account the (optional) overrides specified in
-    `bg_color` and `pen`. The selected colour will obey the standard colour
+    `bg_colour` and `pen`. The selected colour will obey the standard colour
     selection precedence of the `Canvas` class, and is guaranteed to return a
     valid [`Colour`][lbutils.graphics.colours.Colour] object.
 
-    * `select_fg_color()`. Return the colour to be used for drawing in the
+    * `select_fg_colour()`. Return the colour to be used for drawing in the
     foreground, taking into account the (optional) overrides specified in `color`
     and `pen`. The selected colour will obey the standard colour selection
     precedence of the `Canvas` class, and is guaranteed to return a valid
@@ -264,11 +265,20 @@ class Canvas(ABC):
     """
 
     ##
+    ## Internal Attributes
+    ##
+
+    _font: fonts.BaseFont
+
+    ##
     ## Constructors
     ##
 
     def __init__(
-        self, width: int, height: int, bit_order: graphics.DEVICE_BIT_ORDER = "ARM"
+        self,
+        width: int,
+        height: int,
+        bit_order: Optional[Literal["ARM", "INTEL"]] = "ARM",
     ) -> None:
         """Creates a (packed) representation of a colour value, from the three
         bytes `r` (red), `g` (green) and `b` (blue).
@@ -286,9 +296,9 @@ class Canvas(ABC):
             `ARM` as set by the default constructor.
         """
         # Set the Attribute Values. Note use the properties to ensure
-        # that the type being set is correct
-        self.fg_color = graphics.colours.Colour(255, 255, 255, bit_order)
-        self.bg_color = graphics.colours.Colour(0, 0, 0, bit_order)
+        # that the type being set is correctly
+        self.fg_colour = graphics.colours.Colour(255, 255, 255, bit_order)
+        self.bg_colour = graphics.colours.Colour(0, 0, 0, bit_order)
 
         self.pen = None
 
@@ -299,9 +309,23 @@ class Canvas(ABC):
             0, 0, min_x=0, max_x=width, min_y=0, max_y=height
         )
 
+        self._font = fonts.Org_01()
+
+        self.width = width
+        self.height = height
+
     ##
     ## Properties
     ##
+
+    @property
+    def font(self) -> fonts.BaseFont:
+        return self._font
+
+    @font.setter
+    def font(self, font: fonts.BaseFont) -> None:
+        if font is not None:
+            self._font = font
 
     @property
     def x(self) -> int:
@@ -358,7 +382,7 @@ class Canvas(ABC):
         return self._cursor
 
     @cursor.setter
-    def cursor(self, value) -> graphics.BoundPixel:
+    def cursor(self, value) -> None:
         self._cursor = value
 
     @property
@@ -373,7 +397,7 @@ class Canvas(ABC):
         return self._origin
 
     @origin.setter
-    def origin(self, value) -> graphics.BoundPixel:
+    def origin(self, value) -> None:
         self._origin = value
 
     ##
@@ -381,7 +405,7 @@ class Canvas(ABC):
     ##
 
     @abstractmethod
-    def read_pixel(self, x: int, y: int) -> Type[graphics.Colour]:
+    def read_pixel(self, x: int, y: int) -> graphics.Colour:
         """Read the colour value of the pixel at position (`x`, `y`) and return
         to the caller.
 
@@ -396,14 +420,14 @@ class Canvas(ABC):
         Returns
         -------
 
-        Type[Colour]:
+        Colour:
              The [`Colour`][lbutils.graphics.Colour] representation of the pixel
              located at (x, y).
         """
         pass
 
     @abstractmethod
-    def write_pixel(self, x: int, y: int, colour: Type[graphics.Colour]) -> None:
+    def write_pixel(self, x: int, y: int, colour: graphics.Colour) -> None:
         """Set the pixel at position (`x`, `y`) to the specified colour value.
 
         Parameters
@@ -413,7 +437,7 @@ class Canvas(ABC):
              The X co-ordinate of the pixel to set.
         y: int
              The Y co-ordinate of the pixel to set.
-        colour: Type[Colour]
+        colour: Colour
              The [`Colour`][lbutils.graphics.Colour] representation of the pixel
              located at (x, y).
         """
@@ -422,18 +446,18 @@ class Canvas(ABC):
     @abstractmethod
     def draw_line(
         self,
-        end: tuple,
-        start: tuple = None,
-        fg_colour: Type[graphics.Colour] = None,
-        pen: Type[graphics.Pen] = None,
+        end: tuple[int, int],
+        start: Optional[tuple[int, int]] = None,
+        fg_colour: Optional[graphics.Colour] = None,
+        pen: Optional[graphics.Pen] = None,
     ) -> None:
         """Draw a line from the current `cursor` co-ordinates or the co-ordinate
         specified in `start`, to the point given in the `end` co-ordinates and
         using the specified RGB colour. If the drawing colour is not specified
         in the arguments to this method, then it will use the preference order
         for the foreground colour of the `Canvas` Class to find a suitable
-        colour. See [`select_fg_color`]
-        [lbutils.graphics.Canvas.select_fg_color] for more details of the
+        colour. See [`select_fg_colour`]
+        [lbutils.graphics.Canvas.select_fg_colour] for more details of the
         foreground colour selection algorithm.
 
         Example
@@ -504,24 +528,24 @@ class Canvas(ABC):
         self,
         width: int,
         height: int,
-        start: tuple = None,
-        fg_colour: Type[graphics.Colour] = None,
-        bg_colour: Type[graphics.Colour] = None,
-        pen: Type[graphics.Pen] = None,
-        style: RECTANGLE_STYLE = "FILLED",
+        start: Optional[tuple[int, int]] = None,
+        fg_colour: Optional[graphics.Colour] = None,
+        bg_colour: Optional[graphics.Colour] = None,
+        pen: Optional[graphics.Pen] = None,
+        style: Literal["FILLED", "FRAMED"] = "FILLED",
     ) -> None:
         """Draw a rectangle at the `start` co-ordinate, or the current cursor
         postion if `start` is `None`. In either case the rectangle will be drawn
         to the specified `height` and `width`, using the either the specified or
         `Canvas` `fg_colour` for the frame of the rectangle. If the `style` is
-        `"FILLED"` then  either the specified `bg_colour` or `Canvas` `bg_color`
-        as the interior colour. If the `style` is `"FRAMED"` then the interior
-        of the rectangle is not drawn.
+        `"FILLED"` then  either the specified `bg_colour` or `Canvas`
+        `bg_colour` as the interior colour. If the `style` is `"FRAMED"` then
+        the interior of the rectangle is not drawn.
 
-        See either [`select_fg_color`]
-        [lbutils.graphics.Canvas.select_fg_color] for more details of the
-        foreground colour selection algorithm; or [`select_bg_color`]
-        [lbutils.graphics.Canvas.select_bg_color] for more details of the
+        See either [`select_fg_colour`]
+        [lbutils.graphics.Canvas.select_fg_colour] for more details of the
+        foreground colour selection algorithm; or [`select_bg_colour`]
+        [lbutils.graphics.Canvas.select_bg_colour] for more details of the
         background colour selection algorithm. By default the rectangle is
         `"FILLED"` and so both the background and foreground colours are used.
 
@@ -565,8 +589,10 @@ class Canvas(ABC):
     ## Colour Selection Methods
     ##
 
-    def select_fg_color(
-        self, fg_colour: Type[graphics.Colour] = None, pen: Type[graphics.Pen] = None
+    def select_fg_colour(
+        self,
+        fg_colour: Optional[graphics.Colour] = None,
+        pen: Optional[graphics.Pen] = None,
     ):
         """Return the colour to be used for drawing in the foreground, taking
         into account the (optional) overrides specified in `color` and `pen`.
@@ -603,7 +629,7 @@ class Canvas(ABC):
         Returns
         -------
 
-        Type[Colour]:
+        Colour:
              A [`Colour`][lbutils.graphics.Colour] object representing the
              current foreground colour of the `Canvas`
         """
@@ -619,13 +645,15 @@ class Canvas(ABC):
         else:
             return graphics.colours.COLOUR_WHITE
 
-    def select_bg_color(
-        self, bg_colour: Type[graphics.Colour] = None, pen: Type[graphics.Pen] = None
+    def select_bg_colour(
+        self,
+        bg_colour: Optional[graphics.Colour] = None,
+        pen: Optional[graphics.Pen] = None,
     ):
         """Return the colour to be used for drawing in the background, taking
-        into account the (optional) overrides specified in `bg_color` and `pen`.
-        The selected colour will obey the standard colour selection precedence
-        of the `Canvas` class, and is guaranteed to return a valid
+        into account the (optional) overrides specified in `bg_colour` and
+        `pen`. The selected colour will obey the standard colour selection
+        precedence of the `Canvas` class, and is guaranteed to return a valid
         [`Colour`][lbutils.graphics.colours.Colour] object.
 
         Parameters
@@ -656,7 +684,7 @@ class Canvas(ABC):
         Returns
         -------
 
-        Type[Colour]:
+        Colour:
              A [`Colour`][lbutils.graphics.Colour] object representing the
              current background colour of the `Canvas`.
         """
@@ -676,11 +704,11 @@ class Canvas(ABC):
     ## Drawing Primitives using the `cursor`
     ##
 
-    def fill_screen(self, bg_colour: Type[graphics.Colour] = None) -> None:
+    def fill_screen(self, bg_colour: Optional[graphics.Colour] = None) -> None:
         """Fill the entire display with the specified colour. By default this
         will use the colour preference order to find a background colour if
-        `bg_colour` is `None`. See [`select_bg_color`]
-        [lbutils.graphics.Canvas.select_bg_color] for more details of the
+        `bg_colour` is `None`. See [`select_bg_colour`]
+        [lbutils.graphics.Canvas.select_bg_colour] for more details of the
         background colour selection algorithm.
 
         Parameters
@@ -691,10 +719,10 @@ class Canvas(ABC):
              screen. Defaults to using the colour search order of the `Canvas`
              to find a colour.
         """
-        fill_colour = self.select_bg_color(bg_colour=bg_colour)
+        fill_colour = self.select_bg_colour(bg_colour=bg_colour)
 
         self.draw_rectangle(
-            start=[0, 0],
+            start=(0, 0),
             width=self.width,
             height=self.height,
             fg_colour=fill_colour,
@@ -705,16 +733,16 @@ class Canvas(ABC):
     def write_text(
         self,
         txt_str: str,
-        start: tuple = None,
-        fg_colour: Type[graphics.Colour] = None,
-        pen: Type[graphics.Pen] = None,
+        start: Optional[tuple[int, int]] = None,
+        fg_colour: Optional[graphics.Colour] = None,
+        pen: Optional[graphics.Pen] = None,
     ) -> None:
         """Write the string `txt_str` (using the current `font`) starting at the
         the pixel position (`x`, `y`) specified either by the `cursor` (the
         default) or the `start` tuple. The text string is then written in the
         specified `fg_colour`, or selected from the `Canvas` `fg_colour`, to the
         display. See
-        [`select_fg_color`][lbutils.graphics.Canvas.select_fg_color] for more
+        [`select_fg_colour`][lbutils.graphics.Canvas.select_fg_colour] for more
         details of the colour selection algorithm.
 
         !!! note
@@ -769,13 +797,13 @@ class Canvas(ABC):
     def write_char(
         self,
         utf8_char: str,
-        start: tuple = None,
-        fg_colour: Type[graphics.Colour] = None,
-        pen: Type[graphics.Pen] = None,
+        start: Optional[tuple[int, int]] = None,
+        fg_colour: Optional[graphics.Colour] = None,
+        pen: Optional[graphics.Pen] = None,
     ) -> None:
         """Write a `utf8_char` character (using the current `font`) starting at
         the pixel position (`x`, `y`) of the `cursor` in the specified `colour`.
-        See [`select_fg_color`][lbutils.graphics.Canvas.select_fg_color] for
+        See [`select_fg_colour`][lbutils.graphics.Canvas.select_fg_colour] for
         more details of the colour selection algorithm.
 
         !!! note
@@ -808,8 +836,8 @@ class Canvas(ABC):
             of the `Canvas` to find a suitable colour.
         """
 
-        # Work out what the forground colour should be
-        fg_colour = self.select_fg_color(fg_colour=fg_colour, pen=pen)
+        # Work out what the foreground colour should be
+        use_fg_colour = self.select_fg_colour(fg_colour=fg_colour, pen=pen)
 
         # If a `start` has been specified, then move the cursor to
         # that co-ordinate. Otherwise we assume the cursor is in the
@@ -829,7 +857,7 @@ class Canvas(ABC):
                     self.write_pixel(
                         self.cursor.x + x1 + x_off,
                         self.cursor.y + y1 + y_off,
-                        fg_colour,
+                        use_fg_colour,
                     )
 
         # Move the cursor to the `x` position at the end of the glyph.
@@ -840,7 +868,7 @@ class Canvas(ABC):
     ## utility Methods
     ##
 
-    def move_to(self, xy: tuple) -> None:
+    def move_to(self, xy: tuple[int, int]) -> None:
         """Sets the internal `x` and `y` co-ordinates of the `cursor` as a
         tuple. An alias for the `x_y` property of `Canvas`.
 

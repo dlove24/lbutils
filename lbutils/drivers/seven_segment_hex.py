@@ -83,6 +83,13 @@ try:
 except ImportError:
     print("The Python type library isn't present. Ignoring.")
 
+# Import the typing hints if available. Use our backup version
+# if the official library is missing
+try:
+    from typing import Optional, Literal
+except ImportError:
+    from lbutils.typing import Optional, Literal  # type: ignore
+
 from .common import PIN_ON_SENSE
 
 ##
@@ -183,7 +190,7 @@ class SegHexDisplay:
             for segment in range(7):
                 self.pin_list.append(Pin(gpio_request[segment], Pin.OUT))
 
-    def display(self, character: Union[int, str], pin_on: PIN_ON_SENSE = "LOW") -> None:
+    def display(self, character: int, pin_on: Literal["HIGH", "LOW"] = "LOW") -> None:
         """Display the given `character` on the seven-segment display, using the
         `_char_list` as a guide for which pins to turn on or off. By default the
         `display` method will use the entries in the `_char_list` directly: if

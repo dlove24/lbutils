@@ -73,6 +73,15 @@ shown below
 *   CPython (3.10)
 """
 
+# Import the typing hints if available. Use our backup version
+# if the official library is missing
+try:
+    from typing import Optional, Literal
+except ImportError:
+    from lbutils.typing import Optional, Literal  # type: ignore
+
+from os import uname
+
 ###
 ### Enumerations. MicroPython doesn't have actual an actual `enum` (yet), so
 ### these serve as common cases where a selection of values need to be defined
@@ -128,11 +137,30 @@ class Colour:
     """
 
     ##
+    ## Internal Attributes
+    ##
+
+    _r: int
+    _g: int
+    _b: int
+
+    _565: Optional[int]
+    _888: Optional[int]
+
+    _bR: Optional[int]
+    _bG: Optional[int]
+    _bB: Optional[int]
+
+    ##
     ## Constructors
     ##
 
     def __init__(
-        self, r: int, g: int, b: int, bit_order: DEVICE_BIT_ORDER = "ARM"
+        self,
+        r: int,
+        g: int,
+        b: int,
+        bit_order: Optional[Literal["ARM", "INTEL"]] = "ARM",
     ) -> None:
         """Creates a representation of a colour value, from the three integers
         `r` (red), `g` (green) and `b` (blue). The class will accept anything
@@ -154,11 +182,19 @@ class Colour:
             the bit packing order in colour conversions. Defaults to
             `ARM` as set by the default constructor.
         """
+
+        # Set the colour to the RGB value specified
         self._r = int(r)
         self._g = int(g)
         self._b = int(b)
 
-        self.bit_order = "ARM"
+        # Attempt to determine the platform automatically:
+        # defaulting to the ARM bit order
+        machine = uname()
+        if machine[4].find("x86") != -1:
+            self.bit_order = "INTEL"
+        else:
+            self.bit_order = "ARM"
 
         # Cached values
         self._565 = None
@@ -197,7 +233,7 @@ class Colour:
         return self._bB
 
     @property
-    def as_565(self) -> int:
+    def as_565(self) -> Optional[int]:
         """
         Construct a packed word from the internal colour representation, with
         5 bits of red data, 6 of green, and 5 of blue. On ARM platforms
@@ -236,13 +272,13 @@ class Colour:
                     | self._g >> 5
                 )
             else:
-                self._565(self._r & 0xF8) << 8 | (self._g & 0xFC) << 3 | self._b >> 3
+                self._565 = (self._r & 0xF8) << 8 | (self._g & 0xFC) << 3 | self._b >> 3
 
         # Return the calculated value to the client
         return self._565
 
     @property
-    def as_888(self) -> int:
+    def as_888(self) -> Optional[int]:
         """
         Construct a packed double word from the internal colour representation,
         with 8 bits of red data, 8 bits of green, and 8 of blue. For non-ARM
@@ -281,7 +317,7 @@ class Colour:
                     | self._g >> 5
                 )
             else:
-                self._888(self._r & 0xF8) << 8 | (self._g & 0xFC) << 3 | self._b >> 3
+                self._888 = (self._r & 0xF8) << 8 | (self._g & 0xFC) << 3 | self._b >> 3
 
         # Return the calculated value to the client
         return self._888

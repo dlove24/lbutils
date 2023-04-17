@@ -72,9 +72,9 @@ header below.
 # Import the typing hints if available. Use our backup version
 # if the offical library is missing
 try:
-    from typing import Type
+    from typing import Literal, Optional, Union
 except ImportError:
-    from lbutils.typing import Type
+    from lbutils.typing import Literal, Optional, Union  # type: ignore
 
 # Import the lbutils graphics library
 try:
@@ -88,6 +88,9 @@ import utime
 
 # Allow the use of MicroPython constants
 from micropython import const
+
+# Reference the MicroPython Pin library
+from machine import Pin
 
 ##
 ## Display Commands. Internal list of the command code required by the SSD1331
@@ -147,7 +150,7 @@ class OLEDrgb(graphics.Canvas):
     users of the library, and defaults to [`Org_01`]
     [lbutils.graphics.fonts.Org_01].
     * **Colour Support**: Colours can be selected in different ways, and the
-    `Canvas` maintains a foreground (`fg_color`) and background (`bg_color`)
+    `Canvas` maintains a foreground (`fg_colour`) and background (`bg_color`)
     attribute: along with a common method to override these default colours
     quickly for individual drawing commands. Colours are selected by order of
     precedence, which is defined as
@@ -211,13 +214,13 @@ class OLEDrgb(graphics.Canvas):
 
     **Colour Management**
 
-    * `select_bg_color()`. Return the colour to be used for drawing in the
+    * `select_bg_colour()`. Return the colour to be used for drawing in the
     background, taking into account the (optional) overrides specified in
     `bg_color` and `pen`. The selected colour will obey the standard colour
     selection precedence of the `Canvas` class, and is guaranteed to return a
     valid [`Colour`][lbutils.graphics.colours.Colour] object.
 
-    * `select_fg_color()`. Return the colour to be used for drawing in the
+    * `select_fg_colour()`. Return the colour to be used for drawing in the
     foreground, taking into account the (optional) overrides specified in `color`
     and `pen`. The selected colour will obey the standard colour selection
     precedence of the `Canvas` class, and is guaranteed to return a valid
@@ -297,7 +300,7 @@ class OLEDrgb(graphics.Canvas):
         spi_controller,
         data_cmd_pin: int = 15,
         chip_sel_pin: int = 14,
-        reset_pin: int = 17,
+        reset_pin: Pin = 17,
         width: int = 96,
         height: int = 64,
     ) -> None:
@@ -421,9 +424,6 @@ class OLEDrgb(graphics.Canvas):
         self.data_cmd_pin = data_cmd_pin
         self.chip_sel_pin = chip_sel_pin
         self.reset_pin = reset_pin
-        self.width = width
-        self.height = height
-        self.font = None
 
         # Initalise the diaplay
         self.reset()
@@ -471,23 +471,10 @@ class OLEDrgb(graphics.Canvas):
         self._write(None, data)
 
     ##
-    ## Properties
-    ##
-
-    @property
-    def font(self) -> None:
-        return self._font
-
-    @font.setter
-    def font(self, font) -> None:
-        if font is not None:
-            self._font = font
-
-    ##
     ## Methods
     ##
 
-    def read_pixel(self, x: int, y: int) -> Type[graphics.Colour]:
+    def read_pixel(self, x: int, y: int) -> graphics.Colour:
         """Read the colour value of the pixel at position (`x`, `y`) and return
         to the caller.
 
@@ -502,7 +489,7 @@ class OLEDrgb(graphics.Canvas):
         Returns
         -------
 
-        Type[Colour]:
+        Colour:
              The [`Colour`][lbutils.graphics.Colour] representation of the pixel
              located at (x, y).
         """
@@ -511,7 +498,7 @@ class OLEDrgb(graphics.Canvas):
 
         return self._read(None, 2)
 
-    def write_pixel(self, x: int, y: int, colour: Type[graphics.Colour]) -> None:
+    def write_pixel(self, x: int, y: int, colour: graphics.Colour) -> None:
         """Set the pixel at position (`x`, `y`) to the specified colour value.
 
         Parameters
@@ -521,7 +508,7 @@ class OLEDrgb(graphics.Canvas):
              The X co-ordinate of the pixel to set.
         y: int
              The Y co-ordinate of the pixel to set.
-        colour: Type[Colour]
+        colour: Colour
              The [`Colour`][lbutils.graphics.Colour] representation of the pixel
              located at (x, y).
         """
@@ -529,22 +516,22 @@ class OLEDrgb(graphics.Canvas):
         self._write(_SETROW, bytearray([y, y]))
 
         #          self._write(None,bytearray([colour >> 8, colour &0xff]))
-        self.draw_line(start=[x, y], end=[x, y])
+        self.draw_line(start=(x, y), end=(x, y))
 
     def draw_line(
         self,
-        end: tuple,
-        start: tuple = None,
-        fg_colour: Type[graphics.Colour] = None,
-        pen: Type[graphics.Pen] = None,
+        end: tuple[int, int],
+        start: Optional[tuple[int, int]] = None,
+        fg_colour: Optional[graphics.Colour] = None,
+        pen: Optional[graphics.Pen] = None,
     ) -> None:
         """Draw a line from the current `cursor` co-ordinates or the co-ordinate
         specified in `start`, to the point given in the `end` co-ordinates and
         using the specified RGB colour. If the drawing colour is not specified
         in the arguments to this method, then it will use the preference order
         for the foreground colour of the `Canvas` Class to find a suitable
-        colour. See [`select_fg_color`]
-        [lbutils.graphics.Canvas.select_fg_color] for more details of the
+        colour. See [`select_fg_colour`]
+        [lbutils.graphics.Canvas.select_fg_colour] for more details of the
         foreground colour selection algorithm.
 
         Example
@@ -617,7 +604,7 @@ class OLEDrgb(graphics.Canvas):
             `tuple` and the `y` co-ordinate as the second entry of the tuple.
         """
 
-        fg_colour = self.select_fg_color(fg_colour=fg_colour, pen=pen)
+        use_fg_colour = self.select_fg_colour(fg_colour=fg_colour, pen=pen)
 
         try:
             if start is None:
@@ -627,9 +614,9 @@ class OLEDrgb(graphics.Canvas):
                     self.cursor.y,
                     end[0],
                     end[1],
-                    fg_colour.bR,
-                    fg_colour.bG,
-                    fg_colour.bB,
+                    use_fg_colour.bR,
+                    use_fg_colour.bG,
+                    use_fg_colour.bB,
                 )
             else:
                 data = ustruct.pack(
@@ -638,9 +625,9 @@ class OLEDrgb(graphics.Canvas):
                     start[1],
                     end[0],
                     end[1],
-                    fg_colour.bR,
-                    fg_colour.bG,
-                    fg_colour.bB,
+                    use_fg_colour.bR,
+                    use_fg_colour.bG,
+                    use_fg_colour.bB,
                 )
         except Exception:
             raise ValueError(
@@ -655,11 +642,11 @@ class OLEDrgb(graphics.Canvas):
         self,
         width: int,
         height: int,
-        start: tuple = None,
-        fg_colour: Type[graphics.Colour] = None,
-        bg_colour: Type[graphics.Colour] = None,
-        pen: Type[graphics.Pen] = None,
-        style: graphics.RECTANGLE_STYLE = "FILLED",
+        start: Optional[tuple[int, int]] = None,
+        fg_colour: Optional[graphics.Colour] = None,
+        bg_colour: Optional[graphics.Colour] = None,
+        pen: Optional[graphics.Pen] = None,
+        style: Literal["FILLED", "FRAMED"] = "FILLED",
     ) -> None:
         """Draw a rectangle at the `start` co-ordinate, or the current cursor
         postion if `start` is `None`. In either case the rectangle will be drawn
@@ -669,10 +656,10 @@ class OLEDrgb(graphics.Canvas):
         as the interior colour. If the `style` is `"FRAMED"` then the interior
         of the rectangle is not drawn.
 
-        See either [`select_fg_color`]
-        [lbutils.graphics.Canvas.select_fg_color] for more details of the
-        foreground colour selection algorithm; or [`select_bg_color`]
-        [lbutils.graphics.Canvas.select_bg_color] for more details of the
+        See either [`select_fg_colour`]
+        [lbutils.graphics.Canvas.select_fg_colour] for more details of the
+        foreground colour selection algorithm; or [`select_bg_colour`]
+        [lbutils.graphics.Canvas.select_bg_colour] for more details of the
         background colour selection algorithm. By default the rectangle is
         `"FILLED"` and so both the background and foreground colours are used.
 
@@ -711,8 +698,8 @@ class OLEDrgb(graphics.Canvas):
              current background colour.
         """
 
-        fg_colour = self.select_fg_color(fg_colour=fg_colour, pen=pen)
-        bg_colour = self.select_bg_color(bg_colour=bg_colour, pen=pen)
+        use_fg_colour = self.select_fg_colour(fg_colour=fg_colour, pen=pen)
+        use_bg_colour = self.select_bg_colour(bg_colour=bg_colour, pen=pen)
 
         # Send the commands to fill, or not fill, the rectangle
         if style == "FILLED":
@@ -729,12 +716,12 @@ class OLEDrgb(graphics.Canvas):
                 self.cursor.y,
                 self.cursor.x + width - 1,
                 self.cursor.y + height - 1,
-                fg_colour.bR,
-                fg_colour.bG,
-                fg_colour.bB,
-                bg_colour.bR,
-                bg_colour.bG,
-                bg_colour.bB,
+                use_fg_colour.bR,
+                use_fg_colour.bG,
+                use_fg_colour.bB,
+                use_bg_colour.bR,
+                use_bg_colour.bG,
+                use_bg_colour.bB,
             )
         else:
             # Send the drawing command (the colour data is ignored if the
@@ -745,12 +732,12 @@ class OLEDrgb(graphics.Canvas):
                 start[1],
                 start[0] + width - 1,
                 start[1] + height - 1,
-                fg_colour.bR,
-                fg_colour.bG,
-                fg_colour.bB,
-                bg_colour.bR,
-                bg_colour.bG,
-                bg_colour.bB,
+                use_fg_colour.bR,
+                use_fg_colour.bG,
+                use_fg_colour.bB,
+                use_bg_colour.bR,
+                use_bg_colour.bG,
+                use_bg_colour.bB,
             )
 
         self._write(_DRAWRECT, data)
