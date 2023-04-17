@@ -76,9 +76,9 @@ shown below
 # Import the typing hints if available. Use our backup version
 # if the official library is missing
 try:
-    from typing import Optional, Literal
+    from typing import Literal, Optional
 except ImportError:
-    from lbutils.typing import Optional, Literal  # type: ignore
+    from lbutils.typing import Literal, Optional  # type: ignore
 
 from os import uname
 

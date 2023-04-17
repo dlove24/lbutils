@@ -35,8 +35,8 @@ This version is written for MicroPython 3.4, and has been tested on:
 
 # Import the SPI, GPIO and framebuffer MicroPython libraries
 try:
-    from machine import Pin, SPI
     import framebuf
+    from machine import SPI, Pin
 except ImportError:
     raise RuntimeError("Error: Missing required MicroPython includes!")
 

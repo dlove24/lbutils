@@ -86,11 +86,11 @@ except ImportError:
 import ustruct
 import utime
 
-# Allow the use of MicroPython constants
-from micropython import const
-
 # Reference the MicroPython Pin library
 from machine import Pin
+
+# Allow the use of MicroPython constants
+from micropython import const
 
 ##
 ## Display Commands. Internal list of the command code required by the SSD1331

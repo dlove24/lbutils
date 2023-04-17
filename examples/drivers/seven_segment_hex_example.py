@@ -44,8 +44,8 @@ except ImportError:
 
 # Import required core libraries
 try:
-    import utime
     import hidden
+    import utime
 except ImportError:
     print("Missing core libraries")
 

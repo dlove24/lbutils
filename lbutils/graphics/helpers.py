@@ -41,7 +41,7 @@ except ImportError:
 # Import the math library (needed for polar co-ordinates)
 from math import cos, sin
 
-from .colours import COLOUR_WHITE, COLOUR_BLACK, Colour
+from .colours import COLOUR_BLACK, COLOUR_WHITE, Colour
 
 ###
 ### Classes

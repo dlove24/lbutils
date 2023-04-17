@@ -29,7 +29,7 @@ MicroPython library `machine.I2C`, and the classes for the I2C 'pmods' in
 with the defaults for the Leeds Beckett micro-controller development board.
 """
 
-from machine import Pin, I2C
+from machine import I2C, Pin
 
 I2C_SDA_PIN_DEFAULT = 16
 """Define the pin used for the I2C data line, SDA, when scanning for I2C

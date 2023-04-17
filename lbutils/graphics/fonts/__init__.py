@@ -58,7 +58,6 @@ Python file.
 
 ### Expose the `fonts` module interface as a full package
 from .base_font import BaseFont
-
 from .font06 import Font_06
 from .font08 import Font_08
 from .org_01 import Org_01
