@@ -91,10 +91,10 @@ oled_display.origin.x_y = [0, 0]
 
 # Display the `Font_08` font class in red, and set the cursor
 # of the `oled_display` manually each time.
-print("Running the screen test for the `Font_08` font...")
+print("Running the screen test for the `Font08` font...")
 
 oled_display.fg_colour = graphics.colours.COLOUR_RED
-oled_display.font = fonts.Font_08()
+oled_display.font = fonts.Font08()
 
 oled_display.x_y = [0, 20]
 oled_display.write_text("ABCDEFGHIJKLMN")
@@ -118,10 +118,10 @@ oled_display.fill_screen(graphics.colours.COLOUR_BLACK)
 
 # Display the `Font_06` font class in green, and set the cursor
 # at the start of each call to `write_text`
-print("Running the screen test for the `Font_06` font...")
+print("Running the screen test for the `Font06` font...")
 
 oled_display.fg_colour = graphics.colours.COLOUR_LIME
-oled_display.font = fonts.Font_06()
+oled_display.font = fonts.Font06()
 
 oled_display.write_text(start=[0, 20], txt_str="ABCDEFGHIJKLMN")
 oled_display.write_text(start=[0, 30], txt_str="OPQRSTUVWXYZ")
@@ -134,12 +134,12 @@ utime.sleep(10)
 # Clear the display
 oled_display.fill_screen(graphics.colours.COLOUR_BLACK)
 
-# Display the `Org_01` font class in blue, and use the origin
+# Display the `Org01` font class in blue, and use the origin
 # with an offset to display the text using `write_text`
-print("Running the screen test for the `Org_01` font...")
+print("Running the screen test for the `Org01` font...")
 
 oled_display.fg_colour = graphics.colours.COLOUR_BLUE
-oled_display.font = fonts.Org_01()
+oled_display.font = fonts.Org01()
 
 oled_display.write_text(
     start=oled_display.origin.offset(y=20), txt_str="ABCDEFGHIJKLMN"

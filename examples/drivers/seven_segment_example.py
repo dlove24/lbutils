@@ -63,8 +63,8 @@ seg_list2 = [10, 11, 12, 13, 14, 15, 16]
 
 # Create the seven-segment display objects, each attached to the relevant
 # segment using the `SegDisplay` driver class
-segDisp1 = SegDisplay(seg_list1)
-segDisp2 = SegDisplay(seg_list2)
+seg_display1 = SegDisplay(seg_list1)
+seg_display2 = SegDisplay(seg_list2)
 
 # Read the input value from ADC0 on GPIO Pin 26
 adc = ADC(26)
@@ -73,7 +73,7 @@ adc = ADC(26)
 while True:
     adcval = adc.read_u16()
     temp = hidden.measureval(adcval)
-    segDisp2.display(int(temp % 10))
-    segDisp1.display(int((temp / 10) % 10))
+    seg_display2.display(int(temp % 10))
+    seg_display1.display(int((temp / 10) % 10))
 
     utime.sleep(1)

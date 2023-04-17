@@ -2,6 +2,16 @@
 
 All releases should be on [PyPi](https://pypi.org/project/lbutils-mp/), and also published on [GitHub](https://github.com/dlove24/lbutils). A full log of the changes can be found in the source, or on GitHub: what follows is a summary of key features/changes.
 
+## 2023-04-16: lbutils 0.2.5
+
+### Changed
+
+* Updated the type signature of the library methods to make
+static type checking easier. Also added `mypy` to the commit 
+hook to enforce type checking, and updated the documentation
+to reflect the types of the module attributes in use more
+consistently.
+
 ## 2023-04-16: lbutils 0.2.4
 
 ### New

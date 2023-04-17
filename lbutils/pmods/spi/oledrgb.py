@@ -70,7 +70,7 @@ header below.
 """
 
 # Import the typing hints if available. Use our backup version
-# if the offical library is missing
+# if the official library is missing
 try:
     from typing import Literal, Optional, Union
 except ImportError:
@@ -147,8 +147,8 @@ class OLEDrgb(graphics.Canvas):
     primitives that can be relied upon by higher-level libraries.
     * **Font Support**: The `Canvas` maintains a record of the current font to
     use when writing text through the `font` attribute. This can be changed by
-    users of the library, and defaults to [`Org_01`]
-    [lbutils.graphics.fonts.Org_01].
+    users of the library, and defaults to [`Org01`]
+    [lbutils.graphics.fonts.Org01].
     * **Colour Support**: Colours can be selected in different ways, and the
     `Canvas` maintains a foreground (`fg_colour`) and background (`bg_color`)
     attribute: along with a common method to override these default colours
@@ -168,30 +168,30 @@ class OLEDrgb(graphics.Canvas):
     Attributes
     ----------
 
-    bg_colour:
-         The background [`Colour`][lbutils.graphics.colours.Colour] to use when
-         drawing.
-    cursor:
-         The [`x`][lbutils.graphics.BoundPixel] and [`y`]
-         [lbutils.graphics.BoundPixel] locations  of the current write
-         (or read) operation.
-    origin:
-         The _user_ reference point for the next sequence of drawing primitives.
-         This `origin` will not be altered by changes to the [`x`]
-         [lbutils.graphics.BoundPixel] and [`y`]
-         [lbutils.graphics.BoundPixel] locations of any drawing command.
-    font:
-         The sub-class of [`BaseFont`][lbutils.graphics.fonts.base_font.BaseFont]
-         to use when drawing characters.
-    fg_colour:
-         The foreground [`Colour`][lbutils.graphics.colours.Colour] to use when
-         drawing.
-    pen:
-         The [`Pen`][lbutils.graphics.Pen] to use when drawing on the canvas.
-    height:
-         A read-only value for the height of the canvas in pixels.
-    width:
-         A read-only value for the width of the canvas in pixels.
+    bg_colour: graphics.Colour
+        The background [`Colour`][lbutils.graphics.colours.Colour] to use when
+        drawing.
+    cursor: graphics.BoundPixel
+        The [`x`][lbutils.graphics.BoundPixel] and [`y`]
+        [lbutils.graphics.BoundPixel] locations  of the current write
+        (or read) operation.
+    origin: graphics.BoundPixel
+        The _user_ reference point for the next sequence of drawing primitives.
+        This `origin` will not be altered by changes to the [`x`]
+        [lbutils.graphics.BoundPixel] and [`y`]
+        [lbutils.graphics.BoundPixel] locations of any drawing command.
+    font: fonts.BaseFont
+        The sub-class of [`BaseFont`][lbutils.graphics.fonts.base_font.BaseFont]
+        to use when drawing characters.
+    fg_colour: graphics.Colour
+        The foreground [`Colour`][lbutils.graphics.colours.Colour] to use when
+        drawing.
+    pen: graphics.Pen
+        The [`Pen`][lbutils.graphics.Pen] to use when drawing on the canvas.
+    height: int
+        A read-only value for the height of the canvas in pixels.
+    width: int
+        A read-only value for the width of the canvas in pixels.
     x: int
             The X co-ordinate value of the `cursor`
     y: int
@@ -200,7 +200,7 @@ class OLEDrgb(graphics.Canvas):
             A tuple representing the co-ordinate (x ,y) of the `cursor`
 
     Methods
-    ----------
+    -------
 
     **Cursor and Origin Movements**
 
@@ -382,20 +382,9 @@ class OLEDrgb(graphics.Canvas):
         Once a suitable object has been instantiated, the drawing methods
         provided by the rest of this class can be used.
 
-        Attributes
-        ----------
-
-        font: Type[BaseFont]
-            The current font in use for the display, which will be
-            an instance of
-            [`lbutils.graphics.fonts.BaseFont`][lbutils.graphics.fonts.base_font.BaseFont].
-            All subsequent text methods (e.g. `write_text`) will make use of
-            the specified `font` until this attribute is changed.
-
-
         Parameters
         ----------
-        spi_controller: Type[SPI]
+        spi_controller: SPI
             An instance of the
             [`machine.SPI`](https://docs.micropython.org/en/latest/library/machine.SPI.html)
             class, used to specify the SPI interface that should be used by this
@@ -408,8 +397,7 @@ class OLEDrgb(graphics.Canvas):
         reset_pin: int, optional
             Normally 'low': when held 'high', clears the current display buffer.
             Used to clear the display without having to rewrite each pixel.
-            Defaults
-                        to GPIO Pin 17.
+            Defaults to GPIO Pin 17.
         width: int, optional
             The width in pixels of the display. Defaults to 96.
         height: int, optional
@@ -614,9 +602,9 @@ class OLEDrgb(graphics.Canvas):
                     self.cursor.y,
                     end[0],
                     end[1],
-                    use_fg_colour.bR,
-                    use_fg_colour.bG,
-                    use_fg_colour.bB,
+                    use_fg_colour.red,
+                    use_fg_colour.green,
+                    use_fg_colour.blue,
                 )
             else:
                 data = ustruct.pack(
@@ -625,9 +613,9 @@ class OLEDrgb(graphics.Canvas):
                     start[1],
                     end[0],
                     end[1],
-                    use_fg_colour.bR,
-                    use_fg_colour.bG,
-                    use_fg_colour.bB,
+                    use_fg_colour.red,
+                    use_fg_colour.green,
+                    use_fg_colour.blue,
                 )
         except Exception:
             raise ValueError(
@@ -716,12 +704,12 @@ class OLEDrgb(graphics.Canvas):
                 self.cursor.y,
                 self.cursor.x + width - 1,
                 self.cursor.y + height - 1,
-                use_fg_colour.bR,
-                use_fg_colour.bG,
-                use_fg_colour.bB,
-                use_bg_colour.bR,
-                use_bg_colour.bG,
-                use_bg_colour.bB,
+                use_fg_colour.red,
+                use_fg_colour.green,
+                use_fg_colour.blue,
+                use_bg_colour.red,
+                use_bg_colour.green,
+                use_bg_colour.blue,
             )
         else:
             # Send the drawing command (the colour data is ignored if the
@@ -732,18 +720,18 @@ class OLEDrgb(graphics.Canvas):
                 start[1],
                 start[0] + width - 1,
                 start[1] + height - 1,
-                use_fg_colour.bR,
-                use_fg_colour.bG,
-                use_fg_colour.bB,
-                use_bg_colour.bR,
-                use_bg_colour.bG,
-                use_bg_colour.bB,
+                use_fg_colour.red,
+                use_fg_colour.green,
+                use_fg_colour.blue,
+                use_bg_colour.red,
+                use_bg_colour.green,
+                use_bg_colour.blue,
             )
 
         self._write(_DRAWRECT, data)
 
     def reset(self) -> None:
-        """Resets the display, clearing the current contents."""
+        """Reset the display, clearing the current contents."""
         if self.reset_pin is not None:
             self.reset_pin.value(0)
             utime.sleep(0.1)

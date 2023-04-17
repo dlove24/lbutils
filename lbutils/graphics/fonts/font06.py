@@ -23,7 +23,7 @@
 from .base_font import BaseFont
 
 
-class Font_06(BaseFont):
+class Font06(BaseFont):
     """6x6 pixel sans-serif font, created by
     [`fontconvert`](https://github.com/danjperron/ssd1331_micropython.git)."""
 

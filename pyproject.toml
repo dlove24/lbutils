@@ -33,7 +33,14 @@ packages = ["lbutils", "lbutils.drivers", "lbutils.graphics", "lbutils.graphics.
 
 [tool.ruff]
 # Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.
-select = ["E", "F", "FBT", "I", "Q",  "W"]
+select = ["D4", "E", "F", "FBT", "I", "N", "Q",  "UP", "W"]
+
+# Ignore
+# * F401 - Handle redundant imports via the module.
+# * F821 - ypes needed by the static type checker
+# * D412,D416 - Document formatting handled by docformatter
+# * N802 - Ignore special cases of mixedCase variables in the typing libraray
+ignore = ["D412", "D416", "F401", "F821", "N802"]
 
 # Allow autofix for all enabled rules (when `--fix`) is provided.
 fixable = ["A", "B", "C", "D", "E", "F", "G", "I", "N", "Q", "S", "T", "W", "ANN", "ARG", "BLE", "COM", "DJ", "DTZ", "EM", "ERA", "EXE", "FBT", "ICN", "INP", "ISC", "NPY", "PD", "PGH", "PIE", "PL", "PT", "PTH", "PYI", "RET", "RSE", "RUF", "SIM", "SLF", "TCH", "TID", "TRY", "UP", "YTT"]
@@ -61,10 +68,6 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 # Handle modules slightly differently
 ignore-init-module-imports = true
-
-# Handle redundant imports via the module. Ignore types needed by the type
-# linter
-ignore = ["F401", "F821"]
 
 # Assume Python 3.10.
 target-version = "py310"

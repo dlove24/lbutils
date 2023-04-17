@@ -31,13 +31,6 @@ separate library.
 *   CPython (3.10)
 """
 
-# Import the typing hints if available. Use our backup version
-# if the offical library is missing
-try:
-    from typing import Type
-except ImportError:
-    from lbutils.typing import Type  # type: ignore
-
 # Import the math library (needed for polar co-ordinates)
 from math import cos, sin
 
@@ -65,21 +58,21 @@ class Pen:
 
     ````python
     normal_text = Pen(COLOUR_WHITE)
-    alter_text = Pen(COLOUR_RED)
+    alert_text = Pen(COLOUR_RED)
     ````
 
     This defines a `normal_text` pen with a white foreground and default
     background and line thickness (black and 1 pixel byt default). A second pen
-    for `alter_text` has a red foreground, and similarly a black background with
+    for `alert_text` has a red foreground, and similarly a black background with
     1 pixel thickness. Text can then be written on the canvas using these two
     pens on a `Canvas` as
 
     ````python
     canvas = Canvas(width = 96, height = 48)
 
-    canvas.write_text(0, 10, "This is normal text", pen = normal_text)
-    canvas.write_text(0, 20, "and this is alert", pen = altert_text)
-    canvas.write_text(0, 30, "Now everything is back to normal", pen = normal_text)
+    canvas.write_text(start= (0, 10), "This is normal text", pen = normal_text)
+    canvas.write_text(start= (0, 20), "and this is alert", pen = alert_text)
+    canvas.write_text(start= (0, 30), "Now everything is back to normal", pen = normal_text)
     ````
 
     Attributes
@@ -99,7 +92,7 @@ class Pen:
         bg_colour: Colour = COLOUR_BLACK,
         thickness: int = 1,
     ) -> None:
-        """Creates a `Pen` instance, using the specified foreground and
+        """Create a `Pen` instance, using the specified foreground and
         background colour, and line thickness."""
 
         self.bg_colour = bg_colour
@@ -136,7 +129,7 @@ class Pixel:
             A tuple representing the co-ordinate (x ,y).
 
     Methods
-    ----------
+    -------
 
     * `move_to()`. Move the internal co-ordinate to the value (x, y). An alias
     for the [`x_y`][lbutils.graphics.Pixel.x_y] property.
@@ -158,7 +151,7 @@ class Pixel:
     ##
 
     def __init__(self, x: int, y: int) -> None:
-        """Creates a `Pixel` instance holding the specified `x` and `y` co-
+        """Create a `Pixel` instance holding the specified `x` and `y` co-
         ordinates, together representing the Cartesian point '(`x`, `y`)'.
 
         Parameters
@@ -229,7 +222,7 @@ class Pixel:
     ##
 
     def move_to(self, xy: tuple[int, int]) -> None:
-        """Sets the internal `x` and `y` co-ordinates as a tuple. An alias for
+        """Set the internal `x` and `y` co-ordinates as a tuple. An alias for
         the `x_y` property.
 
         Parameters
@@ -250,7 +243,7 @@ class Pixel:
         self.x_y = xy
 
     def offset(self, x: int = 0, y: int = 0) -> tuple[int, int]:
-        """Returns a `tuple` representing the (x, y) co-ordinate of the current
+        """Return a `tuple` representing the (x, y) co-ordinate of the current
         `Pixel` with the specified Cartesian off-set applied.
 
         Example
@@ -296,7 +289,7 @@ class Pixel:
         return (self.x + x, self.y + y)
 
     def offset_polar(self, r: int = 0, theta: int = 0) -> tuple[int, int]:
-        """Returns a `tuple` representing the (x, y) co-ordinate of the current
+        """Return a `tuple` representing the (x, y) co-ordinate of the current
         `Pixel` with the specified Polar off-set applied as the radius `r` and
         angle `theta`.
 
@@ -407,7 +400,7 @@ class BoundPixel(Pixel):
         min_x: int = 0,
         min_y: int = 0,
     ) -> None:
-        """Creates a `Pixel` instance holding the specified `x` and `y` co-
+        """Create a `Pixel` instance holding the specified `x` and `y` co-
         ordinates, together representing the Cartesian point '(`x`, `y`)'. This
         `x` and `y` value is guaranteed to be maintained between `min_x` and
         `max_x` for the `x` co- ordinate, and `min_y` and `max_y` for the `y`

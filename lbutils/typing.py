@@ -194,7 +194,7 @@ def cast(typ, val):
 
 
 def _overload_dummy(*args, **kwds):
-    """Helper for @overload to raise when called.
+    """Raise `NotImplementedError` for @overload when called.
 
     Parameters
     ----------

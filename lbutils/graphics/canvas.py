@@ -132,8 +132,8 @@ class Canvas(ABC):
     primitives that can be relied upon by higher-level libraries.
     * **Font Support**: The `Canvas` maintains a record of the current font to
     use when writing text through the `font` attribute. This can be changed by
-    users of the library, and defaults to [`Org_01`]
-    [lbutils.graphics.fonts.Org_01].
+    users of the library, and defaults to [`Org01`]
+    [lbutils.graphics.fonts.Org01].
     * **Colour Support**: Colours can be selected in different ways, and the
     `Canvas` maintains a foreground (`fg_colour`) and background (`bg_colour`)
     attribute: along with a common method to override these default colours
@@ -153,29 +153,29 @@ class Canvas(ABC):
     Attributes
     ----------
 
-    bg_colour:
+    bg_colour: graphics.Colour
          The background [`Colour`][lbutils.graphics.colours.Colour] to use when
          drawing.
-    cursor:
+    cursor: graphics.BoundPixel
          The [`x`][lbutils.graphics.BoundPixel] and [`y`]
          [lbutils.graphics.BoundPixel] locations  of the current write
          (or read) operation.
-    origin:
+    origin: graphics.BoundPixel
          The _user_ reference point for the next sequence of drawing primitives.
          This `origin` will not be altered by changes to the [`x`]
          [lbutils.graphics.BoundPixel] and [`y`]
          [lbutils.graphics.BoundPixel] locations of any drawing command.
-    font:
+    font: fonts.BaseFont
          The sub-class of [`BaseFont`][lbutils.graphics.fonts.base_font.BaseFont]
          to use when drawing characters.
-    fg_colour:
+    fg_colour: graphics.Colour
          The foreground [`Colour`][lbutils.graphics.colours.Colour] to use when
          drawing.
-    pen:
+    pen: graphics.Pen
          The [`Pen`][lbutils.graphics.Pen] to use when drawing on the canvas.
-    height:
+    height: int
          A read-only value for the height of the canvas in pixels.
-    width:
+    width: int
          A read-only value for the width of the canvas in pixels.
     x: int
             The X co-ordinate value of the `cursor`
@@ -185,7 +185,7 @@ class Canvas(ABC):
             A tuple representing the co-ordinate (x ,y) of the `cursor`
 
     Methods
-    ----------
+    -------
 
     **Cursor and Origin Movements**
 
@@ -271,6 +271,18 @@ class Canvas(ABC):
     _font: fonts.BaseFont
 
     ##
+    ## Public Attributes
+    ##
+
+    bg_colour: graphics.Colour
+    fg_colour: graphics.Colour
+
+    pen: Optional[graphics.Pen]
+
+    width: int
+    height: int
+
+    ##
     ## Constructors
     ##
 
@@ -280,8 +292,7 @@ class Canvas(ABC):
         height: int,
         bit_order: Optional[Literal["ARM", "INTEL"]] = "ARM",
     ) -> None:
-        """Creates a (packed) representation of a colour value, from the three
-        bytes `r` (red), `g` (green) and `b` (blue).
+        """Create the drawing `Canvas` with the specified `width` and `height`.
 
         Parameters
         ----------
@@ -309,7 +320,7 @@ class Canvas(ABC):
             0, 0, min_x=0, max_x=width, min_y=0, max_y=height
         )
 
-        self._font = fonts.Org_01()
+        self._font = fonts.Org01()
 
         self.width = width
         self.height = height
@@ -869,8 +880,9 @@ class Canvas(ABC):
     ##
 
     def move_to(self, xy: tuple[int, int]) -> None:
-        """Sets the internal `x` and `y` co-ordinates of the `cursor` as a
-        tuple. An alias for the `x_y` property of `Canvas`.
+        """Set the internal (`x`, `y`) co-ordinates of the `cursor` to the
+        values of the `xy` two-value tuple. An alias for the `x_y` property of
+        `Canvas`.
 
         Parameters
         ----------
@@ -890,7 +902,7 @@ class Canvas(ABC):
         self.cursor.x_y = xy
 
     def move_origin_to(self) -> None:
-        """Sets the user drawing [`origin`] [lbutils.graphics.Canvas.origin] of
+        """Set the user drawing [`origin`] [lbutils.graphics.Canvas.origin] of
         the `Canvas` to the specified co-ordinate the next sequence of drawing
         commands.
 

@@ -23,7 +23,7 @@
 from .base_font import BaseFont
 
 
-class Org_01(BaseFont):
+class Org01(BaseFont):
     """A tiny, stylized font with all characters within a 6 pixel height.
 
     Created by [`fontconvert`](https://github.com/danjperron/

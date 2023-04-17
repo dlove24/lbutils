@@ -105,11 +105,11 @@ class Colour:
 
     Attributes
     ----------
-    bR: int, read-only
+    red: int, read-only
         The byte (`0..255`) of the red component of the colour
-    bG: int, read-only
+    green: int, read-only
         The byte (`0..255`) of the green component of the colour
-    bB: int, read-only
+    blue: int, read-only
         The byte (`0..255`) of the blue component of the colour
     as_565: int, read-only
         Provides the colour value in the RGB565 format, using a single
@@ -147,9 +147,9 @@ class Colour:
     _565: Optional[int]
     _888: Optional[int]
 
-    _bR: Optional[int]
-    _bG: Optional[int]
-    _bB: Optional[int]
+    _red: Optional[int]
+    _green: Optional[int]
+    _blue: Optional[int]
 
     ##
     ## Constructors
@@ -162,11 +162,11 @@ class Colour:
         b: int,
         bit_order: Optional[Literal["ARM", "INTEL"]] = "ARM",
     ) -> None:
-        """Creates a representation of a colour value, from the three integers
+        """Create a representation of a colour value, from the three integers
         `r` (red), `g` (green) and `b` (blue). The class will accept anything
-        which can be coerced to an integer as arguments: the access through the
-        attributes will determine the representation used when displaying the
-        colour.
+        which can be coerced to an integer as arguments: the methods used to
+        access the colour (and the `bit_order`) will determine the byte order
+        used as the final representation used when displaying the colour.
 
         Parameters
         ----------
@@ -200,37 +200,37 @@ class Colour:
         self._565 = None
         self._888 = None
 
-        self._bR = None
-        self._bG = None
-        self._bB = None
+        self._red = None
+        self._green = None
+        self._blue = None
 
     ##
     ## Properties
     ##
 
     @property
-    def bR(self) -> int:
+    def red(self) -> int:
         """The red component of the colour value, packed to a single byte."""
-        if self._bR is None:
-            self._bR = self._r & 0xFF
+        if self._red is None:
+            self._red = self._r & 0xFF
 
-        return self._bR
+        return self._red
 
     @property
-    def bG(self) -> int:
+    def green(self) -> int:
         """The green component of the colour value, packed to a single byte."""
-        if self._bG is None:
-            self._bG = self._g & 0xFF
+        if self._green is None:
+            self._green = self._g & 0xFF
 
-        return self._bG
+        return self._green
 
     @property
-    def bB(self) -> int:
+    def blue(self) -> int:
         """The blue component of the colour value, packed to a single byte."""
-        if self._bB is None:
-            self._bB = self._b & 0xFF
+        if self._blue is None:
+            self._blue = self._b & 0xFF
 
-        return self._bB
+        return self._blue
 
     @property
     def as_565(self) -> Optional[int]:
@@ -238,7 +238,7 @@ class Colour:
         Construct a packed word from the internal colour representation, with
         5 bits of red data, 6 of green, and 5 of blue. On ARM platforms
         the packed word representation has the high and low bytes swapped,
-        and so looks like
+        and so looks like.
 
         ````
         F  E  D  C  B  A  9  8  7  6  5  4  3  2  1  0
@@ -283,7 +283,7 @@ class Colour:
         Construct a packed double word from the internal colour representation,
         with 8 bits of red data, 8 bits of green, and 8 of blue. For non-ARM
         platforms this results in a byte order for the two colour words as
-        follows
+        follows.
 
         ````
         F  E  D  C  B  A  9  8  7  6  5  4  3  2  1  0
