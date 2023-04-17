@@ -74,7 +74,7 @@ header below.
 try:
     from typing import Literal, Optional, Type, Union
 except ImportError:
-    from lbutils.typing import Type
+    from lbutils.typing import Literal, Optional, Type, Union  # type: ignore
 
 # Import the lbutils graphics library
 try:
@@ -90,7 +90,7 @@ import utime
 from micropython import const
 
 # Reference the MicroPython Pin library
-from micropython import Pin
+from machine import Pin
 
 ##
 ## Display Commands. Internal list of the command code required by the SSD1331
@@ -150,7 +150,7 @@ class OLEDrgb(graphics.Canvas):
     users of the library, and defaults to [`Org_01`]
     [lbutils.graphics.fonts.Org_01].
     * **Colour Support**: Colours can be selected in different ways, and the
-    `Canvas` maintains a foreground (`fg_color`) and background (`bg_color`)
+    `Canvas` maintains a foreground (`fg_colour`) and background (`bg_color`)
     attribute: along with a common method to override these default colours
     quickly for individual drawing commands. Colours are selected by order of
     precedence, which is defined as
@@ -214,13 +214,13 @@ class OLEDrgb(graphics.Canvas):
 
     **Colour Management**
 
-    * `select_bg_color()`. Return the colour to be used for drawing in the
+    * `select_bg_colour()`. Return the colour to be used for drawing in the
     background, taking into account the (optional) overrides specified in
     `bg_color` and `pen`. The selected colour will obey the standard colour
     selection precedence of the `Canvas` class, and is guaranteed to return a
     valid [`Colour`][lbutils.graphics.colours.Colour] object.
 
-    * `select_fg_color()`. Return the colour to be used for drawing in the
+    * `select_fg_colour()`. Return the colour to be used for drawing in the
     foreground, taking into account the (optional) overrides specified in `color`
     and `pen`. The selected colour will obey the standard colour selection
     precedence of the `Canvas` class, and is guaranteed to return a valid
@@ -424,9 +424,6 @@ class OLEDrgb(graphics.Canvas):
         self.data_cmd_pin = data_cmd_pin
         self.chip_sel_pin = chip_sel_pin
         self.reset_pin = reset_pin
-        self.width = width
-        self.height = height
-        self.font = None
 
         # Initalise the diaplay
         self.reset()
@@ -472,19 +469,6 @@ class OLEDrgb(graphics.Canvas):
         self._write(_SETCOLUMN, bytearray([x, x + width - 1]))
         self._write(_SETROW, bytearray([y, y + height - 1]))
         self._write(None, data)
-
-    ##
-    ## Properties
-    ##
-
-    @property
-    def font(self) -> None:
-        return self._font
-
-    @font.setter
-    def font(self, font) -> None:
-        if font is not None:
-            self._font = font
 
     ##
     ## Methods
@@ -536,8 +520,8 @@ class OLEDrgb(graphics.Canvas):
 
     def draw_line(
         self,
-        end: tuple[int,int],
-        start: Optional[tuple[int,int]] = None,
+        end: tuple[int, int],
+        start: Optional[tuple[int, int]] = None,
         fg_colour: Optional[Type[graphics.Colour]] = None,
         pen: Optional[Type[graphics.Pen]] = None,
     ) -> None:
@@ -546,8 +530,8 @@ class OLEDrgb(graphics.Canvas):
         using the specified RGB colour. If the drawing colour is not specified
         in the arguments to this method, then it will use the preference order
         for the foreground colour of the `Canvas` Class to find a suitable
-        colour. See [`select_fg_color`]
-        [lbutils.graphics.Canvas.select_fg_color] for more details of the
+        colour. See [`select_fg_colour`]
+        [lbutils.graphics.Canvas.select_fg_colour] for more details of the
         foreground colour selection algorithm.
 
         Example
@@ -620,7 +604,7 @@ class OLEDrgb(graphics.Canvas):
             `tuple` and the `y` co-ordinate as the second entry of the tuple.
         """
 
-        use_fg_colour = self.select_fg_color(fg_colour=fg_colour, pen=pen)
+        use_fg_colour = self.select_fg_colour(fg_colour=fg_colour, pen=pen)
 
         try:
             if start is None:
@@ -658,7 +642,7 @@ class OLEDrgb(graphics.Canvas):
         self,
         width: int,
         height: int,
-        start: Optional[tuple[int,int]] = None,
+        start: Optional[tuple[int, int]] = None,
         fg_colour: Optional[Type[graphics.Colour]] = None,
         bg_colour: Optional[Type[graphics.Colour]] = None,
         pen: Optional[Type[graphics.Pen]] = None,
@@ -672,10 +656,10 @@ class OLEDrgb(graphics.Canvas):
         as the interior colour. If the `style` is `"FRAMED"` then the interior
         of the rectangle is not drawn.
 
-        See either [`select_fg_color`]
-        [lbutils.graphics.Canvas.select_fg_color] for more details of the
-        foreground colour selection algorithm; or [`select_bg_color`]
-        [lbutils.graphics.Canvas.select_bg_color] for more details of the
+        See either [`select_fg_colour`]
+        [lbutils.graphics.Canvas.select_fg_colour] for more details of the
+        foreground colour selection algorithm; or [`select_bg_colour`]
+        [lbutils.graphics.Canvas.select_bg_colour] for more details of the
         background colour selection algorithm. By default the rectangle is
         `"FILLED"` and so both the background and foreground colours are used.
 
@@ -714,8 +698,8 @@ class OLEDrgb(graphics.Canvas):
              current background colour.
         """
 
-        use_fg_colour = self.select_fg_color(fg_colour=fg_colour, pen=pen)
-        use_bg_colour = self.select_bg_color(bg_colour=bg_colour, pen=pen)
+        use_fg_colour = self.select_fg_colour(fg_colour=fg_colour, pen=pen)
+        use_bg_colour = self.select_bg_colour(bg_colour=bg_colour, pen=pen)
 
         # Send the commands to fill, or not fill, the rectangle
         if style == "FILLED":

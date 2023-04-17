@@ -36,7 +36,7 @@ separate library.
 try:
     from typing import Type
 except ImportError:
-    from lbutils.typing import Type
+    from lbutils.typing import Type  # type: ignore
 
 # Import the math library (needed for polar co-ordinates)
 from math import cos, sin
@@ -85,9 +85,9 @@ class Pen:
     Attributes
     ----------
 
-    bg_colour: Type[Colour], optional
+    bg_colour: Colour, optional
             The background colour of the pen. Defaults to black.
-    fg_colour: Type[Colour], optional
+    fg_colour: Colour, optional
             The foreground colour of the pen. Defaults to white.
     thickness: int, optional
             The line thickness of the pen. Defaults to 1 pixel.
@@ -95,8 +95,8 @@ class Pen:
 
     def __init__(
         self,
-        fg_colour: Type[Colour] = COLOUR_WHITE,
-        bg_colour: Type[Colour] = COLOUR_BLACK,
+        fg_colour: Colour = COLOUR_WHITE,
+        bg_colour: Colour = COLOUR_BLACK,
         thickness: int = 1,
     ) -> None:
         """Creates a `Pen` instance, using the specified foreground and
@@ -132,7 +132,7 @@ class Pixel:
             The X co-ordinate value.
     y: int
             The Y co-ordinate value.
-    x_y: int
+    x_y: tuple[int, int]
             A tuple representing the co-ordinate (x ,y).
 
     Methods
@@ -145,6 +145,13 @@ class Pixel:
     * `offset_polar()`. Returns a `tuple` representing the (x, y) co-ordinate of
     the current `Pixel` with the specified Polar off-set applied.
     """
+
+    ##
+    ## Internal Attributes
+    ##
+
+    _x: int
+    _y: int
 
     ##
     ## Constructors
@@ -170,7 +177,7 @@ class Pixel:
     ##
 
     @property
-    def x_y(self) -> tuple:
+    def x_y(self) -> tuple[int, int]:
         """Sets, or returns, the internal `x` and `y` co-ordinates as a tuple.
 
         When _reading_ from this property, a tuple is returned with the first
@@ -188,18 +195,40 @@ class Pixel:
             If the `x` or `y` co-ordinate in the `xy` tuple cannot be converted
             to an integer.
         """
-        return [self._x, self._y]
+        return (self._x, self._y)
 
     @x_y.setter
-    def x_y(self, xy: tuple) -> None:
+    def x_y(self, xy: tuple[int, int]) -> None:
         self.x = int(xy[0])
         self.y = int(xy[1])
+
+    ##
+    ## Properties
+    ##
+
+    @property
+    def x(self) -> int:
+        """The `x` co-ordinate of the `Pixel`."""
+        return self._x
+
+    @x.setter
+    def x(self, value: int) -> None:
+        self._x = int(value)
+
+    @property
+    def y(self) -> int:
+        """The `y` co-ordinate of the `Pixel`."""
+        return self._y
+
+    @y.setter
+    def y(self, value: int) -> None:
+        self._y = int(value)
 
     ##
     ## Methods
     ##
 
-    def move_to(self, xy: tuple) -> None:
+    def move_to(self, xy: tuple[int, int]) -> None:
         """Sets the internal `x` and `y` co-ordinates as a tuple. An alias for
         the `x_y` property.
 
@@ -220,7 +249,7 @@ class Pixel:
         """
         self.x_y = xy
 
-    def offset(self, x: int = 0, y: int = 0) -> tuple:
+    def offset(self, x: int = 0, y: int = 0) -> tuple[int, int]:
         """Returns a `tuple` representing the (x, y) co-ordinate of the current
         `Pixel` with the specified Cartesian off-set applied.
 
@@ -264,9 +293,9 @@ class Pixel:
             first value of the `tuple` representing the `x` co-ordinate and the
             second value of the `tuple` representing the `y` co-ordinate.
         """
-        return [self.x + x, self.y + y]
+        return (self.x + x, self.y + y)
 
-    def offset_polar(self, r: int = 0, theta: int = 0) -> tuple:
+    def offset_polar(self, r: int = 0, theta: int = 0) -> tuple[int, int]:
         """Returns a `tuple` representing the (x, y) co-ordinate of the current
         `Pixel` with the specified Polar off-set applied as the radius `r` and
         angle `theta`.
@@ -319,7 +348,7 @@ class Pixel:
             first value of the `tuple` representing the `x` co-ordinate and the
             second value of the `tuple` representing the `y` co-ordinate.
         """
-        return [int(self.x + (r * cos(theta))), int(self.y + (r * sin(theta)))]
+        return (int(self.x + (r * cos(theta))), int(self.y + (r * sin(theta))))
 
 
 class BoundPixel(Pixel):
@@ -330,7 +359,7 @@ class BoundPixel(Pixel):
     'origin' co-ordinate for a drawing, and a 'current' co-ordinate around the
     origin where lines are being drawn to and from.
 
-    Unlike the [`Pixel`][lbutils.graphics.Pixel] class, the `BoundPxiel` will
+    Unlike the [`Pixel`][lbutils.graphics.Pixel] class, the `BoundPixel` will
     also ensure that the X and Y co-ordinates are maintained between minimum and
     maximum value for the `width` or `height`. This is useful for instances where
     a cursor, for instance, must only take values within the limits of a display.
@@ -436,7 +465,7 @@ class BoundPixel(Pixel):
 
     @property
     def x(self) -> int:
-        """The `x` co-ordinate of the `BoundPxiel`, checking that it lies within
+        """The `x` co-ordinate of the `BoundPixel`, checking that it lies within
         the specified `min_x` and `max_x` limits.
 
         If the `x` co-ordinate does lie outside the specified region, set it to
@@ -464,7 +493,7 @@ class BoundPixel(Pixel):
 
     @property
     def y(self) -> int:
-        """The `y` co-ordinate of the `BoundPxiel`, checking that it lies within
+        """The `y` co-ordinate of the `BoundPixel`, checking that it lies within
         the specified `min_x` and `max_y` limits.
 
         If the `y` co-ordinate does lie outside the specified region, set it to

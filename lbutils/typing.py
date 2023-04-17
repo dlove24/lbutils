@@ -89,6 +89,10 @@ class Iterator:
     pass
 
 
+class Literal:
+    pass
+
+
 class Reversible:
     pass
 
