@@ -405,7 +405,7 @@ class Canvas(ABC):
     ##
 
     @abstractmethod
-    def read_pixel(self, x: int, y: int) -> Type[graphics.Colour]:
+    def read_pixel(self, x: int, y: int) -> graphics.Colour:
         """Read the colour value of the pixel at position (`x`, `y`) and return
         to the caller.
 
@@ -420,14 +420,14 @@ class Canvas(ABC):
         Returns
         -------
 
-        Type[Colour]:
+        Colour:
              The [`Colour`][lbutils.graphics.Colour] representation of the pixel
              located at (x, y).
         """
         pass
 
     @abstractmethod
-    def write_pixel(self, x: int, y: int, colour: Type[graphics.Colour]) -> None:
+    def write_pixel(self, x: int, y: int, colour: graphics.Colour) -> None:
         """Set the pixel at position (`x`, `y`) to the specified colour value.
 
         Parameters
@@ -437,7 +437,7 @@ class Canvas(ABC):
              The X co-ordinate of the pixel to set.
         y: int
              The Y co-ordinate of the pixel to set.
-        colour: Type[Colour]
+        colour: Colour
              The [`Colour`][lbutils.graphics.Colour] representation of the pixel
              located at (x, y).
         """
@@ -629,7 +629,7 @@ class Canvas(ABC):
         Returns
         -------
 
-        Type[Colour]:
+        Colour:
              A [`Colour`][lbutils.graphics.Colour] object representing the
              current foreground colour of the `Canvas`
         """
@@ -684,7 +684,7 @@ class Canvas(ABC):
         Returns
         -------
 
-        Type[Colour]:
+        Colour:
              A [`Colour`][lbutils.graphics.Colour] object representing the
              current background colour of the `Canvas`.
         """
@@ -917,4 +917,3 @@ class FrameBufferCanvas(Canvas):
     ocs.micropython.org/en/latest/library/framebuf.html)."""
 
     pass
-

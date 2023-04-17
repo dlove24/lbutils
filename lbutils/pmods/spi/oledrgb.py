@@ -474,7 +474,7 @@ class OLEDrgb(graphics.Canvas):
     ## Methods
     ##
 
-    def read_pixel(self, x: int, y: int) -> Type[graphics.Colour]:
+    def read_pixel(self, x: int, y: int) -> graphics.Colour:
         """Read the colour value of the pixel at position (`x`, `y`) and return
         to the caller.
 
@@ -489,7 +489,7 @@ class OLEDrgb(graphics.Canvas):
         Returns
         -------
 
-        Type[Colour]:
+        Colour:
              The [`Colour`][lbutils.graphics.Colour] representation of the pixel
              located at (x, y).
         """
@@ -498,7 +498,7 @@ class OLEDrgb(graphics.Canvas):
 
         return self._read(None, 2)
 
-    def write_pixel(self, x: int, y: int, colour: Type[graphics.Colour]) -> None:
+    def write_pixel(self, x: int, y: int, colour: graphics.Colour) -> None:
         """Set the pixel at position (`x`, `y`) to the specified colour value.
 
         Parameters
@@ -508,7 +508,7 @@ class OLEDrgb(graphics.Canvas):
              The X co-ordinate of the pixel to set.
         y: int
              The Y co-ordinate of the pixel to set.
-        colour: Type[Colour]
+        colour: Colour
              The [`Colour`][lbutils.graphics.Colour] representation of the pixel
              located at (x, y).
         """
@@ -748,4 +748,3 @@ class OLEDrgb(graphics.Canvas):
             self.reset_pin.value(0)
             utime.sleep(0.1)
             self.reset_pin.value(1)
-
