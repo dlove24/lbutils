@@ -132,7 +132,7 @@ class Colour:
     ##
 
     def __init__(
-        self, r: int, g: int, b: int, bit_order: DEVICE_BIT_ORDER = "ARM"
+        self, r: int, g: int, b: int, bit_order: set = "ARM"
     ) -> None:
         """Creates a representation of a colour value, from the three integers
         `r` (red), `g` (green) and `b` (blue). The class will accept anything

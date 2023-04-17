@@ -88,7 +88,7 @@ except ImportError:
 
 # Import the typing support
 try:
-    from typing import Type
+    from typing import Literal, Optional, Type, Union
 except ImportError:
     from lbutils.typing import Type
 
@@ -422,10 +422,10 @@ class Canvas(ABC):
     @abstractmethod
     def draw_line(
         self,
-        end: tuple,
-        start: tuple = None,
-        fg_colour: Type[graphics.Colour] = None,
-        pen: Type[graphics.Pen] = None,
+        end: tuple[int,int],
+        start: Optional[tuple[int,int]] = None,
+        fg_colour: Optional[Type[graphics.Colour]] = None,
+        pen: Optional[Type[graphics.Pen]] = None,
     ) -> None:
         """Draw a line from the current `cursor` co-ordinates or the co-ordinate
         specified in `start`, to the point given in the `end` co-ordinates and
@@ -504,11 +504,11 @@ class Canvas(ABC):
         self,
         width: int,
         height: int,
-        start: tuple = None,
-        fg_colour: Type[graphics.Colour] = None,
-        bg_colour: Type[graphics.Colour] = None,
-        pen: Type[graphics.Pen] = None,
-        style: RECTANGLE_STYLE = "FILLED",
+        start: Optional[tuple[int,int]] = None,
+        fg_colour: Optional[Type[graphics.Colour]] = None,
+        bg_colour: Optional[Type[graphics.Colour]] = None,
+        pen: Optional[Type[graphics.Pen]] = None,
+        style: Literal["FILLED", "FRAMED"] = "FILLED",
     ) -> None:
         """Draw a rectangle at the `start` co-ordinate, or the current cursor
         postion if `start` is `None`. In either case the rectangle will be drawn
@@ -566,7 +566,7 @@ class Canvas(ABC):
     ##
 
     def select_fg_color(
-        self, fg_colour: Type[graphics.Colour] = None, pen: Type[graphics.Pen] = None
+        self, fg_colour: Optional[Type[graphics.Colour]] = None, pen: Optional[Type[graphics.Pen]] = None
     ):
         """Return the colour to be used for drawing in the foreground, taking
         into account the (optional) overrides specified in `color` and `pen`.
@@ -620,7 +620,7 @@ class Canvas(ABC):
             return graphics.colours.COLOUR_WHITE
 
     def select_bg_color(
-        self, bg_colour: Type[graphics.Colour] = None, pen: Type[graphics.Pen] = None
+        self, bg_colour: Optional[Type[graphics.Colour]] = None, pen: Optional[Type[graphics.Pen]] = None
     ):
         """Return the colour to be used for drawing in the background, taking
         into account the (optional) overrides specified in `bg_color` and `pen`.

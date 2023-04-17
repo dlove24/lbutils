@@ -72,7 +72,7 @@ header below.
 # Import the typing hints if available. Use our backup version
 # if the offical library is missing
 try:
-    from typing import Type
+    from typing import Literal, Optional, Type, Union
 except ImportError:
     from lbutils.typing import Type
 
@@ -88,6 +88,9 @@ import utime
 
 # Allow the use of MicroPython constants
 from micropython import const
+
+# Reference the MicroPython Pin library
+from micropython import Pin
 
 ##
 ## Display Commands. Internal list of the command code required by the SSD1331
@@ -297,7 +300,7 @@ class OLEDrgb(graphics.Canvas):
         spi_controller,
         data_cmd_pin: int = 15,
         chip_sel_pin: int = 14,
-        reset_pin: int = 17,
+        reset_pin: Pin = 17,
         width: int = 96,
         height: int = 64,
     ) -> None:
@@ -529,14 +532,14 @@ class OLEDrgb(graphics.Canvas):
         self._write(_SETROW, bytearray([y, y]))
 
         #          self._write(None,bytearray([colour >> 8, colour &0xff]))
-        self.draw_line(start=[x, y], end=[x, y])
+        self.draw_line(start=(x, y), end=(x, y))
 
     def draw_line(
         self,
-        end: tuple,
-        start: tuple = None,
-        fg_colour: Type[graphics.Colour] = None,
-        pen: Type[graphics.Pen] = None,
+        end: tuple[int,int],
+        start: Optional[tuple[int,int]] = None,
+        fg_colour: Optional[Type[graphics.Colour]] = None,
+        pen: Optional[Type[graphics.Pen]] = None,
     ) -> None:
         """Draw a line from the current `cursor` co-ordinates or the co-ordinate
         specified in `start`, to the point given in the `end` co-ordinates and
@@ -617,7 +620,7 @@ class OLEDrgb(graphics.Canvas):
             `tuple` and the `y` co-ordinate as the second entry of the tuple.
         """
 
-        fg_colour = self.select_fg_color(fg_colour=fg_colour, pen=pen)
+        use_fg_colour = self.select_fg_color(fg_colour=fg_colour, pen=pen)
 
         try:
             if start is None:
@@ -627,9 +630,9 @@ class OLEDrgb(graphics.Canvas):
                     self.cursor.y,
                     end[0],
                     end[1],
-                    fg_colour.bR,
-                    fg_colour.bG,
-                    fg_colour.bB,
+                    use_fg_colour.bR,
+                    use_fg_colour.bG,
+                    use_fg_colour.bB,
                 )
             else:
                 data = ustruct.pack(
@@ -638,9 +641,9 @@ class OLEDrgb(graphics.Canvas):
                     start[1],
                     end[0],
                     end[1],
-                    fg_colour.bR,
-                    fg_colour.bG,
-                    fg_colour.bB,
+                    use_fg_colour.bR,
+                    use_fg_colour.bG,
+                    use_fg_colour.bB,
                 )
         except Exception:
             raise ValueError(
@@ -655,11 +658,11 @@ class OLEDrgb(graphics.Canvas):
         self,
         width: int,
         height: int,
-        start: tuple = None,
-        fg_colour: Type[graphics.Colour] = None,
-        bg_colour: Type[graphics.Colour] = None,
-        pen: Type[graphics.Pen] = None,
-        style: graphics.RECTANGLE_STYLE = "FILLED",
+        start: Optional[tuple[int,int]] = None,
+        fg_colour: Optional[Type[graphics.Colour]] = None,
+        bg_colour: Optional[Type[graphics.Colour]] = None,
+        pen: Optional[Type[graphics.Pen]] = None,
+        style: Literal["FILLED", "FRAMED"] = "FILLED",
     ) -> None:
         """Draw a rectangle at the `start` co-ordinate, or the current cursor
         postion if `start` is `None`. In either case the rectangle will be drawn
@@ -711,8 +714,8 @@ class OLEDrgb(graphics.Canvas):
              current background colour.
         """
 
-        fg_colour = self.select_fg_color(fg_colour=fg_colour, pen=pen)
-        bg_colour = self.select_bg_color(bg_colour=bg_colour, pen=pen)
+        use_fg_colour = self.select_fg_color(fg_colour=fg_colour, pen=pen)
+        use_bg_colour = self.select_bg_color(bg_colour=bg_colour, pen=pen)
 
         # Send the commands to fill, or not fill, the rectangle
         if style == "FILLED":
@@ -729,12 +732,12 @@ class OLEDrgb(graphics.Canvas):
                 self.cursor.y,
                 self.cursor.x + width - 1,
                 self.cursor.y + height - 1,
-                fg_colour.bR,
-                fg_colour.bG,
-                fg_colour.bB,
-                bg_colour.bR,
-                bg_colour.bG,
-                bg_colour.bB,
+                use_fg_colour.bR,
+                use_fg_colour.bG,
+                use_fg_colour.bB,
+                use_bg_colour.bR,
+                use_bg_colour.bG,
+                use_bg_colour.bB,
             )
         else:
             # Send the drawing command (the colour data is ignored if the
@@ -745,12 +748,12 @@ class OLEDrgb(graphics.Canvas):
                 start[1],
                 start[0] + width - 1,
                 start[1] + height - 1,
-                fg_colour.bR,
-                fg_colour.bG,
-                fg_colour.bB,
-                bg_colour.bR,
-                bg_colour.bG,
-                bg_colour.bB,
+                use_fg_colour.bR,
+                use_fg_colour.bG,
+                use_fg_colour.bB,
+                use_bg_colour.bR,
+                use_bg_colour.bG,
+                use_bg_colour.bB,
             )
 
         self._write(_DRAWRECT, data)
