@@ -36,23 +36,26 @@ This version is written for MicroPython 3.4, and has been tested on:
 
 # Import the SPI, GPIO and framebuffer MicroPython libraries
 try:
-    from machine import Pin, SPI
     import framebuf
+    from machine import SPI, Pin
 except ImportError:
-    raise RuntimeError("Error: Missing required MicroPython includes!")
+    msg = "Error: Missing required MicroPython includes!"
+    raise RuntimeError(msg) from ImportError
 
 # Import the lbutils graphics library
 try:
-    import lbutils.graphics as graphics
-    import lbutils.graphics.fonts as fonts
+    from lbutils import graphics
+    from lbutils.graphics import colours, fonts
 except ImportError:
-    raise RuntimeError("Error: Missing required LBUtils graphics library")
+    msg = ("Error: Missing required LBUtils graphics library",)
+    raise RuntimeError(msg) from ImportError
 
 # Import the LB Utils driver for the Pmod OLEDrgb
 try:
     from lbutils.pmods.spi import OLEDrgb
 except ImportError:
-    raise RuntimeError("Error: Cannot find the Pmod OLEDrgb driver!")
+    msg = "Error: Cannot find the Pmod OLEDrgb driver!"
+    raise RuntimeError(msg) from ImportError
 
 # Import the core libraries
 import utime
@@ -70,7 +73,7 @@ chip_sel_pin = Pin(14, Pin.OUT)
 reset_pin = Pin(17, Pin.OUT)
 
 # Add the VCC_Enable pin, used to control the display
-# and display backlight, and set to `high()` to turn
+# and display back-light, and set to `high()` to turn
 # the display on
 vcc_enable = Pin(22, Pin.OUT)
 vcc_enable.high()
@@ -78,7 +81,7 @@ vcc_enable.high()
 # Finally initialise the OLED display driver, and set the display
 # to black
 oled_display = OLEDrgb(spi_controller, data_cmd_pin, chip_sel_pin, reset_pin)
-oled_display.fill_screen(graphics.colours.COLOUR_BLACK)
+oled_display.fill_screen(colours.COLOUR_BLACK)
 
 # Set the origin for the tests
 oled_display.origin.x_y = [0, 0]
@@ -91,10 +94,10 @@ oled_display.origin.x_y = [0, 0]
 
 # Display the `Font_08` font class in red, and set the cursor
 # of the `oled_display` manually each time.
-print("Running the screen test for the `Font_08` font...")
+print("Running the screen test for the `Font08` font...")
 
-oled_display.fg_colour = graphics.colours.COLOUR_RED
-oled_display.font = fonts.Font_08()
+oled_display.fg_colour = colours.COLOUR_RED
+oled_display.font = fonts.Font08()
 
 oled_display.x_y = [0, 20]
 oled_display.write_text("ABCDEFGHIJKLMN")
@@ -114,14 +117,14 @@ oled_display.write_text("0123456789")
 utime.sleep(10)
 
 # Clear the display
-oled_display.fill_screen(graphics.colours.COLOUR_BLACK)
+oled_display.fill_screen(colours.COLOUR_BLACK)
 
-# Display the `Font_06` font class in green, and set the cursor
+# Display the `Font06` font class in green, and set the cursor
 # at the start of each call to `write_text`
-print("Running the screen test for the `Font_06` font...")
+print("Running the screen test for the `Font06` font...")
 
-oled_display.fg_colour = graphics.colours.COLOUR_LIME
-oled_display.font = fonts.Font_06()
+oled_display.fg_colour = colours.COLOUR_LIME
+oled_display.font = fonts.Font06()
 
 oled_display.write_text(start=[0, 20], txt_str="ABCDEFGHIJKLMN")
 oled_display.write_text(start=[0, 30], txt_str="OPQRSTUVWXYZ")
@@ -132,29 +135,34 @@ oled_display.write_text(start=[0, 60], txt_str="0123456789")
 utime.sleep(10)
 
 # Clear the display
-oled_display.fill_screen(graphics.colours.COLOUR_BLACK)
+oled_display.fill_screen(colours.COLOUR_BLACK)
 
-# Display the `Org_01` font class in blue, and use the origin
+# Display the `Org01` font class in blue, and use the origin
 # with an offset to display the text using `write_text`
-print("Running the screen test for the `Org_01` font...")
+print("Running the screen test for the `Org01` font...")
 
-oled_display.fg_colour = graphics.colours.COLOUR_BLUE
-oled_display.font = fonts.Org_01()
+oled_display.fg_colour = colours.COLOUR_BLUE
+oled_display.font = fonts.Org01()
 
 oled_display.write_text(
-    start=oled_display.origin.offset(y=20), txt_str="ABCDEFGHIJKLMN"
+    start=oled_display.origin.offset(y=20),
+    txt_str="ABCDEFGHIJKLMN",
 )
 oled_display.write_text(
-    start=oled_display.origin.offset(y=30), txt_str="OPQRSTUVWXYZ   "
+    start=oled_display.origin.offset(y=30),
+    txt_str="OPQRSTUVWXYZ   ",
 )
 oled_display.write_text(
-    start=oled_display.origin.offset(y=40), txt_str="abcdefghijklmn "
+    start=oled_display.origin.offset(y=40),
+    txt_str="abcdefghijklmn ",
 )
 oled_display.write_text(
-    start=oled_display.origin.offset(y=50), txt_str="opqrstuvwxyz   "
+    start=oled_display.origin.offset(y=50),
+    txt_str="opqrstuvwxyz   ",
 )
 oled_display.write_text(
-    start=oled_display.origin.offset(y=60), txt_str="0123456789     "
+    start=oled_display.origin.offset(y=60),
+    txt_str="0123456789     ",
 )
 
 utime.sleep(10)
@@ -168,7 +176,7 @@ for i in range(8):
     r = (i & 1) * 255
     g = ((i >> 1) & 1) * 255
     b = ((i >> 2) & 1) * 255
-    colors.append(graphics.colours.Colour(r, g, b))
+    colors.append(colours.Colour(r, g, b))
 
 print("Running the colour test...")
 while True:

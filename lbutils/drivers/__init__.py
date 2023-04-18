@@ -45,6 +45,5 @@ This version is written for MicroPython 3.4, and has been tested on:
 
 ### Expose the `drivers` module interface as a full package
 from .common import PIN_ON_SENSE
-
 from .seven_segment import SegDisplay
 from .seven_segment_hex import SegHexDisplay

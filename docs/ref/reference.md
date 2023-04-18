@@ -20,9 +20,9 @@ Drivers for the display of a single digit
 ### Classes
 
 * [`BaseFont`][lbutils.graphics.fonts.BaseFont]. Base class, used  by the font display routines.
-* [`Font06`][lbutils.graphics.fonts.font06]. Six Pixel bitmap font.
-* [`Font08`][lbutils.graphics.fonts.font08]. Eight Pixel bitmap font.
-* [`Org_01`][lbutils.graphics.fonts.org_01]. Alternative bitmap font.
+* [`Font06`][lbutils.graphics.fonts.Font06]. Six Pixel bitmap font.
+* [`Font08`][lbutils.graphics.fonts.Font08]. Eight Pixel bitmap font.
+* [`Org01`][lbutils.graphics.fonts.Org01]. Alternative bitmap font.
 
 ::: lbutils.helpers
     options:

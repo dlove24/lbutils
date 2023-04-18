@@ -44,8 +44,8 @@ except ImportError:
 
 # Import required core libraries
 try:
-    import utime
     import hidden
+    import utime
 except ImportError:
     print("Missing core libraries")
 
@@ -62,8 +62,8 @@ seg_list2 = [10, 11, 12, 13, 14, 15, 16]
 
 # Create the seven-segment display objects, each attached to the relevant
 # segment using the `SegHexDisplay` driver class
-segDisp1 = SegHexDisplay(seg_list1)
-segDisp2 = SegHexDisplay(seg_list2)
+seg_display1 = SegHexDisplay(seg_list1)
+seg_display2 = SegHexDisplay(seg_list2)
 
 # Read the input value from ADC0 on GPIO Pin 26
 adc = ADC(26)
@@ -72,7 +72,7 @@ adc = ADC(26)
 while True:
     adcval = adc.read_u16()
     temp = hidden.measureval(adcval)
-    segDisp2.display(int(temp % 16))
-    segDisp1.display(int((temp / 16) % 16))
+    seg_display2.display(int(temp % 16))
+    seg_display1.display(int((temp / 16) % 16))
 
     utime.sleep(1)

@@ -35,7 +35,7 @@ supported: this module also only supports those with a dedicated SPI interface.
 
 ![Modern Naming Conventions for the SPI Interfaces](docs/media/spi_interfaces.png)
 
-**Figure 1: Modern Naming Conventions for the SPI Interfaces [CC0 – Public Domain]**
+**Figure 1: Modern Naming Conventions for the SPI Interfaces [CC0 - Public Domain]**
 
 In general each module will require a minimum of four pins for the SPI
 interface, as shown in Figure 1. For the SPI modes in the [PMod Interface

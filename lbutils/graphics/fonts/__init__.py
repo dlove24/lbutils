@@ -31,9 +31,9 @@ described below. This reconstruction is undertaken by the [`BaseFont`]
 be sub-classed for a specific font. Currently the fonts (and subclasses) exposed
 in this library are
 
-  * [`Font06`][lbutils.graphics.fonts.font06.Font_06]. 6x6 pixel sans-serif font.
-  * [`Font08`][lbutils.graphics.fonts.font08.Font_08]. 8x8 pixel sans-serif font.
-  * [`Org_01`][lbutils.graphics.fonts.org_01.Org_01]. A tiny, stylized font with
+  * [`Font06`][lbutils.graphics.fonts.font06.Font06]. 6x6 pixel sans-serif font.
+  * [`Font08`][lbutils.graphics.fonts.font08.Font08]. 8x8 pixel sans-serif font.
+  * [`Org01`][lbutils.graphics.fonts.org_01.Org01]. A tiny, stylized font with
   all characters within a 6 pixel height. Created by fontconvert, from the Org_v01
   by Orgdot.
 
@@ -58,7 +58,6 @@ Python file.
 
 ### Expose the `fonts` module interface as a full package
 from .base_font import BaseFont
-
-from .font06 import Font_06
-from .font08 import Font_08
-from .org_01 import Org_01
+from .font06 import Font06
+from .font08 import Font08
+from .org_01 import Org01

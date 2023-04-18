@@ -87,7 +87,7 @@ class BaseFont:
     that bitmap is handled here by `BaseFont`.
 
     Methods
-    ----------
+    -------
 
     * `get_bit()`. Returns the state ('0' or '1') of the bit specified by
     the current cursor `position` within the current glyph bitmap.
@@ -100,7 +100,7 @@ class BaseFont:
     in the next natural position.
     """
 
-    def __init__(self, bitmap: list[bytes], index: list, glyph: list) -> None:
+    def __init__(self, bitmap: bytes, index: dict[str, int], glyph: list) -> None:
         """Take the byte array of `bitmap`s with the `index` of font characters
         and use these together with the `glyph` list to reconstruct the required
         font. This method is typically called by a sub-class in the constructor
@@ -171,7 +171,7 @@ class BaseFont:
         self.position = self.current_glyph[0] * 8
 
     def get_bit(self, position: int) -> int:
-        """Returns the state ('0' or '1') of the bit specified by the current
+        """Return the state ('0' or '1') of the bit specified by the current
         cursor `position` within the current glyph bitmap.
 
         Parameters
