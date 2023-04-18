@@ -33,14 +33,15 @@ packages = ["lbutils", "lbutils.drivers", "lbutils.graphics", "lbutils.graphics.
 
 [tool.ruff]
 # Enable modules for static type and doc checking
-select = ["A", "ANN0", "ANN2", "B", "BLE", "C4", "COM", "D4", "DTZ", "E", "EM", "F", "FBT", "I", "ICN", "INP", "ISC", "N", "Q",  "S", "UP", "W"]
+select = ["A", "ANN0", "ANN2", "B", "BLE", "C4", "COM", "D4", "DTZ", "E", "EM", "F", "FBT", "I", "ICN", "INP", "ISC", "N", "PIE", "Q",  "S", "UP", "W"]
 
 # Ignore
 # * F401 - Handle redundant imports via the module.
 # * F821 - ypes needed by the static type checker
 # * D412,D416 - Document formatting handled by docformatter
 # * N802 - Ignore special cases of mixedCase variables in the typing libraray
-ignore = ["D412", "D416", "F401", "F821", "N802"]
+# * PIE790 - Ignore pass comments as these are required to stop black fighting docformatter
+ignore = ["D412", "D416", "F401", "F821", "N802", "PIE790"]
 
 # Allow autofix for all enabled rules (when `--fix`) is provided.
 fixable = ["A", "B", "C", "D", "E", "F", "G", "I", "N", "Q", "S", "T", "W", "ANN", "ARG", "BLE", "COM", "DJ", "DTZ", "EM", "ERA", "EXE", "FBT", "ICN", "INP", "ISC", "NPY", "PD", "PGH", "PIE", "PL", "PT", "PTH", "PYI", "RET", "RSE", "RUF", "SIM", "SLF", "TCH", "TID", "TRY", "UP", "YTT"]
