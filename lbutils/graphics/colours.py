@@ -245,31 +245,30 @@ class Colour:
 
     @property
     def as_565(self) -> Optional[int]:
-        """
-        Construct a packed word from the internal colour representation, with
-        5 bits of red data, 6 of green, and 5 of blue. On ARM platforms
-        the packed word representation has the high and low bytes swapped,
-        and so looks like.
+        """Construct a packed double word from the internal colour
+        representation, with 8 bits of red data, 8 bits of green, and 8 of blue.
+        For non-ARM platforms this results in a byte order for the two colour
+        words as follows.
 
+        ![````
+        F  E  D  C  B  A  9  8  7  6  5  4  3  2  1  0
+        R4 R3 R2 R1 R0 G5 G4 G3 G2 G1 G0 B4 B3 B2 B1 B0
+        ````](https://kroki.io/bytefield/svg/eNptkT9vgzAQxfd8ihNZ8IBEotA_jF26d0UM5_oMKI6JbNOiRv7uNQ4VRWSx5Luf773zSwVJdM5YKHmTNYZIw62UnVKQ7DGXEvPEs126wrgaaEWhxC1lSCyQlDy_j4qUBmHwO-j1wzVTyEllLaEgswOo7BU1xGIdrmkkeT9C6mh09wZU5QVdO83vtcts90NwOPqahUp8Ho-S9ybMtLC_eShb6prWweHk2dpF8VJknXakJvFzpwWgaeyi_dmr4aJngzYoRAsWUkNfoUAwA_cym3bc2k4-SCQMqtlf4f_-qGaP6PcpiX_8k18CevziLYSyFZiiCnxceLUr5OPpOT_Ca2j9AqizpRs=)
+
+        On ARM platforms the packed word representation has the high and low
+        bytes swapped in each word, and so looks like
+
+        ![
         ````
         F  E  D  C  B  A  9  8  7  6  5  4  3  2  1  0
         G2 G1 G0 B4 B3 B2 B1 B0 R4 R3 R2 R1 R0 G5 G4 G3
-        ````
-
-        On non-ARM platform, the internal representation follows the
-        normal bit sequence for a 565 representation and looks like
-
-        ````
-        F  E  D  C  B  A  9  8  7  6  5  4  3  2  1  0
-        R4 R3 R2 R1 R0 G5 G4 G3 G2 G1 G0 B4 B3 B2 B1 B0
-        ````
+        ````](https://kroki.io/bytefield/svg/eNqFkUFvhCAQhe_7KybuRQ4m7HZNW4-99N6r8QBlUFMWN4Ct6Yb_XkRTazTphYSZb-Y9HqlAyZwzFgpeZ7VB1HAvZKsUJEdGpWQ08eSQrjCuelxRTLItZVAskJScTqsipUEY9hX0uv6WKcZRZQ0ygeYAUNob0xCLVbimkeTdAKnDwU0NKIsrc824v9Mus-03wunsKxIqcTweBe9M2GnhePdQNNjWjYPTxZO1i_wpz1rtUI3iH60WwExtF-33TvVXPRu0QSFasJAa_AwFhBmYymR849Z28jpmmxAoZ4cPfom8InsTLyHmPwO5_w1_n39DscXDL-zT__iJEa3SATpcHukZnkPrBwBOtNI=)
 
         Returns
         -------
 
         int:
             A packed byte value of the colour representation.
-
         """
         # Check for a cached value ...
         if self._565 is None:
@@ -290,31 +289,30 @@ class Colour:
 
     @property
     def as_888(self) -> Optional[int]:
-        """
-        Construct a packed double word from the internal colour representation,
-        with 8 bits of red data, 8 bits of green, and 8 of blue. For non-ARM
-        platforms this results in a byte order for the two colour words as
-        follows.
+        """Construct a packed double word from the internal colour
+        representation, with 8 bits of red data, 8 bits of green, and 8 of blue.
+        For non-ARM platforms this results in a byte order for the two colour
+        words as follows.
 
-        ````
+        ![````
         F  E  D  C  B  A  9  8  7  6  5  4  3  2  1  0
         R4 R3 R2 R1 R0 G5 G4 G3 G2 G1 G0 B4 B3 B2 B1 B0
-        ````
+        ````](https://kroki.io/bytefield/svg/eNptkcFuwyAMhu95Ciu9JIdItGq1Lsdddt81ysEMk6BRUgFRo1V59wHr1KUpByTsz_Zv_kKQRO-tg5p3VWeJDFxrqbSGfINMSmT5XGbFAuN6pAWFEteUJXGHpOTsWatLrzz9x-KJWOIMCIuXIGsYz5VGTrrqCQXZDKBxZzSQgm14FonkwwSFp8n_JqCpT-j72H8wvnLqm2C7m9syRFJ5umo-2NDTweY6Q92T6noP2_1cLlUcjodKGU86Dv9SRgDazt1nfw56PJmbQBdq16LyDxJ5Cc1t-nH--6i2fEa_RzvWfHLpecVbcGZdEP164NnE2COWvAhclvZerBz4_QvbwWtI_QAsTrIm)
 
         On ARM platforms the packed word representation has the high and low
         bytes swapped in each word, and so looks like
 
+        ![
         ````
         F  E  D  C  B  A  9  8  7  6  5  4  3  2  1  0
         G2 G1 G0 B4 B3 B2 B1 B0 R4 R3 R2 R1 R0 G5 G4 G3
-        ````
+        ````](https://kroki.io/bytefield/svg/eNptkbFuwyAQhnc_xclZ7MESiRI1ZczSvavlAcphoxIcAVasRn73Ao3kOjYDEnff_fffUQiUzHvrgPK2ai2igQeVSmvId4xIyUg-lVmxwLgecEExydaURTFDUnKyJXXvlMf_WDwRS5wBYdk92OqHW6UZR111yATaDKB2N2YgBZvwLBLJ-xEKj6P_S0BNr8x3Ub83vnLqB2F_mJoyRFJ5uijvbdB0sHtMQDtUbedhf5zKpYvT-VQp41HH5t_KCGC2dXPvr14PV_M06ELt2lT-ERecl1A_-5-nee9NuVXxiWLNh9W-0GQk5JVKu91WvYQfXMvGfw18luZejBz0j2_kAO8h9QtAIrIm)
 
         Returns
         -------
 
         int:
             A packed double word value of the colour representation.
-
         """
         # Check for a cached value ...
         if self._888 is None:
