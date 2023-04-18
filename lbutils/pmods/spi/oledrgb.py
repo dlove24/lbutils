@@ -368,7 +368,7 @@ class OLEDrgb(graphics.Canvas):
         reset_pin = Pin(17, Pin.OUT)
         ````
 
-        The display backlight, and the low-power mode of the display
+        The display back-light, and the low-power mode of the display
         driver, are controlled by a `vcc_enable` GPIO pin. In normal use
         this GPIO pin is set 'high': for low-power mode this pin should
         be set 'low'. During initialisation it is normal to set this pin
@@ -427,7 +427,7 @@ class OLEDrgb(graphics.Canvas):
         self.chip_sel_pin = chip_sel_pin
         self.reset_pin = reset_pin
 
-        # Initalise the diaplay
+        # Initialise the display
         self.reset()
         for command, data in self._INIT:
             self._write(command, data)
