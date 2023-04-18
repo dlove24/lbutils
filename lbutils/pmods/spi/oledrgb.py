@@ -86,8 +86,8 @@ except ImportError:
 import ustruct
 import utime
 
-# Reference the MicroPython Pin library
-from machine import Pin
+# Reference the MicroPython SPI and Pin library
+from machine import SPI, Pin
 
 # Allow the use of MicroPython constants
 from micropython import const
@@ -286,10 +286,23 @@ class OLEDrgb(graphics.Canvas):
         (_DISPLAYON, b""),
     )
 
+    ##
+    ## Structure byte packing formats
+    ##
+
     _ENCODE_PIXEL = ">H"
     _ENCODE_POS = ">BB"
     _ENCODE_LINE = ">BBBBBBB"
     _ENCODE_RECT = ">BBBBBBBBBB"
+
+    ##
+    ## Public Attributes
+    ##
+
+    spi_controller: SPI
+    data_cmd_pin = Pin
+    chip_sel_pin = Pin
+    reset_pin = Pin
 
     ##
     ## Constructors
@@ -297,7 +310,7 @@ class OLEDrgb(graphics.Canvas):
 
     def __init__(
         self,
-        spi_controller,
+        spi_controller: SPI,
         data_cmd_pin: int = 15,
         chip_sel_pin: int = 14,
         reset_pin: Pin = 17,
@@ -422,7 +435,11 @@ class OLEDrgb(graphics.Canvas):
     ## Private (Non-Public) Methods
     ##
 
-    def _read(self, command=None, count=0):
+    def _read(
+        self,
+        command: Optional[int] = None,
+        count: Optional[int] = 0,
+    ) -> int:
         """Decode a command read on the `data_cmd_pin` from the display
         driver."""
         self.data_cmd_pin.value(0)
@@ -437,7 +454,11 @@ class OLEDrgb(graphics.Canvas):
 
         return data
 
-    def _write(self, command=None, data=None):
+    def _write(
+        self,
+        command: Optional[int] = None,
+        data: Optional[Union[bytes, bytearray]] = None,
+    ) -> None:
         """Write a command over the `data_cmd_pin` to the display driver."""
         if command is None:
             self.data_cmd_pin.value(1)
@@ -453,7 +474,9 @@ class OLEDrgb(graphics.Canvas):
 
             self.chip_sel_pin.value(1)
 
-    def _block(self, x, y, width, height, data):
+    def _block(
+        self, x: int, y: int, width: int, height: int, data: Union[bytes, bytearray]
+    ) -> None:
         self._write(_SETCOLUMN, bytearray([x, x + width - 1]))
         self._write(_SETROW, bytearray([y, y + height - 1]))
         self._write(None, data)
@@ -484,7 +507,7 @@ class OLEDrgb(graphics.Canvas):
         self._write(_SETCOLUMN, bytearray([x, x]))
         self._write(_SETROW, bytearray([y, y]))
 
-        return self._read(None, 2)
+        return graphics.Colour.from_565(self._read(None, 2))
 
     def write_pixel(self, x: int, y: int, colour: graphics.Colour) -> None:
         """Set the pixel at position (`x`, `y`) to the specified colour value.

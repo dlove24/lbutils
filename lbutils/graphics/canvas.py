@@ -393,7 +393,7 @@ class Canvas(ABC):
         return self._cursor
 
     @cursor.setter
-    def cursor(self, value) -> None:
+    def cursor(self, value: graphics.BoundPixel) -> None:
         self._cursor = value
 
     @property
@@ -408,7 +408,7 @@ class Canvas(ABC):
         return self._origin
 
     @origin.setter
-    def origin(self, value) -> None:
+    def origin(self, value: graphics.BoundPixel) -> None:
         self._origin = value
 
     ##
@@ -604,7 +604,7 @@ class Canvas(ABC):
         self,
         fg_colour: Optional[graphics.Colour] = None,
         pen: Optional[graphics.Pen] = None,
-    ):
+    ) -> graphics.Colour:
         """Return the colour to be used for drawing in the foreground, taking
         into account the (optional) overrides specified in `color` and `pen`.
         The selected colour will obey the standard colour selection precedence
@@ -646,7 +646,7 @@ class Canvas(ABC):
         """
 
         if pen is not None:
-            return fg_colour
+            return pen.fg_colour
         elif fg_colour is not None:
             return fg_colour
         elif self.pen is not None:
@@ -660,7 +660,7 @@ class Canvas(ABC):
         self,
         bg_colour: Optional[graphics.Colour] = None,
         pen: Optional[graphics.Pen] = None,
-    ):
+    ) -> graphics.Colour:
         """Return the colour to be used for drawing in the background, taking
         into account the (optional) overrides specified in `bg_colour` and
         `pen`. The selected colour will obey the standard colour selection
@@ -701,7 +701,7 @@ class Canvas(ABC):
         """
 
         if pen is not None:
-            return bg_colour
+            return pen.bg_colour
         elif bg_colour is not None:
             return bg_colour
         elif self.pen is not None:

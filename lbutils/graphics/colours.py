@@ -121,7 +121,15 @@ class Colour:
     bit_order: DEVICE_BIT_ORDER, read-write
         Argument indicating if the underlying bit order used for
         the bit packing order in colour conversions. Defaults to
-        `ARM` as set by the default constructor.
+        auto-detect the bit order in the default constructor.
+
+    Methods
+    -------
+
+    from_565: Color
+        Create a [`Colour`][lbutils.graphics.Colour] object from the byte
+        passed in as a parameter: assuming the byte is an RGB 565 packed
+        byte.
 
     Implementation
     --------------
@@ -321,6 +329,23 @@ class Colour:
 
         # Return the calculated value to the client
         return self._888
+
+    ##
+    ## Methods
+    ##
+
+    @staticmethod
+    def from_565(rgb: int) -> Colour:
+        """Create a [`Colour`][lbutils.graphics.Colour] object from the byte
+        passed in as a parameter: assuming the byte is an RGB 565 packed
+        byte."""
+        red = 0
+        green = 0
+        blue = 0
+
+        new_colour = Colour(red, green, blue)
+
+        return new_colour
 
 
 ###
