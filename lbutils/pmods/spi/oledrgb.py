@@ -23,7 +23,7 @@ OLEDrgb](https://digilent.com/reference/pmod/pmodoledrgb/start), based on the
 ['ssd1331'](https://github.com/danjperron/pico_mpu6050_ssd1331) driver by Daniel
 Perron. The [Pmod
 OLEDrgb](https://digilent.com/reference/pmod/pmodoledrgb/start) provides an OLED
-screen with a 96×64 pixel display capable of 16-bit RGB colour resolution.
+screen with a 96x64 pixel display capable of 16-bit RGB colour resolution.
 
 !!! note
 
