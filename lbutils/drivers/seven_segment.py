@@ -76,6 +76,7 @@ This version is written for MicroPython 3.4, and has been tested on:
 # Import MicroPython libraries for GPIO access if available
 try:
     from machine import Pin
+    from micropython import const
 except ImportError:
     print("Ignoring MicroPython includes")
 
@@ -87,6 +88,19 @@ except ImportError:
     from lbutils.typing import Literal, Optional  # type: ignore
 
 from .common import PIN_ON_SENSE
+
+##
+## Constants
+##
+
+DISPLAY_SEGMENTS = const(7)
+"""The number of segements in the display."""
+
+NUM_CHARACTERS = const(9)
+"""The number of individual characters to display.
+
+Each character should have an entry in the internal `_char_list`.
+"""
 
 ##
 ## Classes
@@ -160,7 +174,7 @@ class SegDisplay:
         if (gpio_request is None) or (not gpio_request):
             msg = "The GPIO Request List is empty"
             raise ValueError(msg)
-        elif len(gpio_request) != 7:
+        elif len(gpio_request) != DISPLAY_SEGMENTS:
             msg = "The GPIO Request List must be EXACTLY seven entries long"
             raise ValueError(msg)
         else:
@@ -194,7 +208,7 @@ class SegDisplay:
             The `character` is not in a range that can be displayed.
         """
         # For a character in the valid range...
-        if 0 <= character <= 9:
+        if 0 <= character <= NUM_CHARACTERS:
             if pin_on == "LOW":
                 # ... if the request is to display in the non-inverted form, then
                 # select the row in `_char_list` corresponding to the character to

@@ -71,9 +71,10 @@ This version is written for MicroPython 3.4, and has been tested on:
 * Raspberry Pi Pico H/W
 """
 
-# Import MicroPython libraries for GPIO access if available
+# Import MicroPython libraries for GPIO access and constants if available
 try:
     from machine import Pin
+    from micropython import const
 except ImportError:
     print("Ignoring MicroPython includes")
 
@@ -106,6 +107,15 @@ those which don't fit into `ASCII_DIGITS`"""
 ASCII_HEX_EXTRA_DIGITS = set("ABCDEF")
 """Constant for the set of ASCII hexadecimal decimal digits, including _only_
 those which don't fit into `ASCII_DIGITS`"""
+
+DISPLAY_SEGMENTS = const(7)
+"""The number of segements in the display."""
+
+NUM_CHARACTERS = const(9)
+"""The number of individual characters to display.
+
+Each character should have an entry in the internal `_char_list`.
+"""
 
 ##
 ## Classes
@@ -185,7 +195,7 @@ class SegHexDisplay:
         if (gpio_request is None) or (not gpio_request):
             msg = "The GPIO Request List is empty"
             raise ValueError(msg)
-        elif len(gpio_request) != 7:
+        elif len(gpio_request) != DISPLAY_SEGMENTS:
             msg = "The GPIO Request List must be EXACTLY seven entries long"
             raise ValueError(msg)
         else:
@@ -233,7 +243,7 @@ class SegHexDisplay:
         # Convert a decimal integer in the range [0..15], and then display
         if isinstance(character, int):
             # For a character in the valid range...
-            if 0 <= character <= 15:
+            if 0 <= character <= NUM_CHARACTERS:
                 if pin_on == "LOW":
                     # ... if the request is to display in the non-inverted form, then
                     # select the row in `_char_list` corresponding to the character to

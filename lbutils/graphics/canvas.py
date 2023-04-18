@@ -94,8 +94,8 @@ except ImportError:
 
 # Import the lbutils graphics library
 try:
-    import lbutils.graphics as graphics
-    import lbutils.graphics.fonts as fonts
+    from lbutils import graphics
+    from lbutils.graphics import fonts
 except ImportError:
     msg = ("Error: Missing required LBUtils graphics library",)
     raise RuntimeError(msg) from ImportError
