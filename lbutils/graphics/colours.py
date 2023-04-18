@@ -198,11 +198,14 @@ class Colour:
 
         # Attempt to determine the platform automatically:
         # defaulting to the ARM bit order
-        machine = uname()
-        if machine[4].find("x86") != -1:
-            self.bit_order = "INTEL"
+        if bit_order is None:
+            machine = uname()
+            if machine[4].find("x86") != -1:
+                self.bit_order = "INTEL"
+            else:
+                self.bit_order = "ARM"
         else:
-            self.bit_order = "ARM"
+            self.bit_order = bit_order
 
         # Cached values
         self._565 = None
@@ -339,9 +342,9 @@ class Colour:
         """Create a [`Colour`][lbutils.graphics.Colour] object from the byte
         passed in as a parameter: assuming the byte is an RGB 565 packed
         byte."""
-        red = 0
-        green = 0
-        blue = 0
+        red = rgb & 0xF800
+        green = rgb & 0x07E0
+        blue = rgb & 0x001F
 
         new_colour = Colour(red, green, blue)
 

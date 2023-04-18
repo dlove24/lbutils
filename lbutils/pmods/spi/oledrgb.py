@@ -533,7 +533,7 @@ class OLEDrgb(graphics.Canvas):
         self._write(_SETROW, bytearray([y, y]))
 
         #          self._write(None,bytearray([colour >> 8, colour &0xff]))
-        self.draw_line(start=(x, y), end=(x, y))
+        self.draw_line(start=(x, y), end=(x, y), fg_colour=colour)
 
     def draw_line(
         self,
