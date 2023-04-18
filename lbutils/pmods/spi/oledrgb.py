@@ -640,7 +640,7 @@ class OLEDrgb(graphics.Canvas):
                     use_fg_colour.green,
                     use_fg_colour.blue,
                 )
-        except Exception:
+        except ustruct.error:
             raise ValueError(
                 "Invalid parameters has been passed to 'draw_line'. I cannot"
                 "interpret the co-ordinates passed as arguments: check the"
