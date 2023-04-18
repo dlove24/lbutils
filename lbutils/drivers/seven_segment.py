@@ -76,17 +76,31 @@ This version is written for MicroPython 3.4, and has been tested on:
 # Import MicroPython libraries for GPIO access if available
 try:
     from machine import Pin
+    from micropython import const
 except ImportError:
     print("Ignoring MicroPython includes")
 
 # Import the typing hints if available. Use our backup version
 # if the official library is missing
 try:
-    from typing import Optional, Literal
+    from typing import Literal, Optional
 except ImportError:
-    from lbutils.typing import Optional, Literal  # type: ignore
+    from lbutils.typing import Literal, Optional  # type: ignore
 
 from .common import PIN_ON_SENSE
+
+##
+## Constants
+##
+
+DISPLAY_SEGMENTS = const(7)
+"""The number of segements in the display."""
+
+NUM_CHARACTERS = const(9)
+"""The number of individual characters to display.
+
+Each character should have an entry in the internal `_char_list`.
+"""
 
 ##
 ## Classes
@@ -158,9 +172,11 @@ class SegDisplay:
         self.pin_list = []
 
         if (gpio_request is None) or (not gpio_request):
-            raise ValueError("The GPIO Request List is empty")
-        elif len(gpio_request) != 7:
-            raise ValueError("The GPIO Request List must be EXACTLY seven entries long")
+            msg = "The GPIO Request List is empty"
+            raise ValueError(msg)
+        elif len(gpio_request) != DISPLAY_SEGMENTS:
+            msg = "The GPIO Request List must be EXACTLY seven entries long"
+            raise ValueError(msg)
         else:
             for segment in range(7):
                 self.pin_list.append(Pin(gpio_request[segment], Pin.OUT))
@@ -192,7 +208,7 @@ class SegDisplay:
             The `character` is not in a range that can be displayed.
         """
         # For a character in the valid range...
-        if 0 <= character <= 9:
+        if 0 <= character <= NUM_CHARACTERS:
             if pin_on == "LOW":
                 # ... if the request is to display in the non-inverted form, then
                 # select the row in `_char_list` corresponding to the character to
@@ -210,6 +226,5 @@ class SegDisplay:
                 for pin in range(7):
                     self.pin_list[pin].value(not self._char_list[character][pin])
         else:
-            raise IndexError(
-                "The display character must be between zero ('0') and nine ('9')"
-            )
+            msg = ("The display character must be between zero ('0') and nine ('9')",)
+            raise IndexError(msg)

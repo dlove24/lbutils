@@ -71,9 +71,10 @@ This version is written for MicroPython 3.4, and has been tested on:
 * Raspberry Pi Pico H/W
 """
 
-# Import MicroPython libraries for GPIO access if available
+# Import MicroPython libraries for GPIO access and constants if available
 try:
     from machine import Pin
+    from micropython import const
 except ImportError:
     print("Ignoring MicroPython includes")
 
@@ -86,9 +87,9 @@ except ImportError:
 # Import the typing hints if available. Use our backup version
 # if the official library is missing
 try:
-    from typing import Optional, Literal
+    from typing import Literal, Optional
 except ImportError:
-    from lbutils.typing import Optional, Literal  # type: ignore
+    from lbutils.typing import Literal, Optional  # type: ignore
 
 from .common import PIN_ON_SENSE
 
@@ -106,6 +107,15 @@ those which don't fit into `ASCII_DIGITS`"""
 ASCII_HEX_EXTRA_DIGITS = set("ABCDEF")
 """Constant for the set of ASCII hexadecimal decimal digits, including _only_
 those which don't fit into `ASCII_DIGITS`"""
+
+DISPLAY_SEGMENTS = const(7)
+"""The number of segements in the display."""
+
+NUM_CHARACTERS = const(9)
+"""The number of individual characters to display.
+
+Each character should have an entry in the internal `_char_list`.
+"""
 
 ##
 ## Classes
@@ -183,9 +193,11 @@ class SegHexDisplay:
         self.pin_list = []
 
         if (gpio_request is None) or (not gpio_request):
-            raise ValueError("The GPIO Request List is empty")
-        elif len(gpio_request) != 7:
-            raise ValueError("The GPIO Request List must be EXACTLY seven entries long")
+            msg = "The GPIO Request List is empty"
+            raise ValueError(msg)
+        elif len(gpio_request) != DISPLAY_SEGMENTS:
+            msg = "The GPIO Request List must be EXACTLY seven entries long"
+            raise ValueError(msg)
         else:
             for segment in range(7):
                 self.pin_list.append(Pin(gpio_request[segment], Pin.OUT))
@@ -231,7 +243,7 @@ class SegHexDisplay:
         # Convert a decimal integer in the range [0..15], and then display
         if isinstance(character, int):
             # For a character in the valid range...
-            if 0 <= character <= 15:
+            if 0 <= character <= NUM_CHARACTERS:
                 if pin_on == "LOW":
                     # ... if the request is to display in the non-inverted form, then
                     # select the row in `_char_list` corresponding to the character to
@@ -249,9 +261,10 @@ class SegHexDisplay:
                     for pin in range(7):
                         self.pin_list[pin].value(not self._char_list[character][pin])
             else:
-                raise IndexError(
-                    "The display character must be between zero ('0') and sixteen ('F')"
+                msg = (
+                    "The display character must be between zero ('0') and sixteen ('F')",
                 )
+                raise IndexError(msg)
 
         # Convert a string integer in the range [0..F], and then display
         elif isinstance(character, str):
@@ -281,16 +294,16 @@ class SegHexDisplay:
                     # the column value in `_char_list` for that segment value
                     for pin in range(7):
                         self.pin_list[pin].value(
-                            not self._char_list[_char_list_index][pin]
+                            not self._char_list[_char_list_index][pin],
                         )
             else:
-                raise IndexError(
-                    "The display character must be a string between '0' and 'F'"
-                )
+                msg = ("The display character must be a string between '0' and 'F'",)
+                raise IndexError(msg)
 
         # If we can't convert the input `character`, raise an exception
         else:
-            raise TypeError(
+            msg = (
                 "The 'character' parameter must either be an integer ('int') or a"
-                " string ('str') type."
+                " string ('str') type.",
             )
+            raise TypeError(msg)

@@ -23,7 +23,7 @@ OLEDrgb](https://digilent.com/reference/pmod/pmodoledrgb/start), based on the
 ['ssd1331'](https://github.com/danjperron/pico_mpu6050_ssd1331) driver by Daniel
 Perron. The [Pmod
 OLEDrgb](https://digilent.com/reference/pmod/pmodoledrgb/start) provides an OLED
-screen with a 96×64 pixel display capable of 16-bit RGB colour resolution.
+screen with a 96x64 pixel display capable of 16-bit RGB colour resolution.
 
 !!! note
 
@@ -70,7 +70,7 @@ header below.
 """
 
 # Import the typing hints if available. Use our backup version
-# if the offical library is missing
+# if the official library is missing
 try:
     from typing import Literal, Optional, Union
 except ImportError:
@@ -78,19 +78,20 @@ except ImportError:
 
 # Import the lbutils graphics library
 try:
-    import lbutils.graphics as graphics
+    from lbutils import graphics
 except ImportError:
-    raise RuntimeError("Error: Missing required LBUtils graphics library")
+    msg = ("Error: Missing required LBUtils graphics library",)
+    raise RuntimeError(msg) from ImportError
 
 # Import the core libraries
 import ustruct
 import utime
 
+# Reference the MicroPython SPI and Pin library
+from machine import SPI, Pin
+
 # Allow the use of MicroPython constants
 from micropython import const
-
-# Reference the MicroPython Pin library
-from machine import Pin
 
 ##
 ## Display Commands. Internal list of the command code required by the SSD1331
@@ -147,8 +148,8 @@ class OLEDrgb(graphics.Canvas):
     primitives that can be relied upon by higher-level libraries.
     * **Font Support**: The `Canvas` maintains a record of the current font to
     use when writing text through the `font` attribute. This can be changed by
-    users of the library, and defaults to [`Org_01`]
-    [lbutils.graphics.fonts.Org_01].
+    users of the library, and defaults to [`Org01`]
+    [lbutils.graphics.fonts.Org01].
     * **Colour Support**: Colours can be selected in different ways, and the
     `Canvas` maintains a foreground (`fg_colour`) and background (`bg_color`)
     attribute: along with a common method to override these default colours
@@ -168,30 +169,30 @@ class OLEDrgb(graphics.Canvas):
     Attributes
     ----------
 
-    bg_colour:
-         The background [`Colour`][lbutils.graphics.colours.Colour] to use when
-         drawing.
-    cursor:
-         The [`x`][lbutils.graphics.BoundPixel] and [`y`]
-         [lbutils.graphics.BoundPixel] locations  of the current write
-         (or read) operation.
-    origin:
-         The _user_ reference point for the next sequence of drawing primitives.
-         This `origin` will not be altered by changes to the [`x`]
-         [lbutils.graphics.BoundPixel] and [`y`]
-         [lbutils.graphics.BoundPixel] locations of any drawing command.
-    font:
-         The sub-class of [`BaseFont`][lbutils.graphics.fonts.base_font.BaseFont]
-         to use when drawing characters.
-    fg_colour:
-         The foreground [`Colour`][lbutils.graphics.colours.Colour] to use when
-         drawing.
-    pen:
-         The [`Pen`][lbutils.graphics.Pen] to use when drawing on the canvas.
-    height:
-         A read-only value for the height of the canvas in pixels.
-    width:
-         A read-only value for the width of the canvas in pixels.
+    bg_colour: graphics.Colour
+        The background [`Colour`][lbutils.graphics.colours.Colour] to use when
+        drawing.
+    cursor: graphics.BoundPixel
+        The [`x`][lbutils.graphics.BoundPixel] and [`y`]
+        [lbutils.graphics.BoundPixel] locations  of the current write
+        (or read) operation.
+    origin: graphics.BoundPixel
+        The _user_ reference point for the next sequence of drawing primitives.
+        This `origin` will not be altered by changes to the [`x`]
+        [lbutils.graphics.BoundPixel] and [`y`]
+        [lbutils.graphics.BoundPixel] locations of any drawing command.
+    font: fonts.BaseFont
+        The sub-class of [`BaseFont`][lbutils.graphics.fonts.base_font.BaseFont]
+        to use when drawing characters.
+    fg_colour: graphics.Colour
+        The foreground [`Colour`][lbutils.graphics.colours.Colour] to use when
+        drawing.
+    pen: graphics.Pen
+        The [`Pen`][lbutils.graphics.Pen] to use when drawing on the canvas.
+    height: int
+        A read-only value for the height of the canvas in pixels.
+    width: int
+        A read-only value for the width of the canvas in pixels.
     x: int
             The X co-ordinate value of the `cursor`
     y: int
@@ -200,7 +201,7 @@ class OLEDrgb(graphics.Canvas):
             A tuple representing the co-ordinate (x ,y) of the `cursor`
 
     Methods
-    ----------
+    -------
 
     **Cursor and Origin Movements**
 
@@ -286,10 +287,23 @@ class OLEDrgb(graphics.Canvas):
         (_DISPLAYON, b""),
     )
 
+    ##
+    ## Structure byte packing formats
+    ##
+
     _ENCODE_PIXEL = ">H"
     _ENCODE_POS = ">BB"
     _ENCODE_LINE = ">BBBBBBB"
     _ENCODE_RECT = ">BBBBBBBBBB"
+
+    ##
+    ## Public Attributes
+    ##
+
+    spi_controller: SPI
+    data_cmd_pin = Pin
+    chip_sel_pin = Pin
+    reset_pin = Pin
 
     ##
     ## Constructors
@@ -297,7 +311,7 @@ class OLEDrgb(graphics.Canvas):
 
     def __init__(
         self,
-        spi_controller,
+        spi_controller: SPI,
         data_cmd_pin: int = 15,
         chip_sel_pin: int = 14,
         reset_pin: Pin = 17,
@@ -354,7 +368,7 @@ class OLEDrgb(graphics.Canvas):
         reset_pin = Pin(17, Pin.OUT)
         ````
 
-        The display backlight, and the low-power mode of the display
+        The display back-light, and the low-power mode of the display
         driver, are controlled by a `vcc_enable` GPIO pin. In normal use
         this GPIO pin is set 'high': for low-power mode this pin should
         be set 'low'. During initialisation it is normal to set this pin
@@ -382,20 +396,9 @@ class OLEDrgb(graphics.Canvas):
         Once a suitable object has been instantiated, the drawing methods
         provided by the rest of this class can be used.
 
-        Attributes
-        ----------
-
-        font: Type[BaseFont]
-            The current font in use for the display, which will be
-            an instance of
-            [`lbutils.graphics.fonts.BaseFont`][lbutils.graphics.fonts.base_font.BaseFont].
-            All subsequent text methods (e.g. `write_text`) will make use of
-            the specified `font` until this attribute is changed.
-
-
         Parameters
         ----------
-        spi_controller: Type[SPI]
+        spi_controller: SPI
             An instance of the
             [`machine.SPI`](https://docs.micropython.org/en/latest/library/machine.SPI.html)
             class, used to specify the SPI interface that should be used by this
@@ -408,8 +411,7 @@ class OLEDrgb(graphics.Canvas):
         reset_pin: int, optional
             Normally 'low': when held 'high', clears the current display buffer.
             Used to clear the display without having to rewrite each pixel.
-            Defaults
-                        to GPIO Pin 17.
+            Defaults to GPIO Pin 17.
         width: int, optional
             The width in pixels of the display. Defaults to 96.
         height: int, optional
@@ -425,7 +427,7 @@ class OLEDrgb(graphics.Canvas):
         self.chip_sel_pin = chip_sel_pin
         self.reset_pin = reset_pin
 
-        # Initalise the diaplay
+        # Initialise the display
         self.reset()
         for command, data in self._INIT:
             self._write(command, data)
@@ -434,7 +436,11 @@ class OLEDrgb(graphics.Canvas):
     ## Private (Non-Public) Methods
     ##
 
-    def _read(self, command=None, count=0):
+    def _read(
+        self,
+        command: Optional[int] = None,
+        count: Optional[int] = 0,
+    ) -> int:
         """Decode a command read on the `data_cmd_pin` from the display
         driver."""
         self.data_cmd_pin.value(0)
@@ -449,7 +455,11 @@ class OLEDrgb(graphics.Canvas):
 
         return data
 
-    def _write(self, command=None, data=None):
+    def _write(
+        self,
+        command: Optional[int] = None,
+        data: Optional[Union[bytes, bytearray]] = None,
+    ) -> None:
         """Write a command over the `data_cmd_pin` to the display driver."""
         if command is None:
             self.data_cmd_pin.value(1)
@@ -465,7 +475,14 @@ class OLEDrgb(graphics.Canvas):
 
             self.chip_sel_pin.value(1)
 
-    def _block(self, x, y, width, height, data):
+    def _block(
+        self,
+        x: int,
+        y: int,
+        width: int,
+        height: int,
+        data: Union[bytes, bytearray],
+    ) -> None:
         self._write(_SETCOLUMN, bytearray([x, x + width - 1]))
         self._write(_SETROW, bytearray([y, y + height - 1]))
         self._write(None, data)
@@ -496,7 +513,7 @@ class OLEDrgb(graphics.Canvas):
         self._write(_SETCOLUMN, bytearray([x, x]))
         self._write(_SETROW, bytearray([y, y]))
 
-        return self._read(None, 2)
+        return graphics.Colour.from_565(self._read(None, 2))
 
     def write_pixel(self, x: int, y: int, colour: graphics.Colour) -> None:
         """Set the pixel at position (`x`, `y`) to the specified colour value.
@@ -516,7 +533,7 @@ class OLEDrgb(graphics.Canvas):
         self._write(_SETROW, bytearray([y, y]))
 
         #          self._write(None,bytearray([colour >> 8, colour &0xff]))
-        self.draw_line(start=(x, y), end=(x, y))
+        self.draw_line(start=(x, y), end=(x, y), fg_colour=colour)
 
     def draw_line(
         self,
@@ -614,9 +631,9 @@ class OLEDrgb(graphics.Canvas):
                     self.cursor.y,
                     end[0],
                     end[1],
-                    use_fg_colour.bR,
-                    use_fg_colour.bG,
-                    use_fg_colour.bB,
+                    use_fg_colour.red,
+                    use_fg_colour.green,
+                    use_fg_colour.blue,
                 )
             else:
                 data = ustruct.pack(
@@ -625,16 +642,17 @@ class OLEDrgb(graphics.Canvas):
                     start[1],
                     end[0],
                     end[1],
-                    use_fg_colour.bR,
-                    use_fg_colour.bG,
-                    use_fg_colour.bB,
+                    use_fg_colour.red,
+                    use_fg_colour.green,
+                    use_fg_colour.blue,
                 )
-        except Exception:
-            raise ValueError(
+        except ustruct.error:
+            msg = (
                 "Invalid parameters has been passed to 'draw_line'. I cannot"
                 "interpret the co-ordinates passed as arguments: check the"
-                "'start' and 'end' tuples are correct"
+                "'start' and 'end' tuples are correct",
             )
+            raise ValueError(msg) from ustruct.error
 
         self._write(_DRAWLINE, data)
 
@@ -716,12 +734,12 @@ class OLEDrgb(graphics.Canvas):
                 self.cursor.y,
                 self.cursor.x + width - 1,
                 self.cursor.y + height - 1,
-                use_fg_colour.bR,
-                use_fg_colour.bG,
-                use_fg_colour.bB,
-                use_bg_colour.bR,
-                use_bg_colour.bG,
-                use_bg_colour.bB,
+                use_fg_colour.red,
+                use_fg_colour.green,
+                use_fg_colour.blue,
+                use_bg_colour.red,
+                use_bg_colour.green,
+                use_bg_colour.blue,
             )
         else:
             # Send the drawing command (the colour data is ignored if the
@@ -732,18 +750,18 @@ class OLEDrgb(graphics.Canvas):
                 start[1],
                 start[0] + width - 1,
                 start[1] + height - 1,
-                use_fg_colour.bR,
-                use_fg_colour.bG,
-                use_fg_colour.bB,
-                use_bg_colour.bR,
-                use_bg_colour.bG,
-                use_bg_colour.bB,
+                use_fg_colour.red,
+                use_fg_colour.green,
+                use_fg_colour.blue,
+                use_bg_colour.red,
+                use_bg_colour.green,
+                use_bg_colour.blue,
             )
 
         self._write(_DRAWRECT, data)
 
     def reset(self) -> None:
-        """Resets the display, clearing the current contents."""
+        """Reset the display, clearing the current contents."""
         if self.reset_pin is not None:
             self.reset_pin.value(0)
             utime.sleep(0.1)

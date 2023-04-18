@@ -57,7 +57,8 @@ class and the underlying display protocols.
 The simplest derived class
 
 ````python
-import lbutils.graphics as graphics
+from lbutils import graphics
+from lbutils.graphics import colours, fonts
 
 display = graphics.FrameBufferCanvas(width: int = 96,
         height: int = 64)
@@ -71,7 +72,7 @@ For insance the
 can be cleared to black by
 
 ````python
-display.fill_screen(graphics.colours.COLOUR_BLACK)
+display.fill_screen(colours.COLOUR_BLACK)
 ````
 
 ## Tested Implementations
@@ -94,10 +95,11 @@ except ImportError:
 
 # Import the lbutils graphics library
 try:
-    import lbutils.graphics as graphics
-    import lbutils.graphics.fonts as fonts
+    from lbutils import graphics
+    from lbutils.graphics import colours, fonts
 except ImportError:
-    raise RuntimeError("Error: Missing required LBUtils graphics library")
+    msg = ("Error: Missing required LBUtils graphics library",)
+    raise RuntimeError(msg) from ImportError
 
 ###
 ### Enumerations. MicroPython doesn't have actual an actual `enum` (yet), so
@@ -132,8 +134,8 @@ class Canvas(ABC):
     primitives that can be relied upon by higher-level libraries.
     * **Font Support**: The `Canvas` maintains a record of the current font to
     use when writing text through the `font` attribute. This can be changed by
-    users of the library, and defaults to [`Org_01`]
-    [lbutils.graphics.fonts.Org_01].
+    users of the library, and defaults to [`Org01`]
+    [lbutils.graphics.fonts.Org01].
     * **Colour Support**: Colours can be selected in different ways, and the
     `Canvas` maintains a foreground (`fg_colour`) and background (`bg_colour`)
     attribute: along with a common method to override these default colours
@@ -153,29 +155,29 @@ class Canvas(ABC):
     Attributes
     ----------
 
-    bg_colour:
+    bg_colour: graphics.Colour
          The background [`Colour`][lbutils.graphics.colours.Colour] to use when
          drawing.
-    cursor:
+    cursor: graphics.BoundPixel
          The [`x`][lbutils.graphics.BoundPixel] and [`y`]
          [lbutils.graphics.BoundPixel] locations  of the current write
          (or read) operation.
-    origin:
+    origin: graphics.BoundPixel
          The _user_ reference point for the next sequence of drawing primitives.
          This `origin` will not be altered by changes to the [`x`]
          [lbutils.graphics.BoundPixel] and [`y`]
          [lbutils.graphics.BoundPixel] locations of any drawing command.
-    font:
+    font: fonts.BaseFont
          The sub-class of [`BaseFont`][lbutils.graphics.fonts.base_font.BaseFont]
          to use when drawing characters.
-    fg_colour:
+    fg_colour: graphics.Colour
          The foreground [`Colour`][lbutils.graphics.colours.Colour] to use when
          drawing.
-    pen:
+    pen: graphics.Pen
          The [`Pen`][lbutils.graphics.Pen] to use when drawing on the canvas.
-    height:
+    height: int
          A read-only value for the height of the canvas in pixels.
-    width:
+    width: int
          A read-only value for the width of the canvas in pixels.
     x: int
             The X co-ordinate value of the `cursor`
@@ -185,7 +187,7 @@ class Canvas(ABC):
             A tuple representing the co-ordinate (x ,y) of the `cursor`
 
     Methods
-    ----------
+    -------
 
     **Cursor and Origin Movements**
 
@@ -271,6 +273,18 @@ class Canvas(ABC):
     _font: fonts.BaseFont
 
     ##
+    ## Public Attributes
+    ##
+
+    bg_colour: graphics.Colour
+    fg_colour: graphics.Colour
+
+    pen: Optional[graphics.Pen]
+
+    width: int
+    height: int
+
+    ##
     ## Constructors
     ##
 
@@ -280,8 +294,7 @@ class Canvas(ABC):
         height: int,
         bit_order: Optional[Literal["ARM", "INTEL"]] = "ARM",
     ) -> None:
-        """Creates a (packed) representation of a colour value, from the three
-        bytes `r` (red), `g` (green) and `b` (blue).
+        """Create the drawing `Canvas` with the specified `width` and `height`.
 
         Parameters
         ----------
@@ -297,19 +310,29 @@ class Canvas(ABC):
         """
         # Set the Attribute Values. Note use the properties to ensure
         # that the type being set is correctly
-        self.fg_colour = graphics.colours.Colour(255, 255, 255, bit_order)
-        self.bg_colour = graphics.colours.Colour(0, 0, 0, bit_order)
+        self.fg_colour = colours.Colour(255, 255, 255, bit_order)
+        self.bg_colour = colours.Colour(0, 0, 0, bit_order)
 
         self.pen = None
 
         self.cursor = graphics.BoundPixel(
-            0, 0, min_x=0, max_x=width, min_y=0, max_y=height
+            0,
+            0,
+            min_x=0,
+            max_x=width,
+            min_y=0,
+            max_y=height,
         )
         self.origin = graphics.BoundPixel(
-            0, 0, min_x=0, max_x=width, min_y=0, max_y=height
+            0,
+            0,
+            min_x=0,
+            max_x=width,
+            min_y=0,
+            max_y=height,
         )
 
-        self._font = fonts.Org_01()
+        self._font = fonts.Org01()
 
         self.width = width
         self.height = height
@@ -382,7 +405,7 @@ class Canvas(ABC):
         return self._cursor
 
     @cursor.setter
-    def cursor(self, value) -> None:
+    def cursor(self, value: graphics.BoundPixel) -> None:
         self._cursor = value
 
     @property
@@ -397,7 +420,7 @@ class Canvas(ABC):
         return self._origin
 
     @origin.setter
-    def origin(self, value) -> None:
+    def origin(self, value: graphics.BoundPixel) -> None:
         self._origin = value
 
     ##
@@ -593,7 +616,7 @@ class Canvas(ABC):
         self,
         fg_colour: Optional[graphics.Colour] = None,
         pen: Optional[graphics.Pen] = None,
-    ):
+    ) -> graphics.Colour:
         """Return the colour to be used for drawing in the foreground, taking
         into account the (optional) overrides specified in `color` and `pen`.
         The selected colour will obey the standard colour selection precedence
@@ -635,7 +658,7 @@ class Canvas(ABC):
         """
 
         if pen is not None:
-            return fg_colour
+            return pen.fg_colour
         elif fg_colour is not None:
             return fg_colour
         elif self.pen is not None:
@@ -643,13 +666,13 @@ class Canvas(ABC):
         elif self.fg_colour is not None:
             return self.fg_colour
         else:
-            return graphics.colours.COLOUR_WHITE
+            return colours.COLOUR_WHITE
 
     def select_bg_colour(
         self,
         bg_colour: Optional[graphics.Colour] = None,
         pen: Optional[graphics.Pen] = None,
-    ):
+    ) -> graphics.Colour:
         """Return the colour to be used for drawing in the background, taking
         into account the (optional) overrides specified in `bg_colour` and
         `pen`. The selected colour will obey the standard colour selection
@@ -690,7 +713,7 @@ class Canvas(ABC):
         """
 
         if pen is not None:
-            return bg_colour
+            return pen.bg_colour
         elif bg_colour is not None:
             return bg_colour
         elif self.pen is not None:
@@ -698,7 +721,7 @@ class Canvas(ABC):
         elif self.bg_colour is not None:
             return self.bg_colour
         else:
-            return graphics.colours.COLOUR_BLACK
+            return colours.COLOUR_BLACK
 
     ##
     ## Drawing Primitives using the `cursor`
@@ -869,8 +892,9 @@ class Canvas(ABC):
     ##
 
     def move_to(self, xy: tuple[int, int]) -> None:
-        """Sets the internal `x` and `y` co-ordinates of the `cursor` as a
-        tuple. An alias for the `x_y` property of `Canvas`.
+        """Set the internal (`x`, `y`) co-ordinates of the `cursor` to the
+        values of the `xy` two-value tuple. An alias for the `x_y` property of
+        `Canvas`.
 
         Parameters
         ----------
@@ -890,7 +914,7 @@ class Canvas(ABC):
         self.cursor.x_y = xy
 
     def move_origin_to(self) -> None:
-        """Sets the user drawing [`origin`] [lbutils.graphics.Canvas.origin] of
+        """Set the user drawing [`origin`] [lbutils.graphics.Canvas.origin] of
         the `Canvas` to the specified co-ordinate the next sequence of drawing
         commands.
 

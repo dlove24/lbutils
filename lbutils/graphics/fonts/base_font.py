@@ -79,13 +79,6 @@ Adafruit_GFX.cpp) for a more detailed explanation of how the glyphs are
 reconstructed from the font data.
 """
 
-# Import the typing hints if available. Use our backup version
-# if the offical library is missing
-try:
-    from typing import Dict
-except ImportError:
-    from lbutils.typing import Dict  # type: ignore
-
 
 class BaseFont:
     """A Base Class which implements the access methods required to use the
@@ -94,7 +87,7 @@ class BaseFont:
     that bitmap is handled here by `BaseFont`.
 
     Methods
-    ----------
+    -------
 
     * `get_bit()`. Returns the state ('0' or '1') of the bit specified by
     the current cursor `position` within the current glyph bitmap.
@@ -107,7 +100,7 @@ class BaseFont:
     in the next natural position.
     """
 
-    def __init__(self, bitmap: bytes, index: Dict[str, int], glyph: list) -> None:
+    def __init__(self, bitmap: bytes, index: dict[str, int], glyph: list) -> None:
         """Take the byte array of `bitmap`s with the `index` of font characters
         and use these together with the `glyph` list to reconstruct the required
         font. This method is typically called by a sub-class in the constructor
@@ -178,7 +171,7 @@ class BaseFont:
         self.position = self.current_glyph[0] * 8
 
     def get_bit(self, position: int) -> int:
-        """Returns the state ('0' or '1') of the bit specified by the current
+        """Return the state ('0' or '1') of the bit specified by the current
         cursor `position` within the current glyph bitmap.
 
         Parameters
