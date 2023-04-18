@@ -38,20 +38,22 @@ try:
     import framebuf
     from machine import SPI, Pin
 except ImportError:
-    raise RuntimeError("Error: Missing required MicroPython includes!")
+    raise RuntimeError("Error: Missing required MicroPython includes!") from ImportError
 
 # Import the lbutils graphics library
 try:
     import lbutils.graphics as graphics
     import lbutils.graphics.fonts as fonts
 except ImportError:
-    raise RuntimeError("Error: Missing required LBUtils graphics library")
+    raise RuntimeError(
+        "Error: Missing required LBUtils graphics library"
+    ) from ImportError
 
 # Import the LB Utils driver for the Pmod OLEDrgb
 try:
     from lbutils.pmods.spi import OLEDrgb
 except ImportError:
-    raise RuntimeError("Error: Cannot find the Pmod OLEDrgb driver!")
+    raise RuntimeError("Error: Cannot find the Pmod OLEDrgb driver!") from ImportError
 
 # Import the core libraries
 import utime
