@@ -33,7 +33,7 @@ packages = ["lbutils", "lbutils.drivers", "lbutils.graphics", "lbutils.graphics.
 
 [tool.ruff]
 # Enable modules for static type and doc checking
-select = ["A", "ANN0", "ANN2", "B", "BLE", "COM", "D4", "E", "F", "FBT", "I", "N", "Q",  "S", "UP", "W"]
+select = ["A", "ANN0", "ANN2", "B", "BLE", "C4", "COM", "D4", "DTZ", "E", "EM", "F", "FBT", "I", "N", "Q",  "S", "UP", "W"]
 
 # Ignore
 # * F401 - Handle redundant imports via the module.

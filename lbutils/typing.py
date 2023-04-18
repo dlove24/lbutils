@@ -210,12 +210,13 @@ def _overload_dummy(*args, **kwds):
     NotImplementedError:
         This is a stub and cannot be called directly,
     """
-    raise NotImplementedError(
+    msg = (
         "You should not call an overloaded function. "
         "A series of @overload-decorated functions "
         "outside a stub module should always be followed "
-        "by an implementation that is not @overload-ed.",
+        "by an implementation that is not @overload-ed."
     )
+    raise NotImplementedError(msg)
 
 
 def overload(fun):

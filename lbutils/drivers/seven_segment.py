@@ -158,9 +158,11 @@ class SegDisplay:
         self.pin_list = []
 
         if (gpio_request is None) or (not gpio_request):
-            raise ValueError("The GPIO Request List is empty")
+            msg = "The GPIO Request List is empty"
+            raise ValueError(msg)
         elif len(gpio_request) != 7:
-            raise ValueError("The GPIO Request List must be EXACTLY seven entries long")
+            msg = "The GPIO Request List must be EXACTLY seven entries long"
+            raise ValueError(msg)
         else:
             for segment in range(7):
                 self.pin_list.append(Pin(gpio_request[segment], Pin.OUT))
@@ -210,6 +212,5 @@ class SegDisplay:
                 for pin in range(7):
                     self.pin_list[pin].value(not self._char_list[character][pin])
         else:
-            raise IndexError(
-                "The display character must be between zero ('0') and nine ('9')",
-            )
+            msg = ("The display character must be between zero ('0') and nine ('9')",)
+            raise IndexError(msg)

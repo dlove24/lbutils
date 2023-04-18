@@ -183,9 +183,11 @@ class SegHexDisplay:
         self.pin_list = []
 
         if (gpio_request is None) or (not gpio_request):
-            raise ValueError("The GPIO Request List is empty")
+            msg = "The GPIO Request List is empty"
+            raise ValueError(msg)
         elif len(gpio_request) != 7:
-            raise ValueError("The GPIO Request List must be EXACTLY seven entries long")
+            msg = "The GPIO Request List must be EXACTLY seven entries long"
+            raise ValueError(msg)
         else:
             for segment in range(7):
                 self.pin_list.append(Pin(gpio_request[segment], Pin.OUT))
@@ -249,9 +251,10 @@ class SegHexDisplay:
                     for pin in range(7):
                         self.pin_list[pin].value(not self._char_list[character][pin])
             else:
-                raise IndexError(
+                msg = (
                     "The display character must be between zero ('0') and sixteen ('F')",
                 )
+                raise IndexError(msg)
 
         # Convert a string integer in the range [0..F], and then display
         elif isinstance(character, str):
@@ -284,13 +287,13 @@ class SegHexDisplay:
                             not self._char_list[_char_list_index][pin],
                         )
             else:
-                raise IndexError(
-                    "The display character must be a string between '0' and 'F'",
-                )
+                msg = ("The display character must be a string between '0' and 'F'",)
+                raise IndexError(msg)
 
         # If we can't convert the input `character`, raise an exception
         else:
-            raise TypeError(
+            msg = (
                 "The 'character' parameter must either be an integer ('int') or a"
                 " string ('str') type.",
             )
+            raise TypeError(msg)

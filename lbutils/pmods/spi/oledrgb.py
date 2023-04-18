@@ -80,9 +80,8 @@ except ImportError:
 try:
     import lbutils.graphics as graphics
 except ImportError:
-    raise RuntimeError(
-        "Error: Missing required LBUtils graphics library",
-    ) from ImportError
+    msg = ("Error: Missing required LBUtils graphics library",)
+    raise RuntimeError(msg) from ImportError
 
 # Import the core libraries
 import ustruct
@@ -648,11 +647,12 @@ class OLEDrgb(graphics.Canvas):
                     use_fg_colour.blue,
                 )
         except ustruct.error:
-            raise ValueError(
+            msg = (
                 "Invalid parameters has been passed to 'draw_line'. I cannot"
                 "interpret the co-ordinates passed as arguments: check the"
                 "'start' and 'end' tuples are correct",
-            ) from ustruct.error
+            )
+            raise ValueError(msg) from ustruct.error
 
         self._write(_DRAWLINE, data)
 

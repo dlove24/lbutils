@@ -97,9 +97,8 @@ try:
     import lbutils.graphics as graphics
     import lbutils.graphics.fonts as fonts
 except ImportError:
-    raise RuntimeError(
-        "Error: Missing required LBUtils graphics library",
-    ) from ImportError
+    msg = ("Error: Missing required LBUtils graphics library",)
+    raise RuntimeError(msg) from ImportError
 
 ###
 ### Enumerations. MicroPython doesn't have actual an actual `enum` (yet), so
