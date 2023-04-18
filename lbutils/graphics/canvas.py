@@ -57,7 +57,8 @@ class and the underlying display protocols.
 The simplest derived class
 
 ````python
-import lbutils.graphics as graphics
+from lbutils import graphics
+from lbutils.graphics import colours, fonts
 
 display = graphics.FrameBufferCanvas(width: int = 96,
         height: int = 64)
@@ -71,7 +72,7 @@ For insance the
 can be cleared to black by
 
 ````python
-display.fill_screen(graphics.colours.COLOUR_BLACK)
+display.fill_screen(colours.COLOUR_BLACK)
 ````
 
 ## Tested Implementations
@@ -95,7 +96,7 @@ except ImportError:
 # Import the lbutils graphics library
 try:
     from lbutils import graphics
-    from lbutils.graphics import fonts
+    from lbutils.graphics import colours, fonts
 except ImportError:
     msg = ("Error: Missing required LBUtils graphics library",)
     raise RuntimeError(msg) from ImportError
@@ -309,8 +310,8 @@ class Canvas(ABC):
         """
         # Set the Attribute Values. Note use the properties to ensure
         # that the type being set is correctly
-        self.fg_colour = graphics.colours.Colour(255, 255, 255, bit_order)
-        self.bg_colour = graphics.colours.Colour(0, 0, 0, bit_order)
+        self.fg_colour = colours.Colour(255, 255, 255, bit_order)
+        self.bg_colour = colours.Colour(0, 0, 0, bit_order)
 
         self.pen = None
 
@@ -665,7 +666,7 @@ class Canvas(ABC):
         elif self.fg_colour is not None:
             return self.fg_colour
         else:
-            return graphics.colours.COLOUR_WHITE
+            return colours.COLOUR_WHITE
 
     def select_bg_colour(
         self,
@@ -720,7 +721,7 @@ class Canvas(ABC):
         elif self.bg_colour is not None:
             return self.bg_colour
         else:
-            return graphics.colours.COLOUR_BLACK
+            return colours.COLOUR_BLACK
 
     ##
     ## Drawing Primitives using the `cursor`
