@@ -46,7 +46,7 @@ try:
     import lbutils.graphics.fonts as fonts
 except ImportError:
     raise RuntimeError(
-        "Error: Missing required LBUtils graphics library"
+        "Error: Missing required LBUtils graphics library",
     ) from ImportError
 
 # Import the LB Utils driver for the Pmod OLEDrgb

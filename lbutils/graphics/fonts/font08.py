@@ -367,7 +367,7 @@ class Font08(BaseFont):
             0x00,
             0x1F,
             0x80,
-        ]
+        ],
     )
 
     index = {

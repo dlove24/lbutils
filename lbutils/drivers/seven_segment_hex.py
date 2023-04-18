@@ -250,7 +250,7 @@ class SegHexDisplay:
                         self.pin_list[pin].value(not self._char_list[character][pin])
             else:
                 raise IndexError(
-                    "The display character must be between zero ('0') and sixteen ('F')"
+                    "The display character must be between zero ('0') and sixteen ('F')",
                 )
 
         # Convert a string integer in the range [0..F], and then display
@@ -281,16 +281,16 @@ class SegHexDisplay:
                     # the column value in `_char_list` for that segment value
                     for pin in range(7):
                         self.pin_list[pin].value(
-                            not self._char_list[_char_list_index][pin]
+                            not self._char_list[_char_list_index][pin],
                         )
             else:
                 raise IndexError(
-                    "The display character must be a string between '0' and 'F'"
+                    "The display character must be a string between '0' and 'F'",
                 )
 
         # If we can't convert the input `character`, raise an exception
         else:
             raise TypeError(
                 "The 'character' parameter must either be an integer ('int') or a"
-                " string ('str') type."
+                " string ('str') type.",
             )

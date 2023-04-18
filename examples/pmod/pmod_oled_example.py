@@ -47,7 +47,7 @@ try:
     import lbutils.graphics.fonts as fonts
 except ImportError:
     raise RuntimeError(
-        "Error: Missing required LBUtils graphics library"
+        "Error: Missing required LBUtils graphics library",
     ) from ImportError
 
 # Import the LB Utils driver for the Pmod OLEDrgb
@@ -144,19 +144,24 @@ oled_display.fg_colour = graphics.colours.COLOUR_BLUE
 oled_display.font = fonts.Org01()
 
 oled_display.write_text(
-    start=oled_display.origin.offset(y=20), txt_str="ABCDEFGHIJKLMN"
+    start=oled_display.origin.offset(y=20),
+    txt_str="ABCDEFGHIJKLMN",
 )
 oled_display.write_text(
-    start=oled_display.origin.offset(y=30), txt_str="OPQRSTUVWXYZ   "
+    start=oled_display.origin.offset(y=30),
+    txt_str="OPQRSTUVWXYZ   ",
 )
 oled_display.write_text(
-    start=oled_display.origin.offset(y=40), txt_str="abcdefghijklmn "
+    start=oled_display.origin.offset(y=40),
+    txt_str="abcdefghijklmn ",
 )
 oled_display.write_text(
-    start=oled_display.origin.offset(y=50), txt_str="opqrstuvwxyz   "
+    start=oled_display.origin.offset(y=50),
+    txt_str="opqrstuvwxyz   ",
 )
 oled_display.write_text(
-    start=oled_display.origin.offset(y=60), txt_str="0123456789     "
+    start=oled_display.origin.offset(y=60),
+    txt_str="0123456789     ",
 )
 
 utime.sleep(10)

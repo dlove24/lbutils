@@ -216,7 +216,7 @@ class Font06(BaseFont):
             0x80,
             0x3E,
             0x00,
-        ]
+        ],
     )
 
     index = {

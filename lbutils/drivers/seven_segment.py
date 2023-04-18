@@ -211,5 +211,5 @@ class SegDisplay:
                     self.pin_list[pin].value(not self._char_list[character][pin])
         else:
             raise IndexError(
-                "The display character must be between zero ('0') and nine ('9')"
+                "The display character must be between zero ('0') and nine ('9')",
             )

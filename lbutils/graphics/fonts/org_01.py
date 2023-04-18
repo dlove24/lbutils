@@ -307,7 +307,7 @@ class Org01(BaseFont):
             0xA8,
             0x0F,
             0xE0,
-        ]
+        ],
     )
 
     index = {

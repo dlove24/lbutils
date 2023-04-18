@@ -98,7 +98,7 @@ try:
     import lbutils.graphics.fonts as fonts
 except ImportError:
     raise RuntimeError(
-        "Error: Missing required LBUtils graphics library"
+        "Error: Missing required LBUtils graphics library",
     ) from ImportError
 
 ###
@@ -316,10 +316,20 @@ class Canvas(ABC):
         self.pen = None
 
         self.cursor = graphics.BoundPixel(
-            0, 0, min_x=0, max_x=width, min_y=0, max_y=height
+            0,
+            0,
+            min_x=0,
+            max_x=width,
+            min_y=0,
+            max_y=height,
         )
         self.origin = graphics.BoundPixel(
-            0, 0, min_x=0, max_x=width, min_y=0, max_y=height
+            0,
+            0,
+            min_x=0,
+            max_x=width,
+            min_y=0,
+            max_y=height,
         )
 
         self._font = fonts.Org01()

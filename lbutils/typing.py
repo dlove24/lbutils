@@ -214,7 +214,7 @@ def _overload_dummy(*args, **kwds):
         "You should not call an overloaded function. "
         "A series of @overload-decorated functions "
         "outside a stub module should always be followed "
-        "by an implementation that is not @overload-ed."
+        "by an implementation that is not @overload-ed.",
     )
 
 

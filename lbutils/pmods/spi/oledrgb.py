@@ -81,7 +81,7 @@ try:
     import lbutils.graphics as graphics
 except ImportError:
     raise RuntimeError(
-        "Error: Missing required LBUtils graphics library"
+        "Error: Missing required LBUtils graphics library",
     ) from ImportError
 
 # Import the core libraries
@@ -477,7 +477,12 @@ class OLEDrgb(graphics.Canvas):
             self.chip_sel_pin.value(1)
 
     def _block(
-        self, x: int, y: int, width: int, height: int, data: Union[bytes, bytearray]
+        self,
+        x: int,
+        y: int,
+        width: int,
+        height: int,
+        data: Union[bytes, bytearray],
     ) -> None:
         self._write(_SETCOLUMN, bytearray([x, x + width - 1]))
         self._write(_SETROW, bytearray([y, y + height - 1]))
@@ -646,7 +651,7 @@ class OLEDrgb(graphics.Canvas):
             raise ValueError(
                 "Invalid parameters has been passed to 'draw_line'. I cannot"
                 "interpret the co-ordinates passed as arguments: check the"
-                "'start' and 'end' tuples are correct"
+                "'start' and 'end' tuples are correct",
             ) from ustruct.error
 
         self._write(_DRAWLINE, data)
