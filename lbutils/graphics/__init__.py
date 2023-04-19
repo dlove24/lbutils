@@ -84,6 +84,12 @@ functions which ease the abstraction of the main graphics Canvas library, e.g.
 class as being the most suitable classes for re-use in other drawing and graphics
 routines.
 
+Diagrammatically, the relationship between the  [`Canvas`]
+[lbutils.graphics.Canvas] class and the helper classes listed above can be
+shown as
+
+![Canvas Class Diagram](/media/canvas.svg)
+
 ## Implementation
 
 Much of the functionality of the [`Canvas`]

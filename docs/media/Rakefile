@@ -7,9 +7,15 @@ end
 task :default => :svg
 
 task :byte => source_files.ext(".byte")
+task :class => source_files.ext(".class")
 task :svg => source_files.ext(".svg")
 
 rule ".svg" => ".byte" do |t|
   sh "kroki convert -t bytefield -f svg #{t.source} -o #{t.name}"
 end
+
+rule ".svg" => ".class" do |t|
+  sh "kroki convert -t mermaid -f svg #{t.source} -o #{t.name}"
+end
+
 
