@@ -33,6 +33,10 @@ alone.
 * **[`pmod`][lbutils.pmods]**: Drivers and support for the
   [Digilent peripheral modules](https://digilent.com/reference/pmod/start).
 
+Diagrammatically these modules (and classes) are organised as follows
+
+![Module Organisation](/media/lbutils.svg)
+
 Each module can be imported in its entirety to expose the individual drivers, for
 instance as
 

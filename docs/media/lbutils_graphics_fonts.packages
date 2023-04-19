@@ -1,0 +1,46 @@
+@startuml lbutils
+namespace lbutils {
+    namespace graphics {
+    namespace fonts {
+        abstract class BaseFont {
+            - bitmap
+            - index
+            - glyph
+            {abstract} +int get_bit()
+            {abstract} +int get_next()
+            {abstract} +int set_position()
+            }
+        class Font06 {
+            - bitmap
+            - index
+            - glyph
+            +int get_bit()
+            +int get_next()
+            +int set_position()
+            }
+        class Font08{
+            - bitmap
+            - index
+            - glyph
+            +int get_bit()
+            +int get_next()
+            +int set_position()
+            }
+        class Org01{
+            - bitmap
+            - index
+            - glyph
+            +int get_bit()
+            +int get_next()
+            +int set_position()
+            }
+
+        }
+    }
+}
+
+lbutils.graphics.fonts.Font06 <|-- lbutils.graphics.fonts.BaseFont
+lbutils.graphics.fonts.Font08 <|-- lbutils.graphics.fonts.BaseFont
+lbutils.graphics.fonts.Org01 <|-- lbutils.graphics.fonts.BaseFont
+
+@enduml

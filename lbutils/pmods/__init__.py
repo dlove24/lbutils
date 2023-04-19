@@ -28,7 +28,9 @@ all boards are supported: and in some cases only certain busses are supported
 
 Examples for how to use the library can be found in the '`examples`' folder: or
 [in the documentation](https://lbutils.readthedocs.io/en/latest/) for the
-specific classes.
+specific classes. Diagrammatically these classes are organised in this modules as follows
+
+![Pmod Driver Package Structure](/media/lbutils_pmods.svg)
 
 Tested Implementations
 ----------------------

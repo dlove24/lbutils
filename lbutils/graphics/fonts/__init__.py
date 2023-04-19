@@ -42,6 +42,10 @@ the classes above providing specific fonts are organised as follows
 
 ![Font Class Diagram](/media/fonts.svg)
 
+All fonts are provided in a single package, with the following structure
+
+![Graphics Package Diagram](/media/lbutils_graphics_fonts.svg)
+
 ## Rebuilding the Fonts
 
 Rebuilding the fonts requires the [`fontconvert`](https://github.com/danjperron/ssd1331_micropython)

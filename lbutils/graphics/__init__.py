@@ -90,6 +90,10 @@ shown as
 
 ![Canvas Class Diagram](/media/canvas.svg)
 
+These classes are then organised into the following packages
+
+![Graphics Package Diagram](/media/lbutils_graphics.svg)
+
 ## Implementation
 
 Much of the functionality of the [`Canvas`]
