@@ -1,0 +1,20 @@
+(defattrs :bg-green {:fill "#a0ffa0"})
+(defattrs :bg-blue {:fill "#a0fafa"})
+(defattrs :bg-red {:fill "#ffb0a0"})
+
+(defn draw-group-label-header
+  [span label]
+  (draw-box (text label [:math {:font-size 12}]) {:span span :borders #{} :height 14}))
+
+(defn draw-585-intel
+  [kind args]
+  (draw-column-headers {:labels (reverse column-labels)})
+
+  (draw-box (text "Red") [{:span 5} :bg-red])
+  (draw-box (text "Green") [{:span 6} :bg-green])
+  (draw-box (text "Blue") [{:span 5} :bg-blue])
+)
+
+(draw-585-intel 0x4702 9)
+
+

@@ -1,0 +1,15 @@
+source_files = Rake::FileList.new("**/*") do |fl|
+  fl.exclude("Rakefile")
+  fl.exclude("*.png")
+end
+
+
+task :default => :svg
+
+task :byte => source_files.ext(".byte")
+task :svg => source_files.ext(".svg")
+
+rule ".svg" => ".byte" do |t|
+  sh "kroki convert -t bytefield -f svg #{t.source} -o #{t.name}"
+end
+
