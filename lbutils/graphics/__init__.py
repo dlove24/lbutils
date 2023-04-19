@@ -86,11 +86,7 @@ routines.
 
 Diagrammatically, the relationship between the  [`Canvas`]
 [lbutils.graphics.Canvas] class and the helper classes listed above can be
-shown as
-
-![Canvas Class Diagram](/media/canvas.svg)
-
-These classes are then organised into the following packages
+shown as follows. Note that the [`fonts`][lbutils.graphics.fonts] package is covered [separately][lbutils.graphics.fonts].
 
 ![Graphics Package Diagram](/media/lbutils_graphics.svg)
 

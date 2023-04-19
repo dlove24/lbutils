@@ -1,46 +1,54 @@
 @startuml lbutils
 namespace lbutils {
     namespace graphics {
-    namespace fonts {
-        abstract class BaseFont {
-            - bitmap
-            - index
-            - glyph
-            {abstract} +int get_bit()
-            {abstract} +int get_next()
-            {abstract} +int set_position()
+        namespace fonts {
+            namespace base_font <<Rectangle>> {
+                abstract class BaseFont {
+                    - bitmap
+                    - index
+                    - glyph
+                    {abstract} +int get_bit()
+                    {abstract} +int get_next()
+                    {abstract} +int set_position()
+                }
             }
-        class Font06 {
-            - bitmap
-            - index
-            - glyph
-            +int get_bit()
-            +int get_next()
-            +int set_position()
+            namespace font06 <<Rectangle>> {
+                class Font06 {
+                    - bitmap
+                    - index
+                    - glyph
+                    +int get_bit()
+                    +int get_next()
+                    +int set_position()
+                }
             }
-        class Font08{
-            - bitmap
-            - index
-            - glyph
-            +int get_bit()
-            +int get_next()
-            +int set_position()
+            namespace font08 <<Rectangle>> {
+                class Font08{
+                    - bitmap
+                    - index
+                    - glyph
+                    +int get_bit()
+                    +int get_next()
+                    +int set_position()
+                }
             }
-        class Org01{
-            - bitmap
-            - index
-            - glyph
-            +int get_bit()
-            +int get_next()
-            +int set_position()
+            namespace org_01 <<Rectangle>> {
+                class Org01{
+                    - bitmap
+                    - index
+                    - glyph
+                    +int get_bit()
+                    +int get_next()
+                    +int set_position()
+                }
             }
-
         }
     }
+
 }
 
-lbutils.graphics.fonts.Font06 <|-- lbutils.graphics.fonts.BaseFont
-lbutils.graphics.fonts.Font08 <|-- lbutils.graphics.fonts.BaseFont
-lbutils.graphics.fonts.Org01 <|-- lbutils.graphics.fonts.BaseFont
+lbutils.graphics.fonts.font06.Font06 <|-- lbutils.graphics.fonts.base_font.BaseFont
+lbutils.graphics.fonts.font08.Font08 <|-- lbutils.graphics.fonts.base_font.BaseFont
+lbutils.graphics.fonts.org_01.Org01 <|-- lbutils.graphics.fonts.base_font.BaseFont
 
 @enduml

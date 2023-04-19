@@ -35,7 +35,7 @@ alone.
 
 Diagrammatically these modules (and classes) are organised as follows
 
-![Module Organisation](/media/lbutils.svg)
+![Package and Class Diagram for lbutils](/media/lbutils.svg)
 
 Each module can be imported in its entirety to expose the individual drivers, for
 instance as

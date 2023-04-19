@@ -37,12 +37,9 @@ in this library are
   all characters within a 6 pixel height. Created by fontconvert, from the Org_v01
   by Orgdot.
 
-Together the [`BaseFont`][lbutils.graphics.fonts.base_font.BaseFont] class and
+All fonts are provided in a single package, [`lbutils.graphics.fonts`][lbutils.graphics.fonts], with most of the functionality implemented by the the [`BaseFont`]
+[lbutils.graphics.fonts.base_font.BaseFont] class. Together the [`BaseFont`][lbutils.graphics.fonts.base_font.BaseFont] class and
 the classes above providing specific fonts are organised as follows
-
-![Font Class Diagram](/media/fonts.svg)
-
-All fonts are provided in a single package, with the following structure
 
 ![Graphics Package Diagram](/media/lbutils_graphics_fonts.svg)
 

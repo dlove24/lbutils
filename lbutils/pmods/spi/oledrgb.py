@@ -71,10 +71,6 @@ header below.
 
   * Set-up, font display and rotating colours: `examples/pmods/pmod_oled_example.py`
 
-## Class Diagram
-
-![Class Diagram for OLEDrgb](/media/olergb.svg)
-
 ## References
 
 * **Reference Manual:**

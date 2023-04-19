@@ -20,6 +20,8 @@ plugins:
             show_signature_annotations: True
             show_category_heading: True
             show_source: True
+  - plantuml:
+      puml_url: https://www.plantuml.com/plantuml/
   - search
 
 markdown_extensions:
