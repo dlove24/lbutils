@@ -111,10 +111,10 @@ class Colour:
         The byte (`0..255`) of the green component of the colour
     blue: int, read-only
         The byte (`0..255`) of the blue component of the colour
-    as_565: int, read-only
+    as_rgb565: int, read-only
         Provides the colour value in the RGB565 format, using a single
         byte in the the standard platform representation.
-    as_888: int, read-only
+    as_rgb888: int, read-only
         Provides the colour value in the RGB888 format, using a
         double word for the colour value in the standard platform
         representation.
@@ -244,32 +244,31 @@ class Colour:
         return self._blue
 
     @property
-    def as_565(self) -> Optional[int]:
-        """
-        Construct a packed word from the internal colour representation, with
-        5 bits of red data, 6 of green, and 5 of blue. On ARM platforms
-        the packed word representation has the high and low bytes swapped,
-        and so looks like.
+    def as_rgb565(self) -> Optional[int]:
+        """Construct a packed double word from the internal colour
+        representation, with 8 bits of red data, 8 bits of green, and 8 of blue.
+        For non-ARM platforms this results in a byte order for the two colour
+        words as follows.
 
+        ![````
+        F  E  D  C  B  A  9  8  7  6  5  4  3  2  1  0
+        R4 R3 R2 R1 R0 G5 G4 G3 G2 G1 G0 B4 B3 B2 B1 B0
+        ````](/media/colours_as_rgb565_fig1.svg)
+
+        On ARM platforms the packed word representation has the high and low
+        bytes swapped in each word, and so looks like
+
+        ![
         ````
         F  E  D  C  B  A  9  8  7  6  5  4  3  2  1  0
         G2 G1 G0 B4 B3 B2 B1 B0 R4 R3 R2 R1 R0 G5 G4 G3
-        ````
-
-        On non-ARM platform, the internal representation follows the
-        normal bit sequence for a 565 representation and looks like
-
-        ````
-        F  E  D  C  B  A  9  8  7  6  5  4  3  2  1  0
-        R4 R3 R2 R1 R0 G5 G4 G3 G2 G1 G0 B4 B3 B2 B1 B0
-        ````
+        ````](/media/colours_as_rgb565_fig2.svg)
 
         Returns
         -------
 
         int:
             A packed byte value of the colour representation.
-
         """
         # Check for a cached value ...
         if self._565 is None:
@@ -289,32 +288,24 @@ class Colour:
         return self._565
 
     @property
-    def as_888(self) -> Optional[int]:
-        """
-        Construct a packed double word from the internal colour representation,
-        with 8 bits of red data, 8 bits of green, and 8 of blue. For non-ARM
-        platforms this results in a byte order for the two colour words as
-        follows.
+    def as_rgb888(self) -> Optional[int]:
+        """Construct a packed double word from the internal colour
+        representation, with 8 bits of red data, 8 bits of green, and 8 of blue.
+        For non-ARM platforms this results in a byte order for the two colour
+        words as follows.
 
-        ````
-        F  E  D  C  B  A  9  8  7  6  5  4  3  2  1  0
-        R4 R3 R2 R1 R0 G5 G4 G3 G2 G1 G0 B4 B3 B2 B1 B0
-        ````
+        ![Intel Byte Order for RGB888 Structure](/media/colours_as_rgb888_fig1.svg)
 
         On ARM platforms the packed word representation has the high and low
         bytes swapped in each word, and so looks like
 
-        ````
-        F  E  D  C  B  A  9  8  7  6  5  4  3  2  1  0
-        G2 G1 G0 B4 B3 B2 B1 B0 R4 R3 R2 R1 R0 G5 G4 G3
-        ````
+        ![ARM Byte Order for RGB888 Structure](/media/colours_as_rgb888_fig2.svg)
 
         Returns
         -------
 
         int:
             A packed double word value of the colour representation.
-
         """
         # Check for a cached value ...
         if self._888 is None:

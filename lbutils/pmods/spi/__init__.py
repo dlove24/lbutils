@@ -33,7 +33,7 @@ supported: this module also only supports those with a dedicated SPI interface.
      use. However, most  of the PMod reference documentation (and the underlying
      hardware devices) still use the older terms.
 
-![Modern Naming Conventions for the SPI Interfaces](docs/media/spi_interfaces.png)
+![Modern Naming Conventions for the SPI Interfaces](/media/spi_interfaces.png)
 
 **Figure 1: Modern Naming Conventions for the SPI Interfaces [CC0 - Public Domain]**
 

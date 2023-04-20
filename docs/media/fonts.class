@@ -1,0 +1,37 @@
+classDiagram
+    class BaseFont {
+        - bitmap
+        - index
+        - glyph
+        +int get_bit()*
+        +int get_next()*
+        +int set_position()*
+    }
+    Font06 <-- BaseFont
+    Font08 <-- BaseFont
+    Org01 <-- BaseFont
+    class Font06 {
+        - bitmap
+        - index
+        - glyph
+        +int get_bit()
+        +int get_next()
+        +int set_position()
+    }
+    class Font08 {
+        - bitmap
+        - index
+        - glyph
+        +int get_bit()
+        +int get_next()
+        +int set_position()
+    }
+    class Org01 {
+        - bitmap
+        - index
+        - glyph
+        +int get_bit()
+        +int get_next()
+        +int set_position()
+    }
+

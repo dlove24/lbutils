@@ -53,6 +53,12 @@ This typical behaviour for a common anode display, and also the normal library d
 Alternatively, if the GPIO pins need to be set 'low' ('0') for
 the device input to turn on, then the `pin_on` argument must be sent to `LOW`. This is also the typical behaviour for common cathode devices.
 
+## Class and Package Diagrams
+
+The classes provided for the seven segment displays are described in the following sections. Logically the classes within the `lbutils.drivers` package for these drivers are organised as follows
+
+![Seven Segment Package Structure](/media/lbutils_drivers_seven.svg)
+
 ### Tested Implementations
 
 This version is written for MicroPython 3.4, and has been tested on:

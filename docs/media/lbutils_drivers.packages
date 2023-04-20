@@ -1,0 +1,22 @@
+@startuml lbutils
+namespace lbutils {
+    namespace drivers {
+        class SegDisplay {
+            - list _char_list
+            + display()
+        }
+        class SegHexDisplay {
+            - list _char_list
+            + display()
+        }
+        enum PIN_ON_SENSE {
+            + HIGH
+            + LOW
+        }
+    }
+}
+
+lbutils.drivers.SegDisplay <-- lbutils.drivers.PIN_ON_SENSE
+lbutils.drivers.SegHexDisplay <-- lbutils.drivers.PIN_ON_SENSE
+
+@enduml
