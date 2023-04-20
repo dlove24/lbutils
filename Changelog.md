@@ -4,6 +4,13 @@ All releases should be on [PyPi](https://pypi.org/project/lbutils-mp/), and also
 
 ## 2023-04-16: lbutils 0.2.5
 
+### New
+
+* Added package and class structure diagrams to the
+documentation to make navigating the code easier.
+* Added additional checks to ensure more consistency
+in the documentation.
+
 ### Changed
 
 * Updated the type signature of the library methods to make
