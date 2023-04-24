@@ -20,10 +20,10 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-"""Common libraries and definitions for the for low-level devices. This module
-contains mostly helper and other utility definitions that are used by more than
-one driver. In most cases the services provided by this module are not meant to
-be used directly by end-user code.
+"""Stub implementations of (C)Python libraries, needed where MicroPython
+equivalents are missing: or in some cases outdated. These stubs are deliberately
+as minimal as possible so that when official implementations are available, they
+can be removed.
 
 Tested Implementations
 ----------------------
@@ -32,26 +32,3 @@ This version is written for MicroPython 3.4, and has been tested on:
 
   * Raspberry Pi Pico H/W
 """
-
-# Import the enumerations library. Unfortunately the full version in not
-# in MicroPython yet, so this is a bit of a hack
-try:
-    from enum import IntEnum
-except ImportError:
-    from urest.enum import IntEnum  # type: ignore
-
-###
-### Enumerations
-###
-
-
-class PIN_ON_SENSE(IntEnum):
-    """Sets the device sense for 'ON'.
-
-    When set to `HIGH` the GPIO pins need to be set 'high' ('1') for the device
-    input to turn on. When set to `LOW` the GPIO pins need to be set 'low' ('0')
-    for the device input to turn on.
-    """
-
-    LOW = 0
-    HIGH = 1
