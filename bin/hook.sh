@@ -16,3 +16,5 @@ mypy lbutils
 # to the house style
 docformatter --in-place --config ./pyproject.toml .
 
+# Run the unit tests
+pytest

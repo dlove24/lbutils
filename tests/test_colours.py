@@ -33,7 +33,7 @@ from lbutils.graphics.colours import Colour
 
 
 def test_colour_white_565():
-    """Test that initalising the `Colour` class with Red = 255, Green =
+    """Test that initialising the `Colour` class with Red = 255, Green =
     255 and Blue = 255 gives the correct RGB565 response.
 
     Expectation
@@ -44,17 +44,17 @@ def test_colour_white_565():
     On-Failure
     ----------
 
-      * Check the platform byte ordering has been corretcly determined
+      * Check the platform byte ordering has been correctly determined
       * Check the bit pattern returned against the expected in the method docstring
     """
     colour = Colour(255, 255, 255)
     bin_string = f"{colour.as_rgb565:016b}"
-    assert bin_string == "11111111"
-    assert colour.as_rgb565 == 0xFF
+    assert bin_string == "1111111111111111"
+    assert colour.as_rgb565 == 0xFFFF
 
 
 def test_colour_white_888():
-    """Test that initalising the `Colour` class with Red = 255, Green =
+    """Test that initialising the `Colour` class with Red = 255, Green =
     255 and Blue = 255 gives the correct RGB888 response.
 
     Expectation
@@ -65,7 +65,7 @@ def test_colour_white_888():
     On-Failure
     ----------
 
-      * Check the platform byte ordering has been corretcly determined
+      * Check the platform byte ordering has been correctly determined
       * Check the bit pattern returned against the expected in the method docstring
     """
     colour = Colour(255, 255, 255)
@@ -76,7 +76,7 @@ def test_colour_white_888():
 
 
 def test_colour_black_565():
-    """Test that initalising the `Colour` class with Red = 0, Green =
+    """Test that initialising the `Colour` class with Red = 0, Green =
     0 and Blue = 0 gives the correct RGB565 response.
 
     Expectation
@@ -87,7 +87,7 @@ def test_colour_black_565():
     On-Failure
     ----------
 
-      * Check the platform byte ordering has been corretcly determined
+      * Check the platform byte ordering has been correctly determined
       * Check the bit pattern returned against the expected in the method docstring
     """
     colour = Colour(0, 0, 0)
@@ -97,7 +97,7 @@ def test_colour_black_565():
 
 
 def test_colour_black_888():
-    """Test that initalising the `Colour` class with Red = 0, Green =
+    """Test that initialising the `Colour` class with Red = 0, Green =
     0 and Blue = 0 gives the correct RGB888 response.
 
     Expectation
@@ -108,7 +108,7 @@ def test_colour_black_888():
     On-Failure
     ----------
 
-      * Check the platform byte ordering has been corretcly determined
+      * Check the platform byte ordering has been correctly determined
       * Check the bit pattern returned against the expected in the method docstring
     """
     colour = Colour(0, 0, 0)
@@ -119,7 +119,7 @@ def test_colour_black_888():
 
 
 def test_colour_red_565():
-    """Test that initalising the `Colour` class with Red = 255, Green =
+    """Test that initialising the `Colour` class with Red = 255, Green =
     0 and Blue = 0 gives the correct RGB565 response.
 
     Expectation
@@ -130,17 +130,17 @@ def test_colour_red_565():
     On-Failure
     ----------
 
-      * Check the platform byte ordering has been corretcly determined
+      * Check the platform byte ordering has been correctly determined
       * Check the bit pattern returned against the expected in the method docstring
     """
     colour = Colour(255, 0, 0)
     bin_string = f"{colour.as_rgb565:016b}"
     assert bin_string == "1111100000000000"
-    assert colour.as_rgb565 == 0xF8
+    assert colour.as_rgb565 == 0xF800
 
 
 def test_colour_red_888():
-    """Test that initalising the `Colour` class with Red = 255, Green =
+    """Test that initialising the `Colour` class with Red = 255, Green =
     0 and Blue = 0 gives the correct RGB888 response.
 
     Expectation
@@ -151,7 +151,7 @@ def test_colour_red_888():
     On-Failure
     ----------
 
-      * Check the platform byte ordering has been corretcly determined
+      * Check the platform byte ordering has been correctly determined
       * Check the bit pattern returned against the expected in the method docstring
     """
     colour = Colour(255, 0, 0)
@@ -162,7 +162,7 @@ def test_colour_red_888():
 
 
 def test_colour_green_565():
-    """Test that initalising the `Colour` class with Red = 0, Green =
+    """Test that initialising the `Colour` class with Red = 0, Green =
     255 and Blue = 0 gives the correct RGB565 response.
 
     Expectation
@@ -173,17 +173,17 @@ def test_colour_green_565():
     On-Failure
     ----------
 
-      * Check the platform byte ordering has been corretcly determined
+      * Check the platform byte ordering has been correctly determined
       * Check the bit pattern returned against the expected in the method docstring
     """
     colour = Colour(0, 255, 0)
     bin_string = f"{colour.as_rgb565:016b}"
     assert bin_string == "0000011111100000"
-    assert colour.as_rgb565 == 0x7E0
+    assert colour.as_rgb565 == 0x07E0
 
 
 def test_colour_green_888():
-    """Test that initalising the `Colour` class with Red = 0, Green =
+    """Test that initialising the `Colour` class with Red = 0, Green =
     255 and Blue = 0 gives the correct RGB888 response.
 
     Expectation
@@ -194,7 +194,7 @@ def test_colour_green_888():
     On-Failure
     ----------
 
-      * Check the platform byte ordering has been corretcly determined
+      * Check the platform byte ordering has been correctly determined
       * Check the bit pattern returned against the expected in the method docstring
     """
     colour = Colour(0, 255, 0)
@@ -202,3 +202,89 @@ def test_colour_green_888():
     bin_string = f"{colour.as_rgb888:024b}"
     assert bin_string == "000000001111111100000000"
     assert colour.as_rgb888 == 0x00FF00
+
+
+def test_colour_blue_565():
+    """Test that initialising the `Colour` class with Red = 0, Green =
+    0 and Blue = 255 gives the correct RGB565 response.
+
+    Expectation
+    -----------
+
+    **Pass**: Return value is 0x7E0
+
+    On-Failure
+    ----------
+
+      * Check the platform byte ordering has been correctly determined
+      * Check the bit pattern returned against the expected in the method docstring
+    """
+    colour = Colour(0, 0, 255)
+    bin_string = f"{colour.as_rgb565:016b}"
+    assert bin_string == "0000000000011111"
+    assert colour.as_rgb565 == 0x001F
+
+
+def test_colour_blue_888():
+    """Test that initialising the `Colour` class with Red = 0, Green =
+    0 and Blue = 255 gives the correct RGB888 response.
+
+    Expectation
+    -----------
+
+    **Pass**: Return value is 0x0000FF
+
+    On-Failure
+    ----------
+
+      * Check the platform byte ordering has been correctly determined
+      * Check the bit pattern returned against the expected in the method docstring
+    """
+    colour = Colour(0, 0, 255)
+
+    bin_string = f"{colour.as_rgb888:024b}"
+    assert bin_string == "000000000000000011111111"
+    assert colour.as_rgb888 == 0x0000FF
+
+
+def test_colour_beckett_565():
+    """Test that initialising the `Colour` class with Red = 0, Green =
+    255 and Blue = 0 gives the correct RGB565 response.
+
+    Expectation
+    -----------
+
+    **Pass**: Return value is 0x7E0
+
+    On-Failure
+    ----------
+
+      * Check the platform byte ordering has been correctly determined
+      * Check the bit pattern returned against the expected in the method docstring
+    """
+    colour = Colour(61, 41, 108)
+    bin_string = f"{colour.as_rgb565:016b}"
+    assert bin_string == "0011100101001101"
+    assert colour.as_rgb565 == 0x394D
+
+
+def test_colour_beckett_888():
+    """Test that initialising the `Colour` class with Red = 0, Green =
+    255 and Blue = 0 gives the correct RGB888 response.
+
+    Expectation
+    -----------
+
+    **Pass**: Return value is 0x3D296C
+
+    On-Failure
+    ----------
+
+      * Check the platform byte ordering has been correctly determined
+      * Check the bit pattern returned against the expected in the method docstring
+    """
+    colour = Colour(61, 41, 108)
+
+    bin_string = f"{colour.as_rgb888:024b}"
+    assert bin_string == "001111010010100101101100"
+    assert colour.as_rgb888 == 0x3D296C
