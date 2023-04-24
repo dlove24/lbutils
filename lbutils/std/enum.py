@@ -20,28 +20,12 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
+"""A very minimal 'implementation' of the Python enum Enumerations library.
 
-"""Do nothing 'implementation of the Python Abstract Base class.
-
-Used to avoid import errors, and taken from the
-[pcopy-lib](https://github.com/pfalcon/pycopy-lib/tree/master/abc) library.
+Used to avoid import errors, and to help reinforce type checking on supported
+platform: which does not yet include MicroPython.
 """
 
-# Import the typing hints if available. Use our backup version
-# if the official library is missing
-try:
-    from typing import Any
-except ImportError:
-    from lbutils.typing import Any
 
-
-class ABCMeta:
+class IntEnum:
     pass
-
-
-class ABC:
-    pass
-
-
-def abstractmethod(f: Any) -> Any:
-    return f

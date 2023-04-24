@@ -78,23 +78,51 @@ shown below
 try:
     from typing import Literal, Optional
 except ImportError:
-    from lbutils.typing import Literal, Optional  # type: ignore
+    from lbutils.std.typing import Literal, Optional  # type: ignore
 
-# Import the offical Python 3 library if we can, or the MicroPython version
+# Import the official Python 3 library if we can, or the MicroPython version
 # if that fails
 try:
     from platform import uname
 except ImportError:
-    from os import uname
+    from os import uname  # type: ignore
+
+# Import the enumerations library. Unfortunately the full version in not
+# in MicroPython yet, so this is a bit of a hack
+try:
+    from enum import IntEnum
+except ImportError:
+    from urest.enum import IntEnum  # type: ignore
 
 ###
-### Enumerations. MicroPython doesn't have actual an actual `enum` (yet), so
-### these serve as common cases where a selection of values need to be defined
+### Enumerations
 ###
 
-DEVICE_BIT_ORDER = {"ARM", "INTEL"}
-"""Set the bit order to be used (mostly in graphics code) for low-level
-manipulation of bits send to, and received from, devices."""
+
+class DEVICE_BIT_ORDER(IntEnum):
+    """Set the bit order to be used (mostly in graphics code) for low-level
+    manipulation of bits send to, and received from, devices."""
+
+    ARM = 0
+    INTEL = 1
+
+    ##
+    ## Methods
+    ##
+    @staticmethod
+    def platform() -> "DEVICE_BIT_ORDER":
+        """Attempt to determine the platform automatically:
+
+        defaulting to the ARM bit order if the native order cannot be
+        determined.
+        """
+        machine = uname()
+
+        if machine[4].find("x86") != -1:
+            return DEVICE_BIT_ORDER.INTEL
+        else:
+            return DEVICE_BIT_ORDER.ARM
+
 
 ###
 ### Classes
@@ -173,7 +201,7 @@ class Colour:
         r: int,
         g: int,
         b: int,
-        bit_order: Optional[Literal["ARM", "INTEL"]] = "ARM",
+        bit_order: DEVICE_BIT_ORDER = DEVICE_BIT_ORDER.platform(),
     ) -> None:
         """Create a representation of a colour value, from the three integers
         `r` (red), `g` (green) and `b` (blue). The class will accept anything
@@ -193,7 +221,7 @@ class Colour:
         bit_order: DEVICE_BIT_ORDER, read-write
             Argument indicating if the underlying bit order used for
             the bit packing order in colour conversions. Defaults to
-            `ARM` as set by the default constructor.
+            the platform bit order.
         """
 
         # Set the colour to the RGB value specified
@@ -201,21 +229,12 @@ class Colour:
         self._g = int(g)
         self._b = int(b)
 
-        # Attempt to determine the platform automatically:
-        # defaulting to the ARM bit order
-        if bit_order is None:
-            machine = uname()
-            if machine[4].find("x86") != -1:
-                self.bit_order = "INTEL"
-            else:
-                self.bit_order = "ARM"
-        else:
-            self.bit_order = bit_order
+        # Record the bit order
+        self._bit_order = bit_order
 
         # Cached values
         self._565 = None
         self._888 = None
-
         self._red = None
         self._green = None
         self._blue = None
@@ -279,7 +298,7 @@ class Colour:
         if self._565 is None:
             # ... if there isn't one, calculate what the byte representation
             #     should look like
-            if self.bit_order == "ARM":
+            if self._bit_order == DEVICE_BIT_ORDER.ARM:
                 self._565 = (
                     (self._g & 0x1C) << 1
                     | (self._b >> 3)
@@ -316,10 +335,10 @@ class Colour:
         if self._888 is None:
             # ... if there isn't one, calculate what the byte representation
             #     should look like
-            if self.bit_order == "ARM":
-                self._888 = (self._r << 16 | self._g << 8 | self._b )
+            if self._bit_order == DEVICE_BIT_ORDER.ARM:
+                self._888 = self._r << 16 | self._g << 8 | self._b
             else:
-                self._888 = (self._r << 16 | self._g << 8 | self._b )
+                self._888 = self._r << 16 | self._g << 8 | self._b
 
         # Return the calculated value to the client
         return self._888

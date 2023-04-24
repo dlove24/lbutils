@@ -29,7 +29,7 @@ syntax = "numpy"
 black = true
 
 [tool.setuptools]
-packages = ["lbutils", "lbutils.drivers", "lbutils.graphics", "lbutils.graphics.fonts", "lbutils.helpers", "lbutils.pmods", "lbutils.pmods.spi", "lbutils.pmods.i2c"]
+packages = ["lbutils", "lbutils.drivers", "lbutils.graphics", "lbutils.graphics.fonts", "lbutils.helpers", "lbutils.pmods", "lbutils.pmods.spi", "lbutils.pmods.i2c", "lbutils.std"]
 
 [tool.ruff]
 # Enable pycodestyle (`E`) and Pyflakes (`F`) codes by default.

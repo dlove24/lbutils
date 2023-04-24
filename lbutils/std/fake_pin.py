@@ -28,6 +28,7 @@ limited) 'hardware' testing for the library code."""
 ### Classes
 ###
 
+
 class FakePin:
     """A version of the `machine.Pin` class which **does not** write to any
     hardware, but instead reports the state back as a `pin_array`.
