@@ -1,19 +1,12 @@
 # LBUtils
 
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Documentation Status](https://readthedocs.org/projects/lbutils/badge/?version=latest)](https://lbutils.readthedocs.io/en/latest/?badge=latest)
-[![PyPI version](https://badge.fury.io/py/lbutils-mp.svg)](https://badge.fury.io/py/lbutils-mp)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) [![Documentation Status](https://readthedocs.org/projects/lbutils/badge/?version=latest)](https://lbutils.readthedocs.io/en/latest/?badge=latest) [![PyPI version](https://badge.fury.io/py/lbutils-mp.svg)](https://badge.fury.io/py/lbutils-mp)
 
 ## Background
 
-This library is designed to install all of the common drivers, library code, and
-helper code used within modules at Leeds Beckett University. It is principally
-targeted at MicroPython on the Pico H/W micro-controllers: but compatibility is
-also maintained with CPython 3.10 where possible (or relevant).
+This library is designed to install all of the common drivers, library code, and helper code used within modules at Leeds Beckett University. It is principally targeted at MicroPython on the Pico H/W micro-controllers: but compatibility is also maintained with CPython 3.10 where possible (or relevant).
 
-Examples for how to use the library can be found in the '`examples`' folder: or
-[in the documentation](https://lbutils.readthedocs.io). Otherwise the library is
-organised as follows
+Examples for how to use the library can be found in the '`examples`' folder: or [in the documentation](https://lbutils.readthedocs.io). Otherwise the library is organised as follows
 
 - **`drivers`**: Classes aimed at low-level support of I2C, SPI and other devices requiring board-level support.
 - **`graphics`**: Classes providing support for drawing and text output on display devices.
@@ -22,81 +15,34 @@ organised as follows
 
 ## Installation
 
-A package of this library is provided on PyPi as
-[`lbutils`](https://pypi.org/project/lbutils/). This can be installed with the
-normal Python tools, and should also install to boards running MicroPython under
-[Thonny](https://thonny.org/).
+A package of this library is provided on PyPi as [`lbutils`](https://pypi.org/project/lbutils/). This can be installed with the normal Python tools, and should also install to boards running MicroPython under [Thonny](https://thonny.org/).
 
-For manual installation, everything under the `lbutils` directory should be
-copied to the appropriate directory on the MicroPython board, usually `/lib`.
-The library, or individual drivers, can then be imported as normal: see the
-documentation for the
-[examples](https://lbutils.readthedocs.io/en/latest/examples) for more detailed
-guidance on the use of the library. This code is also available in the
-`lbutils/examples` folder, or as the library `lbutils.examples` when the package
-is installed.
+For manual installation, everything under the `lbutils` directory should be copied to the appropriate directory on the MicroPython board, usually `/lib`. The library, or individual drivers, can then be imported as normal: see the documentation for the [examples](https://lbutils.readthedocs.io/en/latest/examples) for more detailed guidance on the use of the library. This code is also available in the `lbutils/examples` folder, or as the library `lbutils.examples` when the package is installed.
 
 ## Contributions
 
-Releases are pulled from the `trunk`, and development should be undertaken in
-branches to ensure that the code in `trunk` remains in working order. This
-library is principally a teaching library, so the
-[Documentation](https://lbutils.readthedocs.io) should be at least as important
-as the 'code'. Where possible all algorithms and implementation techniques
-should also be explained as fully as possible, or at least linked to reference
-standards/implementations.
+Releases are pulled from the `trunk`, and development should be undertaken in branches to ensure that the code in `trunk` remains in working order. This library is principally a teaching library, so the [Documentation](https://lbutils.readthedocs.io) should be at least as important as the 'code'. Where possible all algorithms and implementation techniques should also be explained as fully as possible, or at least linked to reference standards/implementations.
 
 For consistency
 
-- All code should also be in the format standardised by the
-[Black](https://github.com/psf/black) library. This makes it easier to
-co-ordinate external code and documentation with the implementation documented
-here.
+- All code should also be in the format standardised by the [Black](https://github.com/psf/black) library. This makes it easier to co-ordinate external code and documentation with the implementation documented here.
 
   **Note:** The ['future' style](https://black.readthedocs.io/en/stable/the_black_code_style/future_style.html) of `black` breaks the current (3.4) parser for MicroPython. Until this changes, only the ['current' style](https://black.readthedocs.io/en/stable/the_black_code_style/current_style.html) should be used.
 
-- Code should pass [ruff](https://beta.ruff.rs/docs/) cleanly, with exceptions
-documented in the `pyproject.toml` file. Modern (Python > 3.10) conventions
-should be respected where possible: except where these conflict with the
-[syntax accepted by MicroPython](https://docs.micropython.org/en/latest/genrst/index.html).
-In particular all libraries, functions and methods should have a type signature;
-dummy libraries should be used to support this where possible (see `typing.py` in
-the `lbutils` directory).
-- Code is documented according to the
-[NumPy](https://numpydoc.readthedocs.io/en/latest/format.html) documentation
-standard, and should be provided as standard Python docstrings. The docstrings
-are considered to be authoritative, and will be used to automatically document
-the class/method/etc.
-- Docstrings should be [in NumPy
-format](https://docformatter.readthedocs.io/en/latest/usage.html), and should be
-checked by
-[docformatter](https://docformatter.readthedocs.io/en/latest/index.html) for
-correctness. Code documentation is generated by
-[MkDocs](https://www.mkdocs.org), using the embedded docstrings in the code.
-- All documentation, including documentation strings, should be in the [Markdown
-format accepted by
-[MkDocs](https://www.mkdocs.org/user-guide/configuration/#markdown_extensions),
-and will be automatically rebuilt on commit. A basic check for documentation
-sanity can be done via
+- Code should pass [ruff](https://beta.ruff.rs/docs/) cleanly, with exceptions documented in the `pyproject.toml` file. Modern (Python > 3.10) conventions should be respected where possible: except where these conflict with the [syntax accepted by MicroPython](https://docs.micropython.org/en/latest/genrst/index.html). In particular all libraries, functions and methods should have a type signature; dummy libraries should be used to support this where possible (see `typing.py` in the `lbutils` directory).
+- Code is documented according to the [NumPy](https://numpydoc.readthedocs.io/en/latest/format.html) documentation standard, and should be provided as standard Python docstrings. The docstrings are considered to be authoritative, and will be used to automatically document the class/method/etc.
+- Docstrings should be [in NumPy format](https://docformatter.readthedocs.io/en/latest/usage.html), and should be checked by [docformatter](https://docformatter.readthedocs.io/en/latest/index.html) for correctness. Code documentation is generated by [MkDocs](https://www.mkdocs.org), using the embedded docstrings in the code.
+- All documentation, including documentation strings, should be in the [Markdown format accepted by [MkDocs](https://www.mkdocs.org/user-guide/configuration/#markdown_extensions), and will be automatically rebuilt on commit. A basic check for documentation sanity can be done via
 
   ```
   docformatter --in-place --config ./pyproject.toml
   ```
 
-- All documentation should be organised according to the
-[Diátaxis](https://diataxis.fr/) framework: ideally with examples that do not
-require specific board set-ups. Where specific set-up are required, platforms
-such as [WokWi](https://wokwi.com) should be used where possible to illustrate
-code and example set-ups.
+- All documentation should be organised according to the [Diátaxis](https://diataxis.fr/) framework: ideally with examples that do not require specific board set-ups. Where specific set-up are required, platforms such as [WokWi](https://wokwi.com) should be used where possible to illustrate code and example set-ups.
 
-Tools such as [`darglint`](https://pypi.org/project/darglint/#scope) might also
-be useful (and are installed with the default `requirements.txt`). However
-currently `darglint` has minimal support for the NumPy documentation standard,
-and so the output of `darglint` should be used with caution.
+Tools such as [`darglint`](https://pypi.org/project/darglint/#scope) might also be useful (and are installed with the default `requirements.txt`). However currently `darglint` has minimal support for the NumPy documentation standard, and so the output of `darglint` should be used with caution.
 
-Where possible the above should be/is enforced by the use of a [pre-commit
-hook](https://githooks.com/) for `git`. The script `hook.sh` in the `bin`
-directory is provided for this purpose, and can be installed as
+Where possible the above should be/is enforced by the use of a [pre-commit hook](https://githooks.com/) for `git`. The script `hook.sh` in the `bin` directory is provided for this purpose, and can be installed as
 
 ```
 cd .git/hooks; ln -s ../../bin/hook.sh pre-commit

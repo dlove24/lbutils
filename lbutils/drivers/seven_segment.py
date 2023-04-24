@@ -85,7 +85,7 @@ except ImportError:
 try:
     from typing import Literal, Optional
 except ImportError:
-    from lbutils.typing import Literal, Optional  # type: ignore
+    from lbutils.std.typing import Literal, Optional  # type: ignore
 
 from .common import PIN_ON_SENSE
 
@@ -181,7 +181,7 @@ class SegDisplay:
             for segment in range(7):
                 self.pin_list.append(Pin(gpio_request[segment], Pin.OUT))
 
-    def display(self, character: int, pin_on: Literal["HIGH", "LOW"] = "LOW") -> None:
+    def display(self, character: int, pin_on: PIN_ON_SENSE = PIN_ON_SENSE.LOW) -> None:
         """Display the given `character` on the seven-segment display, using the
         `_char_list` as a guide for which pins to turn on or off. By default the
         `display` method will use the entries in the `_char_list` directly: if
@@ -209,7 +209,7 @@ class SegDisplay:
         """
         # For a character in the valid range...
         if 0 <= character <= NUM_CHARACTERS:
-            if pin_on == "LOW":
+            if pin_on == PIN_ON_SENSE.LOW:
                 # ... if the request is to display in the non-inverted form, then
                 # select the row in `_char_list` corresponding to the character to
                 # be displayed and then set in turn each of the GPIO pins corresponding

@@ -21,27 +21,34 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""Do nothing 'implementation of the Python Abstract Base class.
+"""A 'fake' version of the `machine.Pin` library, used to allow some (very
+limited) 'hardware' testing for the library code."""
 
-Used to avoid import errors, and taken from the
-[pcopy-lib](https://github.com/pfalcon/pycopy-lib/tree/master/abc) library.
-"""
-
-# Import the typing hints if available. Use our backup version
-# if the official library is missing
-try:
-    from typing import Any
-except ImportError:
-    from lbutils.typing import Any
+###
+### Classes
+###
 
 
-class ABCMeta:
-    pass
+class FakePin:
+    """A version of the `machine.Pin` class which **does not** write to any
+    hardware, but instead reports the state back as a `pin_array`.
 
+    This allows some visibility into the 'internal' state of the Pin for
+    hardware testing. Common methods from the `Pin` library are also provided to
+    make this class drop-in compatible.
+    """
 
-class ABC:
-    pass
+    ##
+    ## Attributes
+    ##
 
+    pin_array: dict[int, bool]
+    """Exposes the internal state of the hardware."""
 
-def abstractmethod(f: Any) -> Any:
-    return f
+    ##
+    ## Constructor
+    ##
+
+    ##
+    ## Methods
+    ##

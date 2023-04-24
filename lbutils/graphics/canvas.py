@@ -85,13 +85,13 @@ display.fill_screen(colours.COLOUR_BLACK)
 try:
     from abc import ABC, abstractmethod
 except ImportError:
-    from lbutils.abc import ABC, abstractmethod  # type: ignore
+    from lbutils.std.abc import ABC, abstractmethod  # type: ignore
 
 # Import the typing support
 try:
     from typing import Literal, Optional, Union
 except ImportError:
-    from lbutils.typing import Literal, Optional, Union  # type: ignore
+    from lbutils.std.typing import Literal, Optional, Union  # type: ignore
 
 # Import the lbutils graphics library
 try:
@@ -101,19 +101,30 @@ except ImportError:
     msg = ("Error: Missing required LBUtils graphics library",)
     raise RuntimeError(msg) from ImportError
 
+# Import the enumerations library. Unfortunately the full version in not
+# in MicroPython yet, so this is a bit of a hack
+try:
+    from enum import IntEnum
+except ImportError:
+    from urest.enum import IntEnum  # type: ignore
+
 ###
-### Enumerations. MicroPython doesn't have actual an actual `enum` (yet), so
-### these serve as common cases where a selection of values need to be defined
+### Enumerations
 ###
 
-RECTANGLE_STYLE = {"FRAMED", "FILLED"}
-"""Set the style of the rectangle.
 
-The `FRAMED` style will draw the rectangle using the current foreground colour
-(`fg_colour`), and leave the body of the rectangle unset. The `FILLED` style
-acts as `FRAMED`, but additionally sets the internal region of the rectangle to
-the current background colour (`bg_colour`).
-"""
+class RECTANGLE_STYLE(IntEnum):
+    """Set the style of the rectangle.
+
+    The `FRAMED` style will draw the rectangle using the current foreground
+    colour (`fg_colour`), and leave the body of the rectangle unset. The
+    `FILLED` style acts as `FRAMED`, but additionally sets the internal region
+    of the rectangle to the current background colour (`bg_colour`).
+    """
+
+    FRAMED = 0
+    FILLED = 1
+
 
 ###
 ### Classes
@@ -292,7 +303,7 @@ class Canvas(ABC):
         self,
         width: int,
         height: int,
-        bit_order: Optional[Literal["ARM", "INTEL"]] = "ARM",
+        bit_order: colours.DEVICE_BIT_ORDER = colours.DEVICE_BIT_ORDER.platform(),
     ) -> None:
         """Create the drawing `Canvas` with the specified `width` and `height`.
 
@@ -555,7 +566,7 @@ class Canvas(ABC):
         fg_colour: Optional[graphics.Colour] = None,
         bg_colour: Optional[graphics.Colour] = None,
         pen: Optional[graphics.Pen] = None,
-        style: Literal["FILLED", "FRAMED"] = "FILLED",
+        style: RECTANGLE_STYLE = RECTANGLE_STYLE.FILLED,
     ) -> None:
         """Draw a rectangle at the `start` co-ordinate, or the current cursor
         postion if `start` is `None`. In either case the rectangle will be drawn
@@ -602,9 +613,9 @@ class Canvas(ABC):
              order for the foreground and background colours of the `Canvas` to
              find suitable colours.
         style: RECTANGLE_STYLE, optional
-             Set the style for the rectangle to draw. The defined style,
-             `FILLED`, sets the interior of the rectangle to the the
-             current background colour.
+             Set the style for the rectangle to draw. The default style,
+             `RECTANGLE_STYLE.FILLED`, sets the interior of the rectangle to the
+             the current background colour.
         """
         pass
 
@@ -750,7 +761,7 @@ class Canvas(ABC):
             height=self.height,
             fg_colour=fill_colour,
             bg_colour=fill_colour,
-            style="FILLED",
+            style=RECTANGLE_STYLE.FILLED,
         )
 
     def write_text(

@@ -84,11 +84,12 @@ header below.
 try:
     from typing import Literal, Optional, Union
 except ImportError:
-    from lbutils.typing import Literal, Optional, Union  # type: ignore
+    from lbutils.std.typing import Literal, Optional, Union  # type: ignore
 
 # Import the lbutils graphics library
 try:
     from lbutils import graphics
+    from lbutils.graphics import colours
 except ImportError:
     msg = ("Error: Missing required LBUtils graphics library",)
     raise RuntimeError(msg) from ImportError
@@ -327,6 +328,7 @@ class OLEDrgb(graphics.Canvas):
         reset_pin: Pin = 17,
         width: int = 96,
         height: int = 64,
+        bit_order: colours.DEVICE_BIT_ORDER = colours.DEVICE_BIT_ORDER.platform(),
     ) -> None:
         """Initialise the SPI interface, and sent the sequence of commands
         required for the device startup. The full command sequence is documented
@@ -429,7 +431,7 @@ class OLEDrgb(graphics.Canvas):
         """
 
         # Set the ancestor values
-        super().__init__(width, height, "ARM")
+        super().__init__(width, height, bit_order)
 
         # Set the local attributes
         self.spi_controller = spi_controller
@@ -674,7 +676,7 @@ class OLEDrgb(graphics.Canvas):
         fg_colour: Optional[graphics.Colour] = None,
         bg_colour: Optional[graphics.Colour] = None,
         pen: Optional[graphics.Pen] = None,
-        style: Literal["FILLED", "FRAMED"] = "FILLED",
+        style: graphics.RECTANGLE_STYLE = graphics.RECTANGLE_STYLE.FILLED,
     ) -> None:
         """Draw a rectangle at the `start` co-ordinate, or the current cursor
         postion if `start` is `None`. In either case the rectangle will be drawn
@@ -721,9 +723,9 @@ class OLEDrgb(graphics.Canvas):
              order for the foreground and background colours of the `Canvas` to
              find suitable colours.
         style: RECTANGLE_STYLE, optional
-             Set the style for the rectangle to draw. The defined style,
-             `FILLED`, sets the interior of the rectangle to the the
-             current background colour.
+             Set the style for the rectangle to draw. The default style,
+             `RECTANGLE_STYLE.FILLED`, sets the interior of the rectangle to the
+             the current background colour.
         """
 
         use_fg_colour = self.select_fg_colour(fg_colour=fg_colour, pen=pen)
