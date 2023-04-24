@@ -286,5 +286,5 @@ def test_colour_beckett_888_arm():
     colour = Colour(61, 41, 108, bit_order=DEVICE_BIT_ORDER.ARM)
 
     bin_string = f"{colour.as_rgb888:032b}"
-    # assert bin_string == "00111101000000000110110000101001"
+    assert bin_string == "00111101000000000110110000101001"
     assert colour.as_rgb888 == 0x3D006C29
