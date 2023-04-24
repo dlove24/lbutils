@@ -120,6 +120,8 @@ documentation for the sub-class itself.
 ### Expose the `graphics` module interface as a full package
 __all__ = ["colours", "canvas", "helpers"]
 
-from .canvas import RECTANGLE_STYLE, Canvas, FrameBufferCanvas
+from .fonts.base_font import BaseFont
+
 from .colours import DEVICE_BIT_ORDER, Colour
 from .helpers import BoundPixel, Pen, Pixel
+from .canvas import RECTANGLE_STYLE, Canvas, FrameBufferCanvas

@@ -80,7 +80,12 @@ try:
 except ImportError:
     from lbutils.typing import Literal, Optional  # type: ignore
 
-from os import uname
+# Import the offical Python 3 library if we can, or the MicroPython version
+# if that fails
+try:
+    from platform import uname
+except ImportError:
+    from os import uname
 
 ###
 ### Enumerations. MicroPython doesn't have actual an actual `enum` (yet), so
@@ -245,8 +250,8 @@ class Colour:
 
     @property
     def as_rgb565(self) -> Optional[int]:
-        """Construct a packed double word from the internal colour
-        representation, with 8 bits of red data, 8 bits of green, and 8 of blue.
+        """Construct a packed byte from the internal colour
+        representation, with 5 bits of red data, 6 bits of green, and 5 of blue.
         For non-ARM platforms this results in a byte order for the two colour
         words as follows.
 
@@ -312,14 +317,9 @@ class Colour:
             # ... if there isn't one, calculate what the byte representation
             #     should look like
             if self.bit_order == "ARM":
-                self._888 = (
-                    (self._g & 0x1C) << 1
-                    | (self._b >> 3)
-                    | (self._r & 0xF8)
-                    | self._g >> 5
-                )
+                self._888 = (self._r << 16 | self._g << 8 | self._b )
             else:
-                self._888 = (self._r & 0xF8) << 8 | (self._g & 0xFC) << 3 | self._b >> 3
+                self._888 = (self._r << 16 | self._g << 8 | self._b )
 
         # Return the calculated value to the client
         return self._888
@@ -329,7 +329,7 @@ class Colour:
     ##
 
     @staticmethod
-    def from_565(rgb: int) -> Colour:
+    def from_565(rgb: int) -> "Colour":
         """Create a [`Colour`][lbutils.graphics.Colour] object from the byte
         passed in as a parameter: assuming the byte is an RGB 565 packed
         byte."""
