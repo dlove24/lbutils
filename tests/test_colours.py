@@ -22,11 +22,10 @@
 """Tests of the `colours` module: mostly the colour conversion routines of the
 `Colour` class.
 
-!!! Note
-    Binary strings are used in the checks of the bit values to make it easier
-    to locate stray and incorrect bits. If a test fails, `pytest` should
-    report the correct binary representation, and the one recieved from the
-    method.
+!!! Note     Binary strings are used in the checks of the bit values to make it
+easier     to locate stray and incorrect bits. If a test fails, `pytest` should
+report the correct binary representation, and the one recieved from the
+method.
 
 Run as: `py.test test_colours.py`
 """
@@ -49,8 +48,8 @@ def test_colour_white_565():
       * Check the bit pattern returned against the expected in the method docstring
     """
 
-    colour = Colour(255,255,255) 
-    bin_string = "{:016b}".format(colour.as_rgb565)
+    colour = Colour(255,255,255)
+    bin_string = f"{colour.as_rgb565:016b}"
     assert bin_string == "11111111"
     assert colour.as_rgb565 == 0xFF
 
@@ -72,7 +71,7 @@ def test_colour_white_888():
 
     colour = Colour(255,255,255)
 
-    bin_string = "{:024b}".format(colour.as_rgb888)
+    bin_string = f"{colour.as_rgb888:024b}"
     assert bin_string == "111111111111111111111111"
     assert colour.as_rgb888 == 0xFFFFFF
 
@@ -92,8 +91,8 @@ def test_colour_black_565():
       * Check the bit pattern returned against the expected in the method docstring
     """
 
-    colour = Colour(0,0,0) 
-    bin_string = "{:016b}".format(colour.as_rgb565)
+    colour = Colour(0,0,0)
+    bin_string = f"{colour.as_rgb565:016b}"
     assert bin_string == "0000000000000000"
     assert colour.as_rgb565 == 0x0
 
@@ -115,7 +114,7 @@ def test_colour_black_888():
 
     colour = Colour(0,0,0)
 
-    bin_string = "{:024b}".format(colour.as_rgb888)
+    bin_string = f"{colour.as_rgb888:024b}"
     assert bin_string == "000000000000000000000000"
     assert colour.as_rgb888 == 0x0
 
@@ -135,8 +134,8 @@ def test_colour_red_565():
       * Check the bit pattern returned against the expected in the method docstring
     """
 
-    colour = Colour(255,0,0) 
-    bin_string = "{:016b}".format(colour.as_rgb565)
+    colour = Colour(255,0,0)
+    bin_string = f"{colour.as_rgb565:016b}"
     assert bin_string == "1111100000000000"
     assert colour.as_rgb565 == 0xF8
 
@@ -158,7 +157,7 @@ def test_colour_red_888():
 
     colour = Colour(255,0,0)
 
-    bin_string = "{:024b}".format(colour.as_rgb888)
+    bin_string = f"{colour.as_rgb888:024b}"
     assert bin_string == "111111110000000000000000"
     assert colour.as_rgb888 == 0xFF0000
 
@@ -178,19 +177,19 @@ def test_colour_green_565():
       * Check the bit pattern returned against the expected in the method docstring
     """
 
-    colour = Colour(0,255,0) 
-    bin_string = "{:016b}".format(colour.as_rgb565)
+    colour = Colour(0,255,0)
+    bin_string = f"{colour.as_rgb565:016b}"
     assert bin_string == "0000011111100000"
     assert colour.as_rgb565 == 0x7E0
 
-def test_colour_red_888():
-    """Test that initalising the `Colour` class with Red = 255, Green =
-    0 and Blue = 0 gives the correct RGB888 response.
+def test_colour_green_888():
+    """Test that initalising the `Colour` class with Red = 0, Green =
+    255 and Blue = 0 gives the correct RGB888 response.
 
     Expectation
     -----------
 
-    **Pass**: Return value is 0xFF0000
+    **Pass**: Return value is 0x00FF00
 
     On-Failure
     ----------
@@ -199,8 +198,8 @@ def test_colour_red_888():
       * Check the bit pattern returned against the expected in the method docstring
     """
 
-    colour = Colour(255,0,0)
+    colour = Colour(0, 255,0)
 
-    bin_string = "{:024b}".format(colour.as_rgb888)
-    assert bin_string == "111111110000000000000000"
-    assert colour.as_rgb888 == 0xFF0000
+    bin_string = f"{colour.as_rgb888:024b}"
+    assert bin_string == "000000001111111100000000"
+    assert colour.as_rgb888 == 0x00FF00

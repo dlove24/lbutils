@@ -250,10 +250,10 @@ class Colour:
 
     @property
     def as_rgb565(self) -> Optional[int]:
-        """Construct a packed byte from the internal colour
-        representation, with 5 bits of red data, 6 bits of green, and 5 of blue.
-        For non-ARM platforms this results in a byte order for the two colour
-        words as follows.
+        """Construct a packed byte from the internal colour representation, with
+        5 bits of red data, 6 bits of green, and 5 of blue. For non-ARM
+        platforms this results in a byte order for the two colour words as
+        follows.
 
         ![````
         F  E  D  C  B  A  9  8  7  6  5  4  3  2  1  0

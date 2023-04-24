@@ -21,19 +21,21 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""A 'fake' version of the `machine.Pin` library, used to allow some (very limited)
-'hardware' testing for the library code."""
+"""A 'fake' version of the `machine.Pin` library, used to allow some (very
+limited) 'hardware' testing for the library code."""
 
 ###
 ### Classes
 ###
 
 class FakePin:
-    """A version of the `machine.Pin` class which **does not** write to any 
-    hardware, but instead reports the state back as a `pin_array`. This allows
-    some visibility into the 'internal' state of the Pin for hardware testing.
-    Common methods from the `Pin` library are also provided to make this class
-    drop-in compatible."""
+    """A version of the `machine.Pin` class which **does not** write to any
+    hardware, but instead reports the state back as a `pin_array`.
+
+    This allows some visibility into the 'internal' state of the Pin for
+    hardware testing. Common methods from the `Pin` library are also provided to
+    make this class drop-in compatible.
+    """
 
     ##
     ## Attributes

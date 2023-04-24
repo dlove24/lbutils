@@ -21,7 +21,7 @@
 """Test scripts for checking the library functionality. This module describes a
 number of tests, designed to be run under the
 [PyTest](https://docs.pytest.org/en/7.2.x/contents.html) harness. The standard
-naming convention for the tests in the folder is
+naming convention for the tests in the folder is.
 
 ````python
 test_<module_name>.py
