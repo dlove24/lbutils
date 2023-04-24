@@ -8,6 +8,7 @@ All releases should be on [PyPi](https://pypi.org/project/lbutils-mp/), and also
 
 - Added package and class structure diagrams to the documentation to make navigating the code easier.
 - Added additional ruff checks to ensure more consistency
+- Added a unit testing framework (based on `pytest`) for core class, and started integration work for `Colour` and `Canvas`.
 
 ### Changed
 
