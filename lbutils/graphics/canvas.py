@@ -218,13 +218,13 @@ class Canvas(ABC):
     * `draw_line()`. Draw a line from a specified point (by default the
     [`cursor`][lbutils.graphics.Canvas.cursor]) to a co-ordinate.
 
-    * `draw_to()`. Draw a line from a specified point (by default the
-    [`cursor`][lbutils.graphics.Canvas.cursor]) to a co-ordinate. Alias for
-    [`draw_line()`][lbutils.graphics.Canvas.draw_line].
-
     * `draw_rectangle()`. Draw a rectangle at the co-ordinate (x, y) of height
     and width, using the specified colours for the frame of the rectangle and
     the interior fill colour (if any).
+
+    * `draw_to()`. Draw a line from a specified point (by default the
+    [`cursor`][lbutils.graphics.Canvas.cursor]) to a co-ordinate. Alias for
+    [`draw_line()`][lbutils.graphics.Canvas.draw_line].
 
     * `fill_screen()`. Fill the entire `Canvas` with the background colour.
 

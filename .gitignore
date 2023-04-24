@@ -4,6 +4,9 @@
 # Python Virtal Environment
 .venv/
 
+# Node packages
+node_modules/
+
 # Temporary packaging files
 dist/
 lbutils_mp.egg-info/

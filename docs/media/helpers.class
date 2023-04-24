@@ -1,0 +1,31 @@
+classDiagram
+    class Colour{
+        +int red
+        +int green
+        +int blue
+        +int as_rgb565
+        +int as_rgb888
+        +DEVICE_BIT_ORDER bitorder
+        +from_rgb565()$
+    }
+    Pen <-- Colour
+    class Pen {
+        +Colour bg_colour
+        +Colour gb_colour
+        +int thickness
+    }
+    BoundPixel <|-- Pixel
+    class Pixel {
+        +int x
+        +int y
+        +tuple x_y
+        +move_to()
+        +offset()
+        +offset_polar()
+    }
+    class BoundPixel {
+        +int min_x
+        +int min_y
+        +int max_x
+        +int max_y
+    }

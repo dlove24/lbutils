@@ -1,8 +1,3 @@
-## SPI Drivers
-
-Modules which have SPI interface support (i.e. the majority of modules) are described in the drivers below. These drivers are organised into the following package structure; with the classes described individually below
-
-```puml
 @startuml lbutils
 namespace lbutils {
     namespace graphics {
@@ -108,19 +103,6 @@ namespace lbutils {
             }
         }
     }
-    namespace pmods {
-        namespace spi {
-            class OLEDrgb {
-                - read()
-                - write()
-                + draw_line()
-                + draw_rectangle()
-                + read_pixel()
-                + reset()
-                + write_pixel()
-                }
-        }
-    }
 }
 
 lbutils.graphics.fonts.font06.Font06 <|-- lbutils.graphics.fonts.base_font.BaseFont
@@ -139,13 +121,4 @@ lbutils.graphics.canvas.Canvas::origin <-- lbutils.graphics.helpers.BoundPixel
 lbutils.graphics.canvas.Canvas::pen <-- lbutils.graphics.helpers.Pen
 lbutils.graphics.canvas.Canvas::font <-- lbutils.graphics.fonts.base_font.BaseFont
 
-lbutils.pmods.spi.OLEDrgb <|-- lbutils.graphics.canvas.Canvas
-
 @enduml
-```
-
-::: lbutils.pmods.spi.oledrgb
-     options:
-          heading_level: 3
-          show_category_heading: False
-

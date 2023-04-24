@@ -1,0 +1,78 @@
+classDiagram
+    class Colour{
+        +int red
+        +int green
+        +int blue
+        +int as_rgb565
+        +int as_rgb888
+        +DEVICE_BIT_ORDER bitorder
+        +from_rgb565()$
+    }
+    Pen <-- Colour
+    class Pen {
+        +Colour bg_colour
+        +Colour gb_colour
+        +int thickness
+    }
+    BoundPixel <|-- Pixel
+    class Pixel {
+        +int x
+        +int y
+        +tuple x_y
+        +move_to()
+        +offset()
+        +offset_polar()
+    }
+    class BoundPixel {
+        +int min_x
+        +int min_y
+        +int max_x
+        +int max_y
+    }
+    class BaseFont {
+        - bitmap
+        - index
+        - glyph
+        +int get_bit()*
+        +int get_next()*
+        +int set_position()*
+    }
+    Canvas <-- Pen
+    Canvas <-- BoundPixel
+    Canvas <-- BaseFont
+    class Canvas {
+        +Colour bg_colour
+        +BoundPixel cursor
+        +Colour fg_colour
+        +BoundPixel origin
+        +Pen pen
+        +int height
+        +int width
+        +int x
+        +int y
+        +int x_y
+        +draw_line()*
+        +draw_rectangle()*
+        +draw_to()
+        +fill_screen()
+        +moveto()
+        +move_origin_to()
+        +read_pixel()*
+        +select_bg_colour()
+        +select_fg_colour()
+        +write_char()
+        +write_pixel()*
+        +write_text()
+    }
+    OLEDrgb <-- Canvas
+    class OLEDrgb {
+        - read()
+        - write()
+        + draw_line()
+        + draw_rectangle()
+        + read_pixel()
+        + reset()
+        + write_pixel()
+
+    }
+

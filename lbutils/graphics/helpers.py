@@ -25,6 +25,10 @@ graphics `Canvas` library. These are typically used to abstract and encapsulate
 common concepts such as a `Pixel`: but which are small enough not a warrant a
 separate library.
 
+The classes and methods provided by this library are described below, and organised as shown
+
+![Helper Class Diagrams](/media/helpers.svg)
+
 ## Tested Implementations
 
 *   Raspberry Pi Pico W (MicroPython 3.4)

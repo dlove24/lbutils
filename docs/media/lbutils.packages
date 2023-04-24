@@ -1,10 +1,25 @@
-## SPI Drivers
-
-Modules which have SPI interface support (i.e. the majority of modules) are described in the drivers below. These drivers are organised into the following package structure; with the classes described individually below
-
-```puml
 @startuml lbutils
 namespace lbutils {
+    namespace drivers {
+        namespace seven_segment <<Rectangle>> {
+            class SegDisplay {
+                - list _char_list
+                + display()
+                }
+        }
+        namespace seven_segment_hex <<Rectangle>> {
+            class SegHexDisplay {
+                - list _char_list
+                + display()
+                }
+        }
+        namespace common <<Rectangle>> {
+            enum PIN_ON_SENSE {
+                + HIGH
+                + LOW
+            }
+        }
+    }
     namespace graphics {
         namespace fonts {
             namespace base_font <<Rectangle>> {
@@ -108,7 +123,11 @@ namespace lbutils {
             }
         }
     }
+    namespace helpers {
+    }
     namespace pmods {
+        namespace i2c {
+        }
         namespace spi {
             class OLEDrgb {
                 - read()
@@ -122,6 +141,9 @@ namespace lbutils {
         }
     }
 }
+
+lbutils.drivers.seven_segment.SegDisplay <-- lbutils.drivers.common.PIN_ON_SENSE
+lbutils.drivers.seven_segment_hex.SegHexDisplay <-- lbutils.drivers.common.PIN_ON_SENSE
 
 lbutils.graphics.fonts.font06.Font06 <|-- lbutils.graphics.fonts.base_font.BaseFont
 lbutils.graphics.fonts.font08.Font08 <|-- lbutils.graphics.fonts.base_font.BaseFont
@@ -142,10 +164,3 @@ lbutils.graphics.canvas.Canvas::font <-- lbutils.graphics.fonts.base_font.BaseFo
 lbutils.pmods.spi.OLEDrgb <|-- lbutils.graphics.canvas.Canvas
 
 @enduml
-```
-
-::: lbutils.pmods.spi.oledrgb
-     options:
-          heading_level: 3
-          show_category_heading: False
-

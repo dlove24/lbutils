@@ -1,0 +1,20 @@
+@startuml lbutils
+namespace lbutils {
+    namespace pmods {
+        namespace i2c {
+        }
+        namespace spi {
+            class OLEDrgb {
+                - read()
+                - write()
+                + draw_line()
+                + draw_rectangle()
+                + read_pixel()
+                + reset()
+                + write_pixel()
+                }
+        }
+    }
+}
+
+@enduml

@@ -25,6 +25,16 @@ Perron. The [Pmod
 OLEDrgb](https://digilent.com/reference/pmod/pmodoledrgb/start) provides an OLED
 screen with a 96x64 pixel display capable of 16-bit RGB colour resolution.
 
+This driver makes extensive use of the graphics facilities provided by the
+[`Canvas`][lbutils.graphics.Canvas] class, and most of the functionality
+provided here implements the low-level routines required by the
+[`Canvas`][lbutils.graphics.Canvas]. For details of the methods and routines
+used in the examples, and referred to below, see the documentation for the
+[`Canvas`][lbutils.graphics.Canvas] class itself. The methods documented here
+either provide low-level access to the underlying hardware for the
+[`Canvas`][lbutils.graphics.Canvas] class, or accelerate some of the drawing
+primitives using the features provided by the SSD1331 hardware.
+
 !!! note
 
     Enabling the functionality of this module requires an extensive set-up
