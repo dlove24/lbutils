@@ -296,7 +296,6 @@ class Colour:
         """
         # Check for a cached value ...
         if self._565 is None:
-
             # Set-up the 565 bit representation
             bits565 = (self._r & 0xF8) << 8 | (self._g & 0xFC) << 3 | self._b >> 3
 
@@ -305,7 +304,7 @@ class Colour:
                 self._565 = bits565
             # For ARM we need to swap the 'high' and 'low' bytes
             else:
-                self._565 = (bits565 & 0xFF) <<8  | (bits565 >> 8)
+                self._565 = (bits565 & 0xFF) << 8 | (bits565 >> 8)
 
         # Return the calculated value to the client
         return self._565
@@ -344,7 +343,11 @@ class Colour:
                 self._888 = bits888
             # For ARM we need to swap the 'high' and 'low' bytes in each word
             else:
-                self._888 = ((bits888 & 0xFF0000) << 8) | ((bits888 & 0x0000FF) << 8) | ((bits888 & 0x0000FF00) >> 8)
+                self._888 = (
+                    ((bits888 & 0x00FF0000) << 8)
+                    | ((bits888 & 0x000000FF) << 8)
+                    | ((bits888 & 0x0000FF00) >> 8)
+                )
 
         # Return the calculated value to the client
         return self._888
