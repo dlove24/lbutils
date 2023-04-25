@@ -1,4 +1,4 @@
-@startuml lbutils
+@startuml lbutils_drivers
 namespace lbutils {
     namespace drivers {
         namespace seven_segment <<Rectangle>> {

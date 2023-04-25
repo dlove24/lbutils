@@ -1,4 +1,4 @@
-@startuml lbutils
+@startuml lbutils_graphics
 namespace lbutils {
     namespace graphics {
         namespace fonts {

@@ -1,4 +1,4 @@
-@startuml lbutils
+@startuml lbutils_graphics_fonts
 namespace lbutils {
     namespace graphics {
         namespace fonts {
@@ -44,7 +44,6 @@ namespace lbutils {
             }
         }
     }
-
 }
 
 lbutils.graphics.fonts.font06.Font06 <|-- lbutils.graphics.fonts.base_font.BaseFont

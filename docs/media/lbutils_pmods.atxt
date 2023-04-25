@@ -1,0 +1,64 @@
+                                                                            ,------------------.            
+                                                                            |OLEDrgb           |            
+                                                                            |------------------|            
+                                                                            |- read()          |            
+                                                                            |- write()         |            
+                                                                            |+ draw_line()     |            
+                                                                            |+ draw_rectangle()|            
+                                                                            |+ read_pixel()    |            
+                                                                            |+ reset()         |            
+                                                                            |+ write_pixel()   |            
+                                                                            `------------------'            
+                                                                                      |                     
+                                                                                      |                     
+                                                                       ,----------------------------.       
+                                                                       |Canvas                      |       
+                                                                       |----------------------------|       
+                                                                       |+ bg_colour : Colour        |       
+                                                                       |+ cursor : BoundPixel       |       
+                                                                       |+ fg_colour : Colour        |       
+                                                                       |+ origin : BoundPixel       |       
+                                                                       |+ pen : Pen                 |       
+,-------------------.  ,-------------------.   ,-------------------.   |+ height : int              |       
+|Font06             |  |Font08             |   |Org01              |   |+ width : int               |       
+|-------------------|  |-------------------|   |-------------------|   |+ x : int                   |       
+|- bitmap           |  |- bitmap           |   |- bitmap           |   |+ y : int                   |       
+|- index            |  |- index            |   |- index            |   |+ x_y : int                 |       
+|- glyph            |  |- glyph            |   |- glyph            |   |+ font : BaseFont           |       
+|+int get_bit()     |  |+int get_bit()     |   |+int get_bit()     |   |{abstract} +draw_line()     |       
+|+int get_next()    |  |+int get_next()    |   |+int get_next()    |   |{abstract} +draw_rectangle()|       
+|+int set_position()|  |+int set_position()|   |+int set_position()|   |+draw_to()                  |       
+`-------------------'  `-------------------'   `-------------------'   |+fill_screen()              |       
+                                                                       |+moveto()                   |       
+                                                                       |+move_origin_to()           |       
+                                                                       |{abstract} +read_pixel()    |       
+                                                                       |+select_bg_colour()         |       
+                                                                       |+select_fg_colour()         |       
+                                                                       |+write_char()               |       
+                                                                       |{abstract} +write_pixel()   |       
+                                                                       |+write_text()               |       
+                                                                       `----------------------------'       
+                                                                                                            
+                     ,------------------------------.                                                       
+                     |BaseFont                      |                                       ,-------------. 
+                     |------------------------------|     ,--------------------.            |BoundPixel   | 
+                     |- bitmap                      |     |Pen                 |            |-------------| 
+                     |- index                       |     |--------------------|            |+ min_x : int| 
+                     |- glyph                       |     |+ bg_colour : Colour|            |+ min_y : int| 
+                     |{abstract} +int get_bit()     |     |+ fg_colour : Colour|            |+ max_x : int| 
+                     |{abstract} +int get_next()    |     |+ thickness : int   |            |+ max_y : int| 
+                     |{abstract} +int set_position()|     `--------------------'            `-------------' 
+                     `------------------------------'                                              |        
+                                                                                                   |        
+                                                                                                   |        
+                                                        ,-----------------------------.    ,---------------.
+                                                        |Colour                       |    |Pixel          |
+                                                        |-----------------------------|    |---------------|
+                                                        |+ red : int                  |    |+ x : int      |
+                                                        |+ green : int                |    |+ y : int      |
+                                                        |+ blue : int                 |    |+ x_y : tuple  |
+                                                        |+ as_rgb565 : int            |    |+move_to()     |
+                                                        |+ as_rgb888 : int            |    |+offset()      |
+                                                        |+DEVICE_WORD_ORDER word_order|    |+offset_polar()|
+                                                        |{static} +from_rgb565()      |    `---------------'
+                                                        `-----------------------------'                     

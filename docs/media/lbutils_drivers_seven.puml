@@ -1,0 +1,28 @@
+@startuml lbutils_drivers_seven
+namespace lbutils {
+    namespace drivers {
+        namespace seven_segment <<Rectangle>> {
+            class SegDisplay {
+                - list _char_list
+                + display()
+                }
+        }
+        namespace seven_segment_hex <<Rectangle>> {
+            class SegHexDisplay {
+                - list _char_list
+                + display()
+                }
+        }
+        namespace common <<Rectangle>> {
+            enum PIN_ON_SENSE {
+                + HIGH
+                + LOW
+            }
+        }
+    }
+}
+
+lbutils.drivers.seven_segment.SegDisplay <-- lbutils.drivers.common.PIN_ON_SENSE
+lbutils.drivers.seven_segment_hex.SegHexDisplay <-- lbutils.drivers.common.PIN_ON_SENSE
+
+@enduml
