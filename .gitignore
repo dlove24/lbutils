@@ -7,6 +7,9 @@
 # Node packages
 node_modules/
 
+# Java documentation build tools
+bin/plantuml.jar
+
 # Temporary packaging files
 dist/
 lbutils_mp.egg-info/

@@ -71,7 +71,7 @@ namespace lbutils {
             + blue : int
             + as_rgb565 : int
             + as_rgb888 : int
-            +DEVICE_BIT_ORDER bitorder
+            +DEVICE_WORD_ORDER word_order
             {static} +from_rgb565()
         }
     }

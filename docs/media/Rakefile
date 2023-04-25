@@ -9,6 +9,7 @@ task :default => :svg
 task :byte => source_files.ext(".byte")
 task :class => source_files.ext(".class")
 task :packages => source_files.ext(".packages")
+task :puml => source_files.ext(".puml")
 task :svg => source_files.ext(".svg")
 
 rule ".svg" => ".byte" do |t|
@@ -21,5 +22,10 @@ end
 
 rule ".svg" => ".packages" do |t|
   sh "kroki convert -t plantuml -f svg #{t.source} -o #{t.name}"
+end
+
+rule ".svg" => ".puml" do |t|
+  sh "java -jar ../../bin/plantuml.jar #{t.source} -svg"
+  sh "java -jar ../../bin/plantuml.jar #{t.source} -txt"
 end
 

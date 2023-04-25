@@ -80,13 +80,6 @@ try:
 except ImportError:
     from lbutils.std.typing import Literal, Optional  # type: ignore
 
-# Import the official Python 3 library if we can, or the MicroPython version
-# if that fails
-try:
-    from platform import uname
-except ImportError:
-    from os import uname  # type: ignore
-
 # Import the enumerations library. Unfortunately the full version in not
 # in MicroPython yet, so this is a bit of a hack
 try:
@@ -99,29 +92,20 @@ except ImportError:
 ###
 
 
-class DEVICE_BIT_ORDER(IntEnum):
-    """Set the bit order to be used (mostly in graphics code) for low-level
-    manipulation of bits send to, and received from, devices."""
+class DEVICE_WORD_ORDER(IntEnum):
+    """Set the byte order to be used (mostly in graphics code) for the low-level
+    representation of words send to, and received from, devices."""
 
-    ARM = 0
-    INTEL = 1
+    NORMAL = 0
+    """Use the platform native representation of words, with no changes to the
+    byte order.
 
-    ##
-    ## Methods
-    ##
-    @staticmethod
-    def platform() -> "DEVICE_BIT_ORDER":
-        """Attempt to determine the platform automatically:
-
-        defaulting to the ARM bit order if the native order cannot be
-        determined.
-        """
-        machine = uname()
-
-        if machine[4].find("x86") != -1:
-            return DEVICE_BIT_ORDER.INTEL
-        else:
-            return DEVICE_BIT_ORDER.ARM
+    The endianness of the word being represented is also determined by the
+    underlying platform
+    """
+    SWAP_BYTES = 1
+    """Use the standard platform endian representation for the _bytes_: but swap
+    the word order so the 'low byte' is first and the 'high byte' second."""
 
 
 ###
@@ -151,10 +135,11 @@ class Colour:
         Provides the colour value in the RGB888 format, using a
         double word for the colour value in the standard platform
         representation.
-    bit_order: DEVICE_BIT_ORDER, read-write
-        Argument indicating if the underlying bit order used for
-        the bit packing order in colour conversions. Defaults to
-        auto-detect the bit order in the default constructor.
+    word_order: DEVICE_WORD_ORDER, read-write
+        Argument indicating if the underlying byte order used for
+        the bit packing in specific hardware colour conversions.
+        Defaults to `DEVICE_WORD_ORDER.NORMAL`, to use the standard
+        platform (host) conventions.
 
     Methods
     -------
@@ -201,12 +186,12 @@ class Colour:
         r: int,
         g: int,
         b: int,
-        bit_order: DEVICE_BIT_ORDER = DEVICE_BIT_ORDER.platform(),
+        word_order: DEVICE_WORD_ORDER = DEVICE_WORD_ORDER.NORMAL,
     ) -> None:
         """Create a representation of a colour value, from the three integers
         `r` (red), `g` (green) and `b` (blue). The class will accept anything
         which can be coerced to an integer as arguments: the methods used to
-        access the colour (and the `bit_order`) will determine the byte order
+        access the colour (and the `word_order`) will determine the byte order
         used as the final representation used when displaying the colour.
 
         Parameters
@@ -218,10 +203,11 @@ class Colour:
             The integer representing the green component of the colour.
         b: int
             The integer representing the blue component of the colour.
-        bit_order: DEVICE_BIT_ORDER, read-write
-            Argument indicating if the underlying bit order used for
-            the bit packing order in colour conversions. Defaults to
-            the platform bit order.
+        word_order: DEVICE_WORD_ORDER, read-write
+            Argument indicating if the underlying byte order used for
+            the bit packing in specific hardware colour conversions.
+            Defaults to `DEVICE_WORD_ORDER.NORMAL`, to use the standard
+            platform (host) conventions.
         """
 
         # Set the colour to the RGB value specified
@@ -229,8 +215,9 @@ class Colour:
         self._g = int(g)
         self._b = int(b)
 
-        # Record the bit order
-        self.bit_order = bit_order
+        # Record the convention for ordering
+        # the bytes in the words
+        self.word_order = word_order
 
         # Cached values
         self._565 = None
@@ -271,15 +258,15 @@ class Colour:
     def as_rgb565(self) -> Optional[int]:
         """Construct a packed double word from the internal colour
         representation, with 8 bits of red data, 8 bits of green, and 8 of blue.
-        For non-ARM platforms this results in a byte order for the two colour
-        words as follows.
+        For most platforms this results in a byte order for the two colour words
+        as follows.
 
         ![````
         F  E  D  C  B  A  9  8  7  6  5  4  3  2  1  0
         R4 R3 R2 R1 R0 G5 G4 G3 G2 G1 G0 B4 B3 B2 B1 B0
         ````](/media/colours_as_rgb565_fig1.svg)
 
-        On ARM platforms the packed word representation has the high and low
+        On some platforms the packed word representation has the high and low
         bytes swapped in each word, and so looks like
 
         ![
@@ -287,6 +274,10 @@ class Colour:
         F  E  D  C  B  A  9  8  7  6  5  4  3  2  1  0
         G2 G1 G0 B4 B3 B2 B1 B0 R4 R3 R2 R1 R0 G5 G4 G3
         ````](/media/colours_as_rgb565_fig2.svg)
+
+        Platforms which require the above byte order in the word **must** set
+        the `word_order` property to `DEVICE_WORD_ORDER.SWAP_BYTES`; either
+        before calling this method or in the object constructor.
 
         Returns
         -------
@@ -299,10 +290,10 @@ class Colour:
             # Set-up the 565 bit representation
             bits565 = (self._r & 0xF8) << 8 | (self._g & 0xFC) << 3 | self._b >> 3
 
-            # For Intel that is all we need...
-            if self.bit_order == DEVICE_BIT_ORDER.INTEL:
+            # In most case that is all we need...
+            if self.word_order == DEVICE_WORD_ORDER.NORMAL:
                 self._565 = bits565
-            # For ARM we need to swap the 'high' and 'low' bytes
+            # For some cases we need to swap the 'high' and 'low' bytes
             else:
                 self._565 = (bits565 & 0xFF) << 8 | (bits565 >> 8)
 
@@ -313,15 +304,19 @@ class Colour:
     def as_rgb888(self) -> Optional[int]:
         """Construct a packed double word from the internal colour
         representation, with 8 bits of red data, 8 bits of green, and 8 of blue.
-        For non-ARM platforms this results in a byte order for the two colour
-        words as follows.
+        For most platforms this results in a byte order for the two colour words
+        as follows.
 
-        ![Intel Byte Order for RGB888 Structure](/media/colours_as_rgb888_fig1.svg)
+        ![Standard Byte Order for RGB888 Structure](/media/colours_as_rgb888_fig1.svg)
 
-        On ARM platforms the packed word representation has the high and low
+        On some platforms the packed word representation has the high and low
         bytes swapped in each word, and so looks like
 
         ![ARM Byte Order for RGB888 Structure](/media/colours_as_rgb888_fig2.svg)
+
+        Platforms which require the above byte order in the word **must** set
+        the `word_order` property to `DEVICE_WORD_ORDER.SWAP_BYTES`; either
+        before calling this method or in the object constructor.
 
         Returns
         -------
@@ -338,10 +333,11 @@ class Colour:
             # high byte of the high word 0x00 (all zeroes)
             bits888 = self._r << 16 | self._g << 8 | self._b
 
-            # For Intel that is all we need...
-            if self.bit_order == DEVICE_BIT_ORDER.INTEL:
+            # For most cases that is all we need...
+            if self.word_order == DEVICE_WORD_ORDER.NORMAL:
                 self._888 = bits888
-            # For ARM we need to swap the 'high' and 'low' bytes in each word
+            # For some cases we need to swap the 'high' and 'low'
+            # bytes in each word
             else:
                 self._888 = (
                     ((bits888 & 0x00FF0000) << 8)

@@ -328,7 +328,6 @@ class OLEDrgb(graphics.Canvas):
         reset_pin: Pin = 17,
         width: int = 96,
         height: int = 64,
-        bit_order: colours.DEVICE_BIT_ORDER = colours.DEVICE_BIT_ORDER.platform(),
     ) -> None:
         """Initialise the SPI interface, and sent the sequence of commands
         required for the device startup. The full command sequence is documented
@@ -431,7 +430,7 @@ class OLEDrgb(graphics.Canvas):
         """
 
         # Set the ancestor values
-        super().__init__(width, height, bit_order)
+        super().__init__(width, height)
 
         # Set the local attributes
         self.spi_controller = spi_controller

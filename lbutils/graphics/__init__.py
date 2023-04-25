@@ -122,6 +122,6 @@ __all__ = ["colours", "canvas", "helpers"]
 
 from .fonts.base_font import BaseFont
 
-from .colours import DEVICE_BIT_ORDER, Colour
+from .colours import DEVICE_WORD_ORDER, Colour
 from .helpers import BoundPixel, Pen, Pixel
 from .canvas import RECTANGLE_STYLE, Canvas, FrameBufferCanvas

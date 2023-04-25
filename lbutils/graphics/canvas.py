@@ -303,7 +303,7 @@ class Canvas(ABC):
         self,
         width: int,
         height: int,
-        bit_order: colours.DEVICE_BIT_ORDER = colours.DEVICE_BIT_ORDER.platform(),
+        word_order: colours.DEVICE_WORD_ORDER = colours.DEVICE_WORD_ORDER.NORMAL,
     ) -> None:
         """Create the drawing `Canvas` with the specified `width` and `height`.
 
@@ -314,15 +314,16 @@ class Canvas(ABC):
              The width in pixels of the display.
         height: int
              The height in pixels of the display.
-        bit_order: DEVICE_BIT_ORDER, read-write
-            Argument indicating if the underlying bit order used for
-            the bit packing order in colour conversions. Defaults to
-            `ARM` as set by the default constructor.
+        word_order: DEVICE_WORD_ORDER, read-write
+            Argument indicating if the underlying byte order used for
+            the bit packing in specific hardware colour conversions.
+            Defaults to `DEVICE_WORD_ORDER.NORMAL`, to use the standard
+            platform (host) conventions.
         """
         # Set the Attribute Values. Note use the properties to ensure
         # that the type being set is correctly
-        self.fg_colour = colours.Colour(255, 255, 255, bit_order)
-        self.bg_colour = colours.Colour(0, 0, 0, bit_order)
+        self.fg_colour = colours.Colour(255, 255, 255, word_order)
+        self.bg_colour = colours.Colour(0, 0, 0, word_order)
 
         self.pen = None
 
