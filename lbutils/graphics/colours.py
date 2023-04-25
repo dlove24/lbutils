@@ -339,10 +339,8 @@ class Colour:
             # For some cases we need to swap the 'high' and 'low'
             # bytes in each word
             else:
-                self._888 = (
-                    ((bits888 & 0x00FF0000) << 8)
-                    | ((bits888 & 0x000000FF) << 8)
-                    | ((bits888 & 0x0000FF00) >> 8)
+                self._888 = ((bits888 & 0x00FF00FF) << 8) | (
+                    (bits888 & 0x0000FF00) >> 8
                 )
 
         # Return the calculated value to the client
