@@ -19,7 +19,6 @@
 # COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
 """Drivers for low-level components, including those using the SPI or I2C
 busses. This is mostly a collection of drivers, some third-party, which provide
 low-level access to devices. In most cases additional code will be required to

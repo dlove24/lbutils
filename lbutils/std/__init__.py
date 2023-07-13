@@ -19,7 +19,6 @@
 # COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
 """Stub implementations of (C)Python libraries, needed where MicroPython
 equivalents are missing: or in some cases outdated. These stubs are deliberately
 as minimal as possible so that when official implementations are available, they

@@ -1,4 +1,4 @@
-@startuml lbutils
+@startuml lbutils_pmods
 namespace lbutils {
     namespace graphics {
         namespace fonts {
@@ -71,7 +71,7 @@ namespace lbutils {
             + blue : int
             + as_rgb565 : int
             + as_rgb888 : int
-            +DEVICE_BIT_ORDER bitorder
+            +DEVICE_WORD_ORDER word_order
             {static} +from_rgb565()
         }
     }
@@ -103,6 +103,23 @@ namespace lbutils {
             }
         }
     }
+    namespace helpers {
+    }
+    namespace pmods {
+        namespace i2c {
+        }
+        namespace spi {
+            class OLEDrgb {
+                - read()
+                - write()
+                + draw_line()
+                + draw_rectangle()
+                + read_pixel()
+                + reset()
+                + write_pixel()
+                }
+        }
+    }
 }
 
 lbutils.graphics.fonts.font06.Font06 <|-- lbutils.graphics.fonts.base_font.BaseFont
@@ -120,5 +137,7 @@ lbutils.graphics.canvas.Canvas::cursor <-- lbutils.graphics.helpers.BoundPixel
 lbutils.graphics.canvas.Canvas::origin <-- lbutils.graphics.helpers.BoundPixel
 lbutils.graphics.canvas.Canvas::pen <-- lbutils.graphics.helpers.Pen
 lbutils.graphics.canvas.Canvas::font <-- lbutils.graphics.fonts.base_font.BaseFont
+
+lbutils.pmods.spi.OLEDrgb <|-- lbutils.graphics.canvas.Canvas
 
 @enduml

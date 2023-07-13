@@ -5,7 +5,7 @@ classDiagram
         +int blue
         +int as_rgb565
         +int as_rgb888
-        +DEVICE_BIT_ORDER bitorder
+        +DEVICE_WORD_ORDER word_order
         +from_rgb565()$
     }
     Pen <-- Colour

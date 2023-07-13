@@ -1,0 +1,166 @@
+@startuml lbutils
+namespace lbutils {
+    namespace drivers {
+        namespace seven_segment <<Rectangle>> {
+            class SegDisplay {
+                - list _char_list
+                + display()
+                }
+        }
+        namespace seven_segment_hex <<Rectangle>> {
+            class SegHexDisplay {
+                - list _char_list
+                + display()
+                }
+        }
+        namespace common <<Rectangle>> {
+            enum PIN_ON_SENSE {
+                + HIGH
+                + LOW
+            }
+        }
+    }
+    namespace graphics {
+        namespace fonts {
+            namespace base_font <<Rectangle>> {
+                abstract class BaseFont {
+                    - bitmap
+                    - index
+                    - glyph
+                    {abstract} +int get_bit()
+                    {abstract} +int get_next()
+                    {abstract} +int set_position()
+                }
+            }
+            namespace font06 <<Rectangle>> {
+                class Font06 {
+                    - bitmap
+                    - index
+                    - glyph
+                    +int get_bit()
+                    +int get_next()
+                    +int set_position()
+                }
+            }
+            namespace font08 <<Rectangle>> {
+                class Font08{
+                    - bitmap
+                    - index
+                    - glyph
+                    +int get_bit()
+                    +int get_next()
+                    +int set_position()
+                }
+            }
+            namespace org_01 <<Rectangle>> {
+                class Org01{
+                    - bitmap
+                    - index
+                    - glyph
+                    +int get_bit()
+                    +int get_next()
+                    +int set_position()
+                }
+            }
+        }
+    namespace helpers <<Rectangle>> {
+        class Pen {
+            + bg_colour : Colour
+            + fg_colour : Colour
+            + thickness : int
+            }
+        class Pixel {
+            + x : int
+            + y : int
+            + x_y : tuple
+            +move_to()
+            +offset()
+            +offset_polar()
+            }
+        class BoundPixel {
+            + min_x : int
+            + min_y : int
+            + max_x : int
+            + max_y : int
+            }
+    }
+    namespace colours <<Rectangle>> {
+        class Colour {
+            + red : int
+            + green : int
+            + blue : int
+            + as_rgb565 : int
+            + as_rgb888 : int
+            +DEVICE_WORD_ORDER word_order
+            {static} +from_rgb565()
+        }
+    }
+    namespace canvas <<Rectangle>> {
+        abstract class Canvas {
+            + bg_colour : Colour
+            + cursor : BoundPixel
+            + fg_colour : Colour
+            + origin : BoundPixel
+            + pen : Pen
+            + height : int
+            + width : int
+            + x : int
+            + y : int
+            + x_y : int
+            + font : BaseFont
+            {abstract} +draw_line()
+            {abstract} +draw_rectangle()
+            +draw_to()
+            +fill_screen()
+            +moveto()
+            +move_origin_to()
+            {abstract} +read_pixel()
+            +select_bg_colour()
+            +select_fg_colour()
+            +write_char()
+            {abstract} +write_pixel()
+            +write_text()
+            }
+        }
+    }
+    namespace helpers {
+    }
+    namespace pmods {
+        namespace i2c {
+        }
+        namespace spi {
+            class OLEDrgb {
+                - read()
+                - write()
+                + draw_line()
+                + draw_rectangle()
+                + read_pixel()
+                + reset()
+                + write_pixel()
+                }
+        }
+    }
+}
+
+lbutils.drivers.seven_segment.SegDisplay <-- lbutils.drivers.common.PIN_ON_SENSE
+lbutils.drivers.seven_segment_hex.SegHexDisplay <-- lbutils.drivers.common.PIN_ON_SENSE
+
+lbutils.graphics.fonts.font06.Font06 <|-- lbutils.graphics.fonts.base_font.BaseFont
+lbutils.graphics.fonts.font08.Font08 <|-- lbutils.graphics.fonts.base_font.BaseFont
+lbutils.graphics.fonts.org_01.Org01 <|-- lbutils.graphics.fonts.base_font.BaseFont
+
+lbutils.graphics.helpers.Pen::bg_colour <-- lbutils.graphics.colours.Colour
+lbutils.graphics.helpers.Pen::fg_colour <-- lbutils.graphics.colours.Colour
+
+lbutils.graphics.helpers.BoundPixel <|-- lbutils.graphics.helpers.Pixel
+
+lbutils.graphics.canvas.Canvas::bg_colour <-- lbutils.graphics.colours.Colour
+lbutils.graphics.canvas.Canvas::fg_colour <-- lbutils.graphics.colours.Colour
+lbutils.graphics.canvas.Canvas::cursor <-- lbutils.graphics.helpers.BoundPixel
+lbutils.graphics.canvas.Canvas::origin <-- lbutils.graphics.helpers.BoundPixel
+lbutils.graphics.canvas.Canvas::pen <-- lbutils.graphics.helpers.Pen
+lbutils.graphics.canvas.Canvas::font <-- lbutils.graphics.fonts.base_font.BaseFont
+
+lbutils.pmods.spi.OLEDrgb <|-- lbutils.graphics.canvas.Canvas
+
+@enduml

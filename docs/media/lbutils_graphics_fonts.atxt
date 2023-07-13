@@ -1,0 +1,22 @@
+,-------------------.  ,-------------------.   ,-------------------.
+|Font06             |  |Font08             |   |Org01              |
+|-------------------|  |-------------------|   |-------------------|
+|- bitmap           |  |- bitmap           |   |- bitmap           |
+|- index            |  |- index            |   |- index            |
+|- glyph            |  |- glyph            |   |- glyph            |
+|+int get_bit()     |  |+int get_bit()     |   |+int get_bit()     |
+|+int get_next()    |  |+int get_next()    |   |+int get_next()    |
+|+int set_position()|  |+int set_position()|   |+int set_position()|
+`-------------------'  `-------------------'   `-------------------'
+                                  |                                 
+                                  |                                 
+                  ,------------------------------.                  
+                  |BaseFont                      |                  
+                  |------------------------------|                  
+                  |- bitmap                      |                  
+                  |- index                       |                  
+                  |- glyph                       |                  
+                  |{abstract} +int get_bit()     |                  
+                  |{abstract} +int get_next()    |                  
+                  |{abstract} +int set_position()|                  
+                  `------------------------------'                  

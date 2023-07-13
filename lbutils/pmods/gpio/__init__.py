@@ -19,4 +19,15 @@
 # COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-"""PMod examples for `lbutils`."""
+"""Utilities and GPIO Drivers for the Digilent Peripheral Modules. This library
+is designed to provide drivers and support for the [Digilent peripheral
+modules](https://digilent.com/reference/pmod/start).
+
+## GPIO Conventions
+"""
+
+### Expose the `pmod.gpio` module interface as a full package
+__all__ = ["led"]
+
+from .common import PMOD_ROW
+from .led import LED

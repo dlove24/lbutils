@@ -19,7 +19,6 @@
 # COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
 """Fonts for the LED and OLED displays; especially the those using the 'pmod'
 packages. These fonts are based on open-source font files, and converted with
 the [`fontconvert`](https://github.com/danjperron/ssd1331_micropython) utility

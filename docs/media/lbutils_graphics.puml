@@ -1,25 +1,5 @@
-@startuml lbutils
+@startuml lbutils_graphics
 namespace lbutils {
-    namespace drivers {
-        namespace seven_segment <<Rectangle>> {
-            class SegDisplay {
-                - list _char_list
-                + display()
-                }
-        }
-        namespace seven_segment_hex <<Rectangle>> {
-            class SegHexDisplay {
-                - list _char_list
-                + display()
-                }
-        }
-        namespace common <<Rectangle>> {
-            enum PIN_ON_SENSE {
-                + HIGH
-                + LOW
-            }
-        }
-    }
     namespace graphics {
         namespace fonts {
             namespace base_font <<Rectangle>> {
@@ -91,7 +71,7 @@ namespace lbutils {
             + blue : int
             + as_rgb565 : int
             + as_rgb888 : int
-            +DEVICE_BIT_ORDER bitorder
+            +DEVICE_WORD_ORDER word_order
             {static} +from_rgb565()
         }
     }
@@ -123,27 +103,7 @@ namespace lbutils {
             }
         }
     }
-    namespace helpers {
-    }
-    namespace pmods {
-        namespace i2c {
-        }
-        namespace spi {
-            class OLEDrgb {
-                - read()
-                - write()
-                + draw_line()
-                + draw_rectangle()
-                + read_pixel()
-                + reset()
-                + write_pixel()
-                }
-        }
-    }
 }
-
-lbutils.drivers.seven_segment.SegDisplay <-- lbutils.drivers.common.PIN_ON_SENSE
-lbutils.drivers.seven_segment_hex.SegHexDisplay <-- lbutils.drivers.common.PIN_ON_SENSE
 
 lbutils.graphics.fonts.font06.Font06 <|-- lbutils.graphics.fonts.base_font.BaseFont
 lbutils.graphics.fonts.font08.Font08 <|-- lbutils.graphics.fonts.base_font.BaseFont
@@ -160,7 +120,5 @@ lbutils.graphics.canvas.Canvas::cursor <-- lbutils.graphics.helpers.BoundPixel
 lbutils.graphics.canvas.Canvas::origin <-- lbutils.graphics.helpers.BoundPixel
 lbutils.graphics.canvas.Canvas::pen <-- lbutils.graphics.helpers.Pen
 lbutils.graphics.canvas.Canvas::font <-- lbutils.graphics.fonts.base_font.BaseFont
-
-lbutils.pmods.spi.OLEDrgb <|-- lbutils.graphics.canvas.Canvas
 
 @enduml

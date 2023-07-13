@@ -19,7 +19,6 @@
 # COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
 """Simple hexadecimal driver for a seven-segment display, requiring seven GPIO
 pins.
 
@@ -109,7 +108,7 @@ ASCII_HEX_EXTRA_DIGITS = set("ABCDEF")
 those which don't fit into `ASCII_DIGITS`"""
 
 DISPLAY_SEGMENTS = const(7)
-"""The number of segements in the display."""
+"""The number of segments in the display."""
 
 NUM_CHARACTERS = const(9)
 """The number of individual characters to display.

@@ -8,6 +8,7 @@ extra_css:
 
 plugins:
   - autorefs
+  - glightbox
   - mkdocstrings:
       handlers:
         python:
@@ -40,8 +41,9 @@ nav:
   - 'Reference':
     - 'Guide to the API': 'ref/reference.md'
     - 'Pmod Drivers': 'ref/pmods/pmod_summary.md'
-    - 'Pmod Drivers - SPI': 'ref/pmods/pmod_spi.md'
+    - 'Pmod Drivers - GPIO': 'ref/pmods/pmod_gpio.md'
     - 'Pmod Drivers - I2C': 'ref/pmods/pmod_i2c.md'
+    - 'Pmod Drivers - SPI': 'ref/pmods/pmod_spi.md'
     - 'Graphics Support': 'ref/graphics/graphics_intro.md'
     - 'Fonts and Font Selection': 'ref/graphics/font_guide.md'
     - 'Seven Segment Drivers': 'ref/drivers/seven_segment.md'

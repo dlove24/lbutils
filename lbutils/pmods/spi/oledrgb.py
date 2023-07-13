@@ -17,7 +17,6 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-
 """Simple display driver for the [Pmod
 OLEDrgb](https://digilent.com/reference/pmod/pmodoledrgb/start), based on the
 ['ssd1331'](https://github.com/danjperron/pico_mpu6050_ssd1331) driver by Daniel
@@ -272,6 +271,12 @@ class OLEDrgb(graphics.Canvas):
     colour value.
     """
 
+    ##
+    ## Private (Non-Public) Attributes
+    ##
+
+    # Command sequence used for the display initialisation
+
     _INIT = (
         (_DISPLAYOFF, b""),
         (_LOCK, b"\x0b"),
@@ -298,9 +303,9 @@ class OLEDrgb(graphics.Canvas):
         (_DISPLAYON, b""),
     )
 
-    ##
-    ## Structure byte packing formats
-    ##
+    #
+    # Format strings used in byte packing structures
+    #
 
     _ENCODE_PIXEL = ">H"
     _ENCODE_POS = ">BB"
@@ -328,7 +333,6 @@ class OLEDrgb(graphics.Canvas):
         reset_pin: Pin = 17,
         width: int = 96,
         height: int = 64,
-        bit_order: colours.DEVICE_BIT_ORDER = colours.DEVICE_BIT_ORDER.platform(),
     ) -> None:
         """Initialise the SPI interface, and sent the sequence of commands
         required for the device startup. The full command sequence is documented
@@ -431,7 +435,7 @@ class OLEDrgb(graphics.Canvas):
         """
 
         # Set the ancestor values
-        super().__init__(width, height, bit_order)
+        super().__init__(width, height)
 
         # Set the local attributes
         self.spi_controller = spi_controller
