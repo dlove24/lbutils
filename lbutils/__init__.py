@@ -29,7 +29,7 @@ alone.
   support for display drivers.
 * **[`helpers`][lbutils.helpers]**: Functions and classes which help replace
   boiler-plate code for tasks such as setting up network access.
-* **[`pmod`][lbutils.pmods]**: Drivers and support for the
+* **[`pmod`][pmod-drivers]**: Drivers and support for the
   [Digilent peripheral modules](https://digilent.com/reference/pmod/start).
 
 Diagrammatically these modules (and classes) are organised as follows
