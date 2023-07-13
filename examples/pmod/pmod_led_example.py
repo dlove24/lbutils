@@ -51,10 +51,10 @@ import utime
 ##
 
 # Create the controller (on the UPPER pins!)
-led_controller = LED(pmod_row = PMOD_ROW.LOWER)
+led_controller = LED(pmod_row=PMOD_ROW.LOWER)
 
 # Turn all LEDs off
-led_controller.set_state(leds = [False,False,False,False])
+led_controller.set_state(leds=[False, False, False, False])
 
 ##
 ## Setup the LEDs as a simple test sequence. This is the most basic
@@ -91,9 +91,9 @@ print("Flashing for 10 seconds...")
 
 for index in range(1, 10):
     if index % 2 == 0:
-        led_controller.set_state(leds = [True,False,True,False])
+        led_controller.set_state(leds=[True, False, True, False])
     else:
-        led_controller.set_state(False,True,False,True)
+        led_controller.set_state(False, True, False, True)  # noqa: FBT003
 
     utime.sleep(1)
 
@@ -103,4 +103,4 @@ for index in range(1, 10):
 
 print("Shutting down.")
 
-led_controller.set_state(leds = [False,False,False,False])
+led_controller.set_state(leds=[False, False, False, False])
