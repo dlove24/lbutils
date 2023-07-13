@@ -154,12 +154,14 @@ class LED:
         ````
 
         If the lower row of header pins is required, then the constructor argument
-        **must* be set, for instance as
+        **must** be set, for instance as
 
         ````python
         # Instantiate the GPIO module with the default pin assignments
         # for the lower row of header pins
-        led_controller = lbutils.pmods.gpio.LED(pmod_row = lbutils.pmods.gpio.PMOD_ROW.UPPER)
+        from lbutils.pmods.gpio import LED, PMOD_ROW
+
+        led_controller = LED(pmod_row = PMOD_ROW.LOWER)
         ````
 
         Individual LEDs can then be turned on using the relevant attributes, e.g.
@@ -174,9 +176,9 @@ class LED:
         led_controller.led1 = False
         ````
 
-        All the LEDs can be set to a specific state using the `set_state`
+        All the LEDs can be set to a specific state using the `set_state()`
         method, and passing in the state of the LEDs in order. For instance to turn only
-        LED 2 `on`, the client can call the method as
+        LED 2 `ON`, the client can call the method as
 
         ````python
         led_controller.set_state(False, False, True, False)
@@ -199,16 +201,17 @@ class LED:
         Note, however, that the state of LEDs which are _not_ named **will not
         change**. There is no 'implicit' state, and so the above is _not_ equivalent to
         the previous examples. The current state of the unnamed LEDS _will not_ be
-        altered by this call.
+        altered by this call: for instance the above example will _not_ modify the
+        current state of `led0`, `led1` or `led3`.
 
 
         Parameters
         ----------
         pmod_row: PMOD_ROW
-            An instance of the
-            [`machine.SPI`](https://docs.micropython.org/en/latest/library/machine.SPI.html)
-            class, used to specify the SPI interface that should be used by this
-            driver to interface to the display controller.
+            Set the row (pin order) of the Pmod header to use. By default this
+            class will use the upper row (equivalent to '`pmod_row = PMOD_PIN_UPPER`'). To
+            use the lower row of pins set `pmod_row` explicitly as `pmod_row =
+            PMOD_PIN_LOWER`.
         """
         # Set the local attributes
         self.pmod_row = pmod_row
@@ -329,15 +332,17 @@ class LED:
         of state.
 
         Note that using the `leds` parameter will override any values set for
-        `led0` to `led3`: both methods cannot be used simultaneously. Similarly any LED
-        whose state is not specified by either name or position using any of the above
-        methods **will not** be set: instead it will be left at its current value.
+        `led0` to `led3`: both methods _cannot_ be used simultaneously in a single call.
+        Similarly any LED whose state is not specified by either name or position using
+        any of the above methods **will not** be set: instead it will be left at its
+        current value.
 
         Raises
         ------
 
         ValueError:
-            If the `leds` list is specified, and the types in the list cannot be converted to `bool`.
+            If the `leds` list is specified, and the types in the list cannot be
+            converted to `bool` when setting the state of an LED.
         """
 
         # If the `leds` array is given, attempt to use this as
@@ -345,22 +350,22 @@ class LED:
         # handling to the caller if they don't obey the type specification
         if leds is not None:
             if leds[0] is not None:
-                self._GPIO0 = leds[0]
+                self._GPIO0.value(leds[0])
             else:
                 return
 
             if leds[1] is not None:
-                self._GPIO1 = leds[1]
+                self._GPIO1.value(leds[1])
             else:
                 return
 
             if leds[2] is not None:
-                self._GPIO2 = leds[2]
+                self._GPIO2.value(leds[2])
             else:
                 return
 
             if leds[3] is not None:
-                self._GPIO3 = leds[3]
+                self._GPIO3.value(leds[3])
 
             return
 
@@ -368,15 +373,15 @@ class LED:
         # state from the named arguments
         else:
             if led0 is not None:
-                self._GPIO0 = led0
+                self._GPIO0.value(led0)
 
             if led1 is not None:
-                self._GPIO1 = led1
+                self._GPIO1.value(led1)
 
             if led2 is not None:
-                self._GPIO2 = led2
+                self._GPIO2.value(led2)
 
             if led3 is not None:
-                self._GPIO3 = led3
+                self._GPIO3.value(led3)
 
             return
