@@ -19,10 +19,10 @@
 # COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-"""Common libraries and definitions for the for low-level devices. This module
-contains mostly helper and other utility definitions that are used by more than
-one driver. In most cases the services provided by this module are not meant to
-be used directly by end-user code.
+"""Common libraries and definitions for the GPIO Pmods. This module contains
+mostly helper and other utility definitions that are used by more than one
+driver. In most cases the services provided by this module are not meant to be
+used directly by end-user code.
 
 Tested Implementations
 ----------------------
@@ -44,13 +44,29 @@ except ImportError:
 ###
 
 
-class PIN_ON_SENSE(IntEnum):
-    """Sets the device sense for 'ON'.
+class PMOD_ROW(IntEnum):
+    """Sets row to use in the Pmod header for GPIO devices which use only 6 of
+    the available 12 pins (i.e. 4 of the 8 possible GPIO pins)'."""
 
-    When set to `HIGH` the GPIO pins need to be set 'high' ('1') for the device
-    input to turn on. When set to `LOW` the GPIO pins need to be set 'low' ('0')
-    for the device input to turn on.
-    """
+    UPPER = 0
+    LOWER = 1
 
-    LOW = 0
-    HIGH = 1
+
+class PMOD_PIN_UPPER(IntEnum):
+    """Defines the default pin assignment for a GPIO module using the upper row
+    of pins on a Pmod module."""
+
+    GPIO0 = 15
+    GPIO1 = 0
+    GPIO2 = 22
+    GPIO3 = 0
+
+
+class PMOD_PIN_LOWER(IntEnum):
+    """Defines the default pin assignment for a GPIO module using the lower row
+    of pins on a Pmod module."""
+
+    GPIO0 = 17
+    GPIO1 = 19
+    GPIO2 = 0
+    GPIO3 = 18

@@ -18,7 +18,6 @@
 # COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
 """Example of using the `lbutils.drivers.SegHexDisplay` driver for a seven-
 segment display, requiring seven GPIO pins. A complete example is available at
 [WokWi](https://wokwi.com/projects/360462223276690433), which is based on the

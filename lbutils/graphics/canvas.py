@@ -19,7 +19,6 @@
 # COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
 """Implements an abstract [`Canvas`][lbutils.graphics.Canvas] class, used to
 represent a drawing surface. The specific implemented of the drawing surface is
 left to the derived display drivers, which sub-class

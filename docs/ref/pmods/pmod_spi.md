@@ -8,4 +8,3 @@ Modules which have SPI interface support (i.e. the majority of modules) are desc
      options:
           heading_level: 3
           show_category_heading: False
-

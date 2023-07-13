@@ -4,17 +4,20 @@
 
 The `lbutils.pmods` package provides drivers and support for the Digilent Peripheral Modules. This library is designed to provide drivers and support for the [Digilent peripheral modules](https://digilent.com/reference/pmod/start). Not all boards are supported: and in some cases only certain busses are supported (e.g. using only the I2C bus, even though the `pmod` supports both I2C and SPI).
 
-These packages are organised into the following structure, with [`i2c`][lbutils.pmods.i2c] and [`spi`][spi-drivers] documented separately in more detail.
+These packages are organised into the following structure, with [`gpio`][gpio-drivers], [`i2c`][lbutils.pmods.i2c] and [`spi`][spi-drivers] documented separately in more detail.
 
 ![LBUtils PMod SPI Package Organisation](/media/lbutils_pmods.svg)
 
 ## SPI Conventions
 
 !!! note "Modern SPI Name in Use"
-     For this module, and all SPI references in the library, the [modern SPI
-     names](https://www.oshwa.org/a-resolution-to-redefine-spi-signal-names/) are in
-     use. However, most  of the PMod reference documentation (and the underlying
-     hardware devices) still use the older terms.
+     For this module, and all SPI references in the library, the [modern SPI names]
+     (https://www.oshwa.org/a-resolution-to-redefine-spi-signal-names/), shown in
+     Figure 1, are in use. However, most  of the PMod reference documentation
+     (and the underlying hardware devices) still use the older terms. Some
+     translation will therefore be necessary when cross-referencing between this
+     documentation and older SPI references. A summary of the new pin names is
+     given below.
 
 ![Modern Naming Conventions for the SPI Interfaces](../../media/spi_interfaces.png)
 
