@@ -42,10 +42,10 @@ header below.
 
 |        | Pin Name      | Number       | Description    |
 |--------|---------------|--------------|----------------|
-| Pin 1  | LD0           | 15           | LED 0          |
-| Pin 2  | LD1           |              | LED 1          |
-| Pin 3  | LD2           | 22           | LED 2          |
-| Pin 4  | LD3           |              | LED 3          |
+| Pin 1  | LD0           | 17           | LED 0          |
+| Pin 2  | LD1           | 19           | LED 1          |
+| Pin 3  | LD2           |              | LED 2          |
+| Pin 4  | LD3           | 18           | LED 3          |
 | Pin 5  | GND           | 3            | Ground         |
 | Pin 6  | VCC           | 5            | VCC (+3.3V)    |
 
@@ -53,10 +53,10 @@ header below.
 
 |        | Pin Name      | Number       | Description    |
 |--------|---------------|--------------|----------------|
-| Pin 7  | LD0           | 17           | LED 0          |
-| Pin 8  | LD1           | 19           | LED 1          |
-| Pin 9  | LD2           |              | LED 2          |
-| Pin 10 | LD3           | 18           | LED 3          |
+| Pin 7  | LD0           | 14           | LED 0          |
+| Pin 8  | LD1           |              | LED 1          |
+| Pin 9  | LD2           | 22           | LED 2          |
+| Pin 10 | LD3           |              | LED 3          |
 | Pin 11 | GND           | 3            | Ground         |
 | Pin 12 | VCC           | 5            | VCC (+3.3V)    |
 

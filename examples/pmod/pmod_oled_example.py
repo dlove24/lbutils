@@ -19,6 +19,7 @@
 # COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
 """Example for the [Pmod
 OLEDrgb](https://digilvcc_enablet.com/refervcc_enablece/pmod/pm
 odoled_displayrgb/start) , using the `lbutils.font` library and the
@@ -63,23 +64,9 @@ import utime
 ## Setup the SPI interface to the Pmod OLEDrgb
 ##
 
-# Instantiate the SPI interface
-spi_controller = SPI(0, 100000, mosi=Pin(19), sck=Pin(18))
-
-# Add the pins required by the display controller
-data_cmd_pin = Pin(15, Pin.OUT)
-chip_sel_pin = Pin(14, Pin.OUT)
-reset_pin = Pin(17, Pin.OUT)
-
-# Add the VCC_Enable pin, used to control the display
-# and display back-light, and set to `high()` to turn
-# the display on
-vcc_enable = Pin(22, Pin.OUT)
-vcc_enable.high()
-
-# Finally initialise the OLED display driver, and set the display
-# to black
-oled_display = OLEDrgb(spi_controller, data_cmd_pin, chip_sel_pin, reset_pin)
+# Initialise the OLED display driver, using the default
+# pin assignments and SPI interface, and set the display to black
+oled_display = OLEDrgb()
 oled_display.fill_screen(colours.COLOUR_BLACK)
 
 # Set the origin for the tests
