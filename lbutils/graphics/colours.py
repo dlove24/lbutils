@@ -84,7 +84,7 @@ except ImportError:
 try:
     from enum import IntEnum
 except ImportError:
-    from urest.enum import IntEnum  # type: ignore
+    from lbutils.std.enum import IntEnum  # type: ignore
 
 ###
 ### Enumerations

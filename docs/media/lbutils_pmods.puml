@@ -106,6 +106,15 @@ namespace lbutils {
     namespace helpers {
     }
     namespace pmods {
+        namespace gpio {
+            class LED {
+                + led0 : bool
+                + led1 : bool
+                + led2 : bool
+                + led3 : bool
+                + set_state()
+                }
+        }
         namespace i2c {
         }
         namespace spi {

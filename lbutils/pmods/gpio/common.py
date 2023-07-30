@@ -37,7 +37,7 @@ This version is written for MicroPython 3.4, and has been tested on:
 try:
     from enum import IntEnum
 except ImportError:
-    from urest.enum import IntEnum  # type: ignore
+    from lbutils.std.enum import IntEnum  # type: ignore
 
 ###
 ### Enumerations
@@ -56,17 +56,17 @@ class PMOD_PIN_UPPER(IntEnum):
     """Defines the default pin assignment for a GPIO module using the upper row
     of pins on a Pmod module."""
 
-    GPIO0 = 15
-    GPIO1 = 0
-    GPIO2 = 22
-    GPIO3 = 0
+    GPIO0 = 17
+    GPIO1 = 19
+    GPIO2 = 0
+    GPIO3 = 18
 
 
 class PMOD_PIN_LOWER(IntEnum):
     """Defines the default pin assignment for a GPIO module using the lower row
     of pins on a Pmod module."""
 
-    GPIO0 = 17
-    GPIO1 = 19
-    GPIO2 = 0
-    GPIO3 = 18
+    GPIO0 = 14
+    GPIO1 = 0
+    GPIO2 = 22
+    GPIO3 = 0

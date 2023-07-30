@@ -53,14 +53,14 @@ header below.
 
 |        | Pin Name      | Number       | Description                         |
 |--------|---------------|--------------|-------------------------------------|
-| Pin 1  | CS            | 14           | SPI Chip Select                     |
+| Pin 1  | CS            | 17           | SPI Chip Select                     |
 | Pin 2  | SDO           | 19           | SPI Serial Data Out                 |
 | Pin 3  | Not Connected | No Connection| Not Connected                       |
 | Pin 4  | SCK           | 18           | SPI Serial Clock                    |
 | Pin 5  | GND           | 3            | Ground                              |
 | Pin 6  | VCC           | 5            | VCC (+3.3V)                         |
-| Pin 7  | D/C           | 15           | Data/Commands. Display Data.        |
-| Pin 8  | RES           | 17           | Reset the display controller        |
+| Pin 7  | D/C           | 14           | Data/Commands. Display Data.        |
+| Pin 8  | RES           | 15           | Reset the display controller        |
 | Pin 9  | VCC_EN        | 22           | VCC Enable (Enable/Disable Display) |
 | Pin 10 | PMODEN        | No Connection| Power Supply to GND. Low-Power Mode |
 | Pin 11 | GND           | 3            | Ground                              |
@@ -122,6 +122,9 @@ _CONTRASTA = const(0x81)
 _CONTRASTB = const(0x82)
 _CONTRASTC = const(0x83)
 _MASTERCURRENT = const(0x87)
+_PRECHARGEA = const(0x8A)
+_PRECHARGEB = const(0x8B)
+_PRECHARGEC = const(0x8C)
 _SETREMAP = const(0xA0)
 _STARTLINE = const(0xA1)
 _DISPLAYOFFSET = const(0xA2)
@@ -134,11 +137,8 @@ _SETMASTER = const(0xAD)
 _DISPLAYOFF = const(0xAE)
 _DISPLAYON = const(0xAF)
 _POWERMODE = const(0xB0)
-_PRECHARGE = const(0xB1)
+_PHASELENGTH = const(0xB1)
 _CLOCKDIV = const(0xB3)
-_PRECHARGEA = const(0x8A)
-_PRECHARGEB = const(0x8B)
-_PRECHARGEC = const(0x8C)
 _PRECHARGELEVEL = const(0xBB)
 _VCOMH = const(0xBE)
 _LOCK = const(0xFD)
@@ -278,29 +278,33 @@ class OLEDrgb(graphics.Canvas):
     # Command sequence used for the display initialisation
 
     _INIT = (
-        (_DISPLAYOFF, b""),
-        (_LOCK, b"\x0b"),
-        (_SETREMAP, b"\x72"),  # RGB Colour
-        (_STARTLINE, b"\x00"),
-        (_DISPLAYOFFSET, b"\x00"),
-        (_NORMALDISPLAY, b""),
-        (_PHASEPERIOD, b"\x31"),
-        (_SETMULTIPLEX, b"\x3f"),
-        (_SETMASTER, b"\x8e"),
-        (_POWERMODE, b"\x0b"),
-        (_PRECHARGE, b"\x31"),  # ;//0x1F - 0x31
-        (_CLOCKDIV, b"\xf0"),
-        (_VCOMH, b"\x3e"),  # ;//0x3E - 0x3F
-        (_MASTERCURRENT, b"\x0c"),  # ;//0x06 - 0x0F
-        (_PRECHARGEA, b"\x64"),
-        (_PRECHARGEB, b"\x78"),
-        (_PRECHARGEC, b"\x64"),
-        (_PRECHARGELEVEL, b"\x3a"),  # 0x3A - 0x00
-        (_CONTRASTA, b"\x91"),  # //0xEF - 0x91
-        (_CONTRASTB, b"\x50"),  # ;//0x11 - 0x50
-        (_CONTRASTC, b"\x7d"),  # ;//0x48 - 0x7D
-        (_NO_SCROLL, b""),
-        (_DISPLAYON, b""),
+        (_LOCK, b"\x12"),  # Enable the driver IC to accept commands
+        (_DISPLAYOFF, b""),  # Send the display off command
+        (_SETREMAP, b"\x72"),  # Set the Remap to RGB Colour
+        (_STARTLINE, b"\x00"),  # Set the Display start Line to the top line
+        (_DISPLAYOFFSET, b"\x00"),  # Set the Display Offset to no vertical offset
+        (_NORMALDISPLAY, b""),  # Make it a normal display
+        (_SETMULTIPLEX, b"\x3f"),  # Set the Multiplex Ratio
+        (_SETMASTER, b"\x8e"),  # Use a required external Vcc supply
+        (_POWERMODE, b"\x0b"),  # Disable Power Saving Mode
+        (_PHASELENGTH, b"\x31"),  # Set the Phase Length of the charge and discharge
+        (
+            _CLOCKDIV,
+            b"\xf0",
+        ),  # Set the Display Clock Divide Ratio and Oscillator Frequency
+        (_PRECHARGEA, b"\x64"),  # Set the Second Pre-Charge Speed of Color A (Red)
+        (_PRECHARGEB, b"\x78"),  # Set the Second Pre-Charge Speed of Color B (Green)
+        (_PRECHARGEC, b"\x64"),  # Set the Second Pre-Charge Speed of Color C (Blue)
+        (
+            _PRECHARGELEVEL,
+            b"\x3a",
+        ),  # Set the Pre-Charge Voltage to approximately 45% of Vcc
+        (_VCOMH, b"\x3e"),  # Set the VCOMH Deselect Level
+        (_MASTERCURRENT, b"\x0c"),  # Set Master Current Attenuation Factor
+        (_CONTRASTA, b"\x91"),  # Set the Contrast for Color A (Red)
+        (_CONTRASTB, b"\x50"),  # Set the Contrast for Color B (Green)
+        (_CONTRASTC, b"\x7d"),  # Set the Contrast for Color C (Blue)
+        (_NO_SCROLL, b""),  # Disable Scrolling
     )
 
     #
@@ -320,6 +324,7 @@ class OLEDrgb(graphics.Canvas):
     data_cmd_pin = Pin
     chip_sel_pin = Pin
     reset_pin = Pin
+    vcc_enable = Pin
 
     ##
     ## Constructors
@@ -327,10 +332,11 @@ class OLEDrgb(graphics.Canvas):
 
     def __init__(
         self,
-        spi_controller: SPI,
-        data_cmd_pin: int = 15,
-        chip_sel_pin: int = 14,
-        reset_pin: Pin = 17,
+        spi_controller: SPI = SPI(0, 100000, mosi=Pin(19), sck=Pin(18)),
+        data_cmd_pin: Pin = Pin(14, Pin.OUT),
+        chip_sel_pin: Pin = Pin(17, Pin.OUT),
+        reset_pin: Pin = Pin(15, Pin.OUT),
+        vcc_enable: Pin = Pin(22, Pin.OUT),
         width: int = 96,
         height: int = 64,
     ) -> None:
@@ -428,6 +434,9 @@ class OLEDrgb(graphics.Canvas):
             Normally 'low': when held 'high', clears the current display buffer.
             Used to clear the display without having to rewrite each pixel.
             Defaults to GPIO Pin 17.
+        vcc_enable:
+            Used to control the display and the display back-light. Set to
+            'high' to turn the display on, and 'low' to turn the display off.
         width: int, optional
             The width in pixels of the display. Defaults to 96.
         height: int, optional
@@ -442,11 +451,27 @@ class OLEDrgb(graphics.Canvas):
         self.data_cmd_pin = data_cmd_pin
         self.chip_sel_pin = chip_sel_pin
         self.reset_pin = reset_pin
+        self.vcc_enable = vcc_enable
 
-        # Initialise the display
-        self.reset()
+        # Initialise the display: see the OLED reference
+        # for details of this step
+        self.data_cmd_pin.value(0)
+        self.reset_pin.value(1)
+        self.vcc_enable.value(0)
+        utime.sleep_ms(20)
+
+        self.reset_pin.value(0)
+        utime.sleep_ms(10)
+        self.reset_pin.value(1)
+        utime.sleep_ms(5)
+
         for command, data in self._INIT:
             self._write(command, data)
+
+        self.vcc_enable.value(1)
+        utime.sleep_ms(25)
+        self._write(_DISPLAYON, b"")
+        utime.sleep_ms(100)
 
     ##
     ## Private (Non-Public) Methods
@@ -489,7 +514,7 @@ class OLEDrgb(graphics.Canvas):
         if data is not None:
             self.spi_controller.write(data)
 
-            self.chip_sel_pin.value(1)
+        self.chip_sel_pin.value(1)
 
     def _block(
         self,
