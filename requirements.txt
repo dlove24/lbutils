@@ -75,4 +75,4 @@ untokenize==0.1.1
 urllib3==1.26.18
 watchdog==3.0.0
 webencodings==0.5.1
-zipp==3.15.0
+zipp==3.18.0
