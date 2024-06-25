@@ -49,7 +49,7 @@ nh3==0.2.17
 packaging==24.0
 paginate==0.5.6
 pathspec==0.12.1
-pdoc==14.4.0
+pdoc==14.5.1
 pkginfo==1.10.0
 platformdirs==4.2.2
 pluggy==1.5.0
@@ -79,7 +79,7 @@ tomli==2.0.1
 twine==5.0.0
 typing_extensions==4.11.0
 untokenize==0.1.1
-urllib3==2.2.1
+urllib3==2.2.2
 watchdog==4.0.0
 webencodings==0.5.1
 zipp==3.18.1
