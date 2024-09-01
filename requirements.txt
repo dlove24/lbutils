@@ -1,4 +1,4 @@
-attrs==23.2.0
+attrs==24.2.0
 Babel==2.15.0
 backports.tarfile==1.2.0
 beautifulsoup4==4.12.3
