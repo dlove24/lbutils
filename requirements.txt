@@ -16,7 +16,7 @@ docformatter==1.7.5
 docutils==0.21.2
 exceptiongroup==1.2.1
 ghp-import==2.1.0
-griffe==0.47.0
+griffe==1.2.0
 idna==3.7
 importlib_metadata==8.0.0
 iniconfig==2.0.0
