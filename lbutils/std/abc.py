@@ -27,20 +27,21 @@ Used to avoid import errors, and taken from the
 """
 
 # Import the typing hints if available. Use our backup version
-# if the official library is missing
+# if the official library is missing. We can ignore errors
+# here, as these will only apply in the MicroPython code (which
+# has much poorer type support)
 try:
     from typing import Any
 except ImportError:
-    from lbutils.std.typing import Any
+    from lbutils.std.typing import Any # type: ignore [assignment]
 
-
-class ABCMeta:
+class ABCMeta: # type: ignore [too-few-public-methods]
     pass
 
 
-class ABC:
+class ABC: # type: ignore [too-few-public-methods]
     pass
 
 
-def abstractmethod(f: Any) -> Any:
+def abstractmethod(f: Any) -> Any: # type: ignore [too-few-public-methods]
     return f
