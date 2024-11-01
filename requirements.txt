@@ -49,7 +49,7 @@ nh3==0.2.18
 packaging==24.1
 paginate==0.5.7
 pathspec==0.12.1
-pdoc==14.6.1
+pdoc==15.0.0
 pkginfo==1.10.0
 platformdirs==4.2.2
 pluggy==1.5.0
