@@ -10,7 +10,7 @@ cffi==1.17.1
 charset-normalizer==3.3.2
 click==8.1.7
 colorama==0.4.6
-cryptography==43.0.1
+cryptography==44.0.1
 dnspython==2.6.1
 docformatter==1.7.5
 docutils==0.21.2
@@ -24,7 +24,7 @@ jaraco.classes==3.4.0
 jaraco.context==6.0.1
 jaraco.functools==4.0.2
 jeepney==0.8.0
-Jinja2==3.1.4
+Jinja2==3.1.5
 keyring==25.3.0
 LinkChecker==10.5.0
 Markdown==3.7
