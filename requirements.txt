@@ -83,7 +83,6 @@ regex==2026.9.3
 requests==2.34.2
 requests-toolbelt==1.0.0
 rfc3986==2.0.0
-rich==15.0.0
 ruff==0.16.6
 SecretStorage==3.5.0
 selectolax==0.4.11
