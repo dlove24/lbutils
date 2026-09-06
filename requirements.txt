@@ -10,7 +10,7 @@ cffi==1.17.1
 charset-normalizer==3.3.2
 click==8.1.7
 colorama==0.4.6
-cryptography==43.0.1
+cryptography==50.0.0
 dnspython==2.6.1
 docformatter==1.7.5
 docutils==0.21.2
@@ -25,7 +25,7 @@ jaraco.classes==3.4.0
 jaraco.context==6.0.1
 jaraco.functools==4.0.2
 jeepney==0.8.0
-Jinja2==3.1.4
+Jinja2==3.1.6
 keyring==25.3.0
 LinkChecker==10.5.0
 Markdown==3.7
@@ -57,7 +57,7 @@ pycodestyle==2.12.1
 pycparser==2.22
 pyflakes==3.2.0
 Pygments==2.18.0
-pymdown-extensions==10.9
+pymdown-extensions==11.0.1
 pyparsing==3.1.4
 pyproject_hooks==1.1.0
 pytest==8.3.2
@@ -67,7 +67,7 @@ PyYAML==6.0.2
 pyyaml_env_tag==0.1
 readme_renderer==44.0
 regex==2024.7.24
-requests==2.32.3
+requests==2.33.0
 requests-toolbelt==1.0.0
 rfc3986==2.0.0
 rich==13.8.0
@@ -78,7 +78,7 @@ soupsieve==2.6
 tomli==2.0.1
 typing_extensions==4.12.2
 untokenize==0.1.1
-urllib3==2.2.2
+urllib3==2.7.0
 watchdog==5.0.2
 webencodings==0.5.1
 zipp==3.20.1
