@@ -6,6 +6,7 @@ jobs:
   build:
     permissions:
       contents: read
+      push: write
       pull-requests: write
 
     runs-on: ubuntu-latest
